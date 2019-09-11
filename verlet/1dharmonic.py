@@ -8,24 +8,26 @@ tmin = 0        # Starting time
 dt = 0.01       # Time step
 n_steps = 3000  # Number of time steps
 
-times = [tmin + i * dt for i in range(n_steps)]
-x = []      # Positions
-v = []      # Velocities
-f = []      # Forces
-x.append(0) # Initial position
-v.append(1) # Initial velocity
-m = 1       # Mass
-w = 1       # Angular Frequency for spring
-f.append(get_force(x[0])) # Compute inital force
+times = np.array([tmin + i * dt for i in range(n_steps)])
+x = np.zeros((len(times)))      # Initialize Positions
+v = np.zeros((len(times)))      # Initialize Velocities
+f = np.zeros((len(times)))      # Initialize Forces
+x[0] = 0                # Initial position
+v[0] = 1                # Initial velocity
+m = 1                   # Set mass
+w = 1                   # Angular Frequency for spring
+f[0] = get_force(x[0])  # Compute inital force
 
-for i in range(n_steps):
-    x.append( x[i] + v[i] * dt + ((f[i])/(2 * m) * dt**2) )
-    v_half = v[i] + (f[i]/(2 * m)) * dt
-    if i < n_steps:
-        f.append(get_force(x[i + 1]))
-    v.append( v_half + (f[i + 1]/(2 * m)) * dt )
+for i in range(1,n_steps):
+    # Update position
+    x[i] = x[i - 1] + v[i - 1] * dt + ((f[i - 1])/(2 * m) * dt**2)
+    # Compute velocity at half step
+    v_half = v[i - 1] + (f[i - 1]/(2 * m)) * dt
+    # Update force
+    f[i] = get_force(x[i])
+    # Update velocity
+    v[i] = v_half + (f[i]/(2 * m)) * dt
 
-x.pop()
 plt.xlim(0, max(times))
 plt.ylim(-max(x) - .1,max(x) + .1)
 plt.plot(times, x, 'o', color='blue')
