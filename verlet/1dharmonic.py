@@ -24,3 +24,11 @@ for i in range(n_steps):
     if i < n_steps:
         f.append(get_force(x[i + 1]))
     v.append( v_half + (f[i + 1]/(2 * m)) * dt )
+
+x.pop()
+plt.xlim(0, max(times))
+plt.ylim(-max(x) - .1,max(x) + .1)
+plt.plot(times, x, 'o', color='blue')
+plt.xlabel("t")
+plt.ylabel("x(t)")
+plt.savefig("positions.pdf")
