@@ -33,7 +33,7 @@
 
 \maketitle
 
-\section{Derivation of Path Integral}
+\section{Derivation of Path Integral for 1D Harmonic Oscillator}
 As always, we will start with the case of a single quantum particle moving in one dimension. So the Hamiltonian looks like,
 \be
   H = \frac{p^2}{2m} + V(x)
@@ -71,7 +71,7 @@ We would like to separate the hamiltonian into its kinetic and potential energy 
 However, we cannot split the exponentials because, for two operators that do not commute $\text{exp}(\hat{H}) \neq \text{exp}(\hat{K}) + \text{exp}(\hat{U})$.
 To get around this we employ the trotter decompositon
 \be
-  e^{- \beta \hat{H}} = e^{- \beta \hat{H}} = \lim_{P \to\infty} \Big[ e^{- \beta \hat{U}/2P} e^{-\beta \hat{K}/P} e^{-\beta{U}/2P} \Big]^P .
+  e^{- \beta \hat{H}} = e^{- \beta (\hat{K} + \hat{U})} = \lim_{P \to\infty} \Big[ e^{- \beta \hat{U}/2P} e^{-\beta \hat{K}/P} e^{-\beta{U}/2P} \Big]^P .
 \ee
 Substituting this into equation (\ref{eq:density_mat}) gives us,
 \be
@@ -92,7 +92,7 @@ We can insert the resolution of identity in terms of the position basis P-1 time
 The integration over a coordinate $x_i$ can be thought of as integrating over a possible path that your particle can take because we can obtain integrations over all possible paths when P $\rightarrow \infty$.
 If we consider an element of the matrix,
 \be \label{eq:omega_mat}
-  \braket{x_{k+1}|\Omega|x_k} = \braket{x+1|e^{-\beta \hat{U}/2P} e^{-\beta \hat{K}/P} e^{-\beta \hat{U}/2P}|x_k}
+  \braket{x_{k+1}|\Omega|x_k} = \braket{x_{k+1}|e^{-\beta \hat{U}/2P} e^{-\beta \hat{K}/P} e^{-\beta \hat{U}/2P}|x_k}
 \ee
 we can recognize that the set of $\ket{x_k}$ are eigenvectors of $e^{-\beta \hat{U}/2P}$ with eigenvalue $e^{-\beta \hat{U(x_k)}/2P}$ because $\hat{U} = U(\hat{x})$ is a function of the coordinate operator.
 This can be shown easily by writing the exponential as a power series in $\hat{U}$.
@@ -129,7 +129,12 @@ If we project this equation on the coordinate basis, we can make use of the herm
   \braket{x|\hat{p}|p} = p \braket{x|p} \quad \Rightarrow \quad \braket{\hat{p} x|p} =  p \braket{x|p} \quad \Rightarrow \quad -i \hbar \frac{\partial}{\partial x} \braket{x|p} = p \braket{x|p}
 \ee
 And if we write $\braket{x|p} = \psi_p(x)$, then we just have a first order differential equation.
-The solution to this equation, with proper normalization, is,
+The solution to this equation can easily be found
+\be
+  - i \hbar \frac{\partial}{\partial x} \psi_p(x) = p \psi_p(x) \quad \Rightarrow \quad \int \frac{d \psi_p}{\psi_p} dx = \int \frac{ip}{\hbar} dx \quad \Rightarrow \quad \ln \psi_p(x) = \frac{ipx}{\hbar} + C_1 \quad \Rightarrow \quad \psi_p(x) = C_2 e^{ipx/\hbar}
+\ee
+where $C_2$ is a normalization constant.
+With proper normalization, the momentum wavefunction looks like
 \be
   \braket{x|p} = \psi_p(x) = \frac{1}{\sqrt{2 \pi \hbar}} e^{ipx/\hbar} .
 \ee
