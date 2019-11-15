@@ -51,11 +51,12 @@ And we can project the coordinate basis onto our state vectors to give us a mean
 \be
   \begin{split}
     \bra{x'|\Psi(t)} = \Psi(x',t) &= \braket{x'|e^{-iHt/\hbar}|\Psi(0)} \\
+    &= \braket{x'|e^{-iHt/\hbar}\int dx|x} \braket{x|\Psi(0)} \\
     &= \int dx \braket{x'|e^{-iHt/\hbar}|x} \braket{x|\Psi(0)} \\
     &= \int dx \braket{x'|e^{-iHt/\hbar}|x} \Psi(x,0)
   \end{split}
 \ee
-where we introduced the resolution of identity $\int \ket{x} \bra{x} dx = 1$.
+where we introduced the resolution of identity $\int dx \ket{x} \bra{x} = 1$.
 
 So now we have a more mathematical representation of our problem; we want to know how to go from $\Psi(x,0)$ to $\Psi(x',t)$.
 The physical representation of our problem is that we have a particle at some point x in space, and we want to be able to detect our particle at some other point x' in space after some time t passes.
@@ -68,7 +69,7 @@ The motive behind doing this is so that we can deal with a damped exponential as
 Therefore, we can derive the path integral form of the density matrix and simply resubstitute time in place of $\beta$ to obtain the path integral form of the time propagator.
 
 We would like to separate the hamiltonian into its kinetic and potential energy components, $\hat{H} = \hat{K} + \hat{U}$.
-However, we cannot split the exponentials because, for two operators that do not commute $\text{exp}(\hat{H}) \neq \text{exp}(\hat{K}) \text{exp}(\hat{U})$.
+However, we cannot split the exponentials because for two operators that do not commute $\text{exp}(\hat{H}) \neq \text{exp}(\hat{K}) \text{exp}(\hat{U})$.
 To get around this we employ the trotter decompositon
 \be
   e^{- \beta \hat{H}} = e^{- \beta (\hat{K} + \hat{U})} = \lim_{P \to\infty} \Big[ e^{- \beta \hat{U}/2P} e^{-\beta \hat{K}/P} e^{-\beta{U}/2P} \Big]^P .
