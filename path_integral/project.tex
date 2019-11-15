@@ -1,0 +1,176 @@
+\documentclass{article}
+%=============================================================================80
+%	                          Packages                                     %
+%==============================================================================%
+% Packages
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{braket}
+\usepackage{float}
+\usepackage{subcaption}
+\usepackage[margin=0.7in]{geometry}
+\usepackage[version=4]{mhchem}
+%==============================================================================%
+%                           User-Defined Commands                              %
+%==============================================================================%
+% User-Defined Commands
+\newcommand{\be}{\begin{equation}}
+\newcommand{\ee}{\end{equation}}
+\newcommand{\benum}{\begin{enumerate}}
+\newcommand{\eenum}{\end{enumerate}}
+\newcommand{\pd}{\partial}
+\newcommand{\dg}{\dagger}
+%==============================================================================%
+%                             Title Information                                %
+%==============================================================================%
+\title{}
+\date{4/3/18}
+\author{Alan Robledo}
+%==============================================================================%
+\begin{document}
+
+\maketitle
+
+\section{Derivation of Path Integral}
+As always, we will start with the case of a single quantum particle moving in one dimension. So the Hamiltonian looks like,
+\be
+  H = \frac{p^2}{2m} + V(x)
+\ee
+We consider the amplitude of a path that the particle can take when going from x to x' over some time t as the propagator written in position space.
+\be
+  A = \braket{x'|e^{-iHt/\hbar}|x}
+\ee
+This is useful to know because the probability of the particle choosing a particular path would simply be $|A|^2$.
+In terms of state vectors, the initial state of our particle can be represented as $\ket{\Psi(0)}$, so the state of our particle can be represented as the inital state vector being acted upon by the propagator
+\be
+  \ket{\Psi(t)} = e^{-iHt/\hbar} \ket{\Psi(0)}
+\ee
+And we can project the coordinate basis onto our state vectors to give us a meaningful representation of our state vector
+\be
+  \begin{split}
+    \bra{x'|\Psi(t)} = \Psi(x',t) &= \braket{x'|e^{-iHt/\hbar}|\Psi(0)} \\
+    &= \int dx \braket{x'|e^{-iHt/\hbar}|x} \bra{x|\Psi(0)} \\
+    &= \int dx \braket{x'|e^{-iHt/\hbar}|x} \Psi(x,0)
+  \end{split}
+\ee
+where we introduced the resolution of identity $\int \ket{x} \bra{x} dx = 1$.
+
+So now we have a more mathematical representation of our problem; we want to know how to go from $\Psi(x,0)$ to $\Psi(x',t)$.
+The physical representation of our problem is that we have a particle at some point x in space, and we want to be able to detect our particle at some other point x' in space after some time t passes.
+
+By going to imaginary time, which is done by substituting $-it/\hbar = \beta$, we can express the coordinate-space quantum propagator as the canonical density matrix,
+\be \label{eq:density_mat}
+  \rho(x,x') = \braket{x'|e^{-\beta \hat{H}}| x}
+\ee
+The motive behind doing this is so that we can deal with a damped exponential as opposed to a complex exponential.
+Therefore, we can derive the path integral form of the density matrix and simply resubstitute time in place of beta to obtain the path integral form of the time propagator.
+
+We would like to separate the hamiltonian into its kinetic and potential energy components, $\hat{H} = \hat{K} + \hat{U}$.
+However, we cannot split the exponentials because, for two operators that do not commute $\text{exp}(\hat{H}) \neq \text{exp}(\hat{K}) + \text{exp}(\hat{U})$.
+To get around this we employ the trotter decompositon
+\be
+  e^{- \beta \hat{H}} = e^{- \beta \hat{H}} = \lim_{P \to\infty} \Big[ e^{- \beta \hat{U}/2P} e^{-\beta \hat{K}/P} e^{-\beta{U}/2P} \Big]^P .
+\ee
+Substituting this into equation (\ref{eq:density_mat}) gives us,
+\be
+  \rho(x,x') = \lim_{P \to\infty} \bra{x'} \lim_{P \to\infty} \Big[ e^{- \beta \hat{U}/2P} e^{-\beta \hat{K}/P} e^{-\beta{U}/2P} \Big]^P \ket{x}
+\ee
+which can be condensed by defining another operator $\Omega$ as
+\be
+  \Omega = e^{-\beta \hat{U}/2P} e^{-\beta \hat{K}/P} e^{-\beta \hat{U}/2P} .
+\ee
+So our density matrix becomes,
+\be
+  \rho(x,x') = \lim_{P \to\infty} \braket{x'|\Omega^P|x}
+\ee
+We can insert the resolution of identity in terms of the position basis P-1 times between each of the omegas, remembering that $\Omega^P = \Omega \Omega \cdots \Omega$,
+\be \label{eq:density_omega}
+  \rho(x,x') = \lim_{P \to\infty} \int \cdots \int dx_P \cdots dx_2 \braket{x'|\Omega|x_P} \braket{x_P|\Omega|x_{P-1}} \bra{x_{P-1}} \cdots \ket{x_3} \braket{x_3|\Omega|x_2} \braket{x_2|\Omega|x}
+\ee
+The integration over a coordinate $x_i$ can be thought of as integrating over a possible path that your particle can take because we can obtain integrations over all possible paths when P $\rightarrow \infty$.
+If we consider an element of the matrix,
+\be \label{eq:omega_mat}
+  \braket{x_{k+1}|\Omega|x_k} = \braket{x+1|e^{-\beta \hat{U}/2P} e^{-\beta \hat{K}/P} e^{-\beta \hat{U}/2P}|x_k}
+\ee
+we can recognize that the set of $\ket{x_k}$ are eigenvectors of $e^{-\beta \hat{U}/2P}$ with eigenvalue $e^{-\beta \hat{U(x_k)}/2P}$ because $\hat{U} = U(\hat{x})$ is a function of the coordinate operator.
+This can be shown easily by writing the exponential as a power series in $\hat{U}$.
+\be
+  e^{-\beta \hat{U}/2P} = \sum_{n=0}^{\infty} \frac{\beta^n(2P)^{-n} \hat{U}^n}{n!}
+\ee
+and if we operate on an eigenvector $\ket{x_k}$, we get
+\be
+  \begin{split}
+    e^{-\beta \hat{U}/2P} \ket{x_k} &= \sum_{n=0}^{\infty} \frac{\beta^n(2P)^{-n}}{n!} \hat{U}^n \ket{x_k} \\
+    &= \sum_{n=0}^{\infty} \frac{\beta^n(2P)^{-n}}{n!} (U(x_k))^n \ket{x_k} \\
+    &= e^{-\beta U(x_k)/2P} \ket{x_k}
+  \end{split}
+\ee
+So equation (\ref{eq:omega_mat}) simplifies to
+\be
+  \braket{x_{k+1}|\Omega|x_k} = e^{-\beta U(x_{k+1})/2P} \braket{x_{k+1}|e^{-\beta \hat{K}/P} |x_k} e^{-\beta U(x_k)/2P} .
+\ee
+We know that $\hat{K}$ is a function of the momentum operator, $\hat{K} = \hat{p}^2/2m$, so we can use the same technique as we did with $\hat{U}$ and the position eigenvectors by introducing the resolution of identity in terms of the momentum basis.
+\be
+  \begin{split}
+    \braket{x_{k+1}|\Omega|x_k} &= \int e^{-\beta U(x_{k+1})/2P} \bra{x_{k+1}}e^{-\beta \hat{K}/P} \ket{p}\braket{p|x_k} e^{-\beta U(x_k)/2P} \\
+    &= \int e^{-\beta U(x_{k+1})/2P} e^{-\beta p^2/2mP} \braket{x_{k+1}|p}\braket{p|x_k} e^{-\beta U(x_k)/2P} dp
+  \end{split}
+\ee
+
+where $\braket{x_{k+1}|p}$ is the momentum wavefunction expressed in the coordinate $x_{k+1}$, and $\braket{p|x_k}$ is the complex conjugate of the momentum wavefunction expressed in the coordinate $x_k$ basis, i.e. $\braket{p|x_k} = \braket{x_k|p}^*$.
+We can obtain a functional form of these wavefunctions by recalling the eigenvalue problem for the momentum operator,
+\be
+  \hat{p} \ket{p} = p \ket{p}
+\ee
+If we project this equation on the coordinate basis, we can make use of the hermitian property of the momentum operator to obtain
+\be
+  \braket{x|\hat{p}|p} = p \braket{x|p} \quad \Rightarrow \quad \braket{\hat{p} x|p} =  p \braket{x|p} \quad \Rightarrow \quad -i \hbar \frac{\partial}{\partial x} \braket{x|p} = p \braket{x|p}
+\ee
+And if we write $\braket{x|p} = \psi_p(x)$, then we just have a first order differential equation.
+The solution to this equation, with proper normalization, is,
+\be
+  \braket{x|p} = \psi_p(x) = \frac{1}{\sqrt{2 \pi \hbar}} e^{ipx/\hbar} .
+\ee
+And it's complex conjugate looks like,
+\be
+  \braket{x|p}^* = \braket{p|x} = \frac{1}{\sqrt{2 \pi \hbar}} e^{-ipx/\hbar}
+\ee
+We can use this to rewrite our matrix elements of $\Omega$ as
+\be
+  \begin{split}
+    \braket{x_{k+1}|\Omega|x_k} &= \int e^{-\beta U(x_{k+1})/2P} e^{-\beta p^2/2mP} \braket{x_{k+1}|p}\braket{p|x_k} e^{-\beta U(x_k)/2P} dp \\
+    &= \frac{1}{2 \pi \hbar} \int e^{-\beta p^2/2mP} e^{-\beta(U(x_{k+1}) + U(x_k))/2P} e^{ip(x_{k+1} - x_k)/\hbar} dp
+  \end{split}
+\ee
+We can move the exponential without the momenta outside of the integral and combine the exponentials with the momenta to obtain
+\be
+  \braket{x_{k+1}|\Omega|x_k} = \frac{1}{2 \pi \hbar} e^{-\beta(U(x_{k+1}) + U(x_k))/2P} \int e^{-\beta p^2/2mP + ip(x_{k+1} - x_k)/\hbar} dp
+\ee
+Since our momentum basis extends from $+ \infty$ to $- \infty$, we end up having an integral of a gaussian if we complete the square,
+\be
+  \begin{split}
+    \frac{- \beta p^2}{2mP} + \frac{(x_{k+1} - x_k)ip}{\hbar} &= \frac{- \beta}{2mP} \Big[ p^2 - \frac{2imP(x_{k+1} - x_k)}{\beta \hbar} \Big] \\
+    &= \frac{- \beta}{2mP} \Big[ \Big( p -  \frac{mP(x_{k+1} - x_k)i}{\beta \hbar} \Big)^2 - \Big( \frac{imP(x_{k+1} - x_k)}{\beta \hbar} \Big)^2 \Big] \\
+    &= \frac{- \beta}{2mP} \Big[ \Big( p -  \frac{imP(x_{k+1} - x_k)}{\beta \hbar} \Big)^2 + \frac{m^2P^2(x_{k+1} - x_k)^2}{\beta^2 \hbar^2} \Big] \\
+    &= \frac{- \beta}{2mP} \Big( p -  \frac{imP(x_{k+1} - x_k)}{\beta \hbar} \Big)^2 - \frac{mP(x_{k+1} - x_k)^2}{2 \beta \hbar^2} \\
+  \end{split}
+\ee
+and make a variable substitution,
+\be
+  u = p -  \frac{imP(x_{k+1} - x_k)}{\beta \hbar} .
+\ee
+Our integral is now
+\be
+  \braket{x_{k+1}|\Omega|x_k} = \frac{1}{2 \pi \hbar} \text{exp} \Big[ \frac{-\beta(U(x_{k+1}) + U(x_k))}{2P} \Big] \text{exp} \Big[ \frac{-mP(x_{k+1} - x_k)^2}{2 \beta \hbar^2} \Big] \int e^\frac{-\beta u^2}{2mP} du
+\ee
+which evaluates to,
+\be
+  \braket{x_{k+1}|\Omega|x_k} = \Big( \frac{mP}{2 \pi \beta \hbar^2} \Big)^{1/2} \text{exp} \Big[ -\frac{\beta}{2P}(U(x_{k+1}) + U(x_k)) \Big] \text{exp} \Big[ -\frac{mP}{2 \beta \hbar^2}(x_{k+1} - x_k)^2 \Big]
+\ee
+Plugging in our matrix elements into equation (\ref{eq:density_omega}) P times for each element gives us the discretized path integral representation of our density matrix.
+\be
+  \rho(x,x') = \lim_{P \to\infty} \int \cdots \int dx_P \cdots dx_2 \Big( \frac{mP}{2 \pi \beta \hbar^2} \Big)^{P/2}
+\ee
+\end{document}
