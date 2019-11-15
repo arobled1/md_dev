@@ -1,6 +1,6 @@
 # Fdb version 3
-["pdflatex"] 1573785307 "project.tex" "project.pdf" "project" 1573785308
-  "/dev/null" 1573785297 0 d41d8cd98f00b204e9800998ecf8427e ""
+["pdflatex"] 1573786135 "project.tex" "project.pdf" "project" 1573786156
+  "/dev/null" 1573786155 0 d41d8cd98f00b204e9800998ecf8427e ""
   "/usr/local/texlive/2019/texmf-dist/fonts/map/fontname/texfonts.map" 1511824771 3332 103109f5612ad95229751940c61aada0 ""
   "/usr/local/texlive/2019/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm" 1246382020 1004 54797486969f23fa377b128694d548df ""
   "/usr/local/texlive/2019/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex8.tfm" 1246382020 988 bdf658c3bfc2d96d3c8b02cfc1c94c20 ""
@@ -89,9 +89,9 @@
   "/usr/local/texlive/2019/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1557342064 3277517 23507ed665b4dd9046f0f2a94bbef2be ""
   "/usr/local/texlive/2019/texmf-var/web2c/pdftex/pdflatex.fmt" 1557342086 4259635 562fc36ec496993777a6c428d8bfb811 ""
   "/usr/local/texlive/2019/texmf.cnf" 1557341546 577 d150fef99ac436ad1156e86b0892f6ef ""
-  "project.aux" 1573785308 252 9620fe95cc6fa19adee4b555881454fb "pdflatex"
-  "project.tex" 1573785306 10402 1769172ac79560f9dfe685cece136825 ""
+  "project.aux" 1573786136 252 9620fe95cc6fa19adee4b555881454fb "pdflatex"
+  "project.tex" 1573786135 10771 91b0aa1a5a241087eef7510e694af350 ""
   (generated)
   "project.pdf"
-  "project.aux"
   "project.log"
+  "project.aux"

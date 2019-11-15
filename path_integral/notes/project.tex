@@ -166,16 +166,20 @@ and make a variable substitution,
 \be
   u = p -  \frac{imP(x_{k+1} - x_k)}{\beta \hbar} .
 \ee
-Our integral is now
+Our integral is now,
 \be
   \braket{x_{k+1}|\Omega|x_k} = \frac{1}{2 \pi \hbar} \text{exp} \Big[ \frac{-\beta(U(x_{k+1}) + U(x_k))}{2P} \Big] \text{exp} \Big[ \frac{-mP(x_{k+1} - x_k)^2}{2 \beta \hbar^2} \Big] \int e^\frac{-\beta u^2}{2mP} du
 \ee
 which evaluates to,
 \be
-  \braket{x_{k+1}|\Omega|x_k} = \Big( \frac{mP}{2 \pi \beta \hbar^2} \Big)^{1/2} \text{exp} \Big[ -\frac{\beta}{2P}(U(x_{k+1}) + U(x_k)) \Big] \text{exp} \Big[ -\frac{mP}{2 \beta \hbar^2}(x_{k+1} - x_k)^2 \Big]
+  \begin{split}
+    \braket{x_{k+1}|\Omega|x_k} &= \Big( \frac{mP}{2 \pi \beta \hbar^2} \Big)^{1/2} \text{exp} \Big[ -\frac{\beta}{2P}(U(x_{k+1}) + U(x_k)) \Big] \text{exp} \Big[ -\frac{mP}{2 \beta \hbar^2}(x_{k+1} - x_k)^2 \Big] \\
+    &= \Big( \frac{mP}{2 \pi \beta \hbar^2} \Big)^{1/2} \text{exp} \Big[ \frac{mP}{2 \beta \hbar^2}(x_{k+1} - x_k)^2 - \frac{\beta}{2P}(U(x_{k+1}) + U(x_k)) \Big]
+  \end{split}
 \ee
 Plugging in our matrix elements into equation (\ref{eq:density_omega}) P times for each element gives us the discretized path integral representation of our density matrix.
 \be
-  \rho(x,x') = \lim_{P \to\infty} \int \cdots \int dx_P \cdots dx_2 \Big( \frac{mP}{2 \pi \beta \hbar^2} \Big)^{P/2}
+  \rho(x,x') = \lim_{P \to\infty} \Big( \frac{mP}{2 \pi \beta \hbar^2} \Big)^{P/2} \int \cdots \int dx_P \cdots dx_2 \quad \text{exp}\Big( \sum_{k=1}^P \Big[ \frac{mP}{2 \beta \hbar^2}(x_{k+1} - x_k)^2 - \frac{\beta}{2P}(U(x_{k+1}) + U(x_k)) \Big] \Big)
 \ee
+where $x_1 = x$ and $x_P = x'$.
 \end{document}
