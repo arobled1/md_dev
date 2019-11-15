@@ -36,7 +36,7 @@
 \section{Derivation of Path Integral for 1D Harmonic Oscillator}
 As always, we will start with the case of a single quantum particle moving in one dimension. So the Hamiltonian looks like,
 \be
-  H = \frac{p^2}{2m} + V(x)
+  H = \frac{p^2}{2m} + U(x)
 \ee
 We consider the amplitude of a path that the particle can take when going from x to x' over some time t as the propagator written in position space.
 \be
@@ -51,7 +51,7 @@ And we can project the coordinate basis onto our state vectors to give us a mean
 \be
   \begin{split}
     \bra{x'|\Psi(t)} = \Psi(x',t) &= \braket{x'|e^{-iHt/\hbar}|\Psi(0)} \\
-    &= \int dx \braket{x'|e^{-iHt/\hbar}|x} \bra{x|\Psi(0)} \\
+    &= \int dx \braket{x'|e^{-iHt/\hbar}|x} \braket{x|\Psi(0)} \\
     &= \int dx \braket{x'|e^{-iHt/\hbar}|x} \Psi(x,0)
   \end{split}
 \ee
