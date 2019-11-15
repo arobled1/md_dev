@@ -65,10 +65,10 @@ By going to imaginary time, which is done by substituting $-it/\hbar = \beta$, w
   \rho(x,x') = \braket{x'|e^{-\beta \hat{H}}| x}
 \ee
 The motive behind doing this is so that we can deal with a damped exponential as opposed to a complex exponential.
-Therefore, we can derive the path integral form of the density matrix and simply resubstitute time in place of beta to obtain the path integral form of the time propagator.
+Therefore, we can derive the path integral form of the density matrix and simply resubstitute time in place of $\beta$ to obtain the path integral form of the time propagator.
 
 We would like to separate the hamiltonian into its kinetic and potential energy components, $\hat{H} = \hat{K} + \hat{U}$.
-However, we cannot split the exponentials because, for two operators that do not commute $\text{exp}(\hat{H}) \neq \text{exp}(\hat{K}) + \text{exp}(\hat{U})$.
+However, we cannot split the exponentials because, for two operators that do not commute $\text{exp}(\hat{H}) \neq \text{exp}(\hat{K}) \text{exp}(\hat{U})$.
 To get around this we employ the trotter decompositon
 \be
   e^{- \beta \hat{H}} = e^{- \beta (\hat{K} + \hat{U})} = \lim_{P \to\infty} \Big[ e^{- \beta \hat{U}/2P} e^{-\beta \hat{K}/P} e^{-\beta{U}/2P} \Big]^P .
