@@ -112,15 +112,15 @@ So equation (\ref{eq:omega_mat}) simplifies to
 \be
   \braket{x_{k+1}|\Omega|x_k} = e^{-\beta U(x_{k+1})/2P} \braket{x_{k+1}|e^{-\beta \hat{K}/P} |x_k} e^{-\beta U(x_k)/2P} .
 \ee
-We know that $\hat{K}$ is a function of the momentum operator, $\hat{K} = \hat{p}^2/2m$, so we can use the same technique as we did with $\hat{U}$ and the position eigenvectors by introducing the resolution of identity in terms of the momentum basis.
+We know that $\hat{K}$ is a function of the momentum operator, $\hat{K} = \hat{p}^2/2m$, so we can use the same technique as we did with $\hat{U}$ and the position eigenvectors by introducing the resolution of identity in terms of the momentum basis
 \be
   \begin{split}
     \braket{x_{k+1}|\Omega|x_k} &= \int e^{-\beta U(x_{k+1})/2P} \bra{x_{k+1}}e^{-\beta \hat{K}/P} \ket{p}\braket{p|x_k} e^{-\beta U(x_k)/2P} \\
     &= \int e^{-\beta U(x_{k+1})/2P} e^{-\beta p^2/2mP} \braket{x_{k+1}|p}\braket{p|x_k} e^{-\beta U(x_k)/2P} dp
   \end{split}
 \ee
-
 where $\braket{x_{k+1}|p}$ is the momentum wavefunction expressed in the coordinate $x_{k+1}$, and $\braket{p|x_k}$ is the complex conjugate of the momentum wavefunction expressed in the coordinate $x_k$ basis, i.e. $\braket{p|x_k} = \braket{x_k|p}^*$.
+
 We can obtain a functional form of these wavefunctions by recalling the eigenvalue problem for the momentum operator,
 \be
   \hat{p} \ket{p} = p \ket{p}
@@ -174,7 +174,7 @@ Our integral is now,
 which evaluates to,
 \be
   \begin{split}
-    \braket{x_{k+1}|\Omega|x_k} &= \Big( \frac{mP}{2 \pi \beta \hbar^2} \Big)^{1/2} \text{exp} \Big[ -\frac{\beta}{2P}(U(x_{k+1}) + U(x_k)) \Big] \text{exp} \Big[ -\frac{mP}{2 \beta \hbar^2}(x_{k+1} - x_k)^2 \Big] \\
+    \braket{x_{k+1}|\Omega|x_k} &= \frac{1}{2 \pi \hbar} \text{exp} \Big[ -\frac{\beta}{2P}(U(x_{k+1}) + U(x_k)) \Big] \text{exp} \Big[ -\frac{mP}{2 \beta \hbar^2}(x_{k+1} - x_k)^2 \Big] \Big( \frac{2 \pi m P}{\beta} \Big)^{1/2} \\
     &= \Big( \frac{mP}{2 \pi \beta \hbar^2} \Big)^{1/2} \text{exp} \Big[ \frac{mP}{2 \beta \hbar^2}(x_{k+1} - x_k)^2 - \frac{\beta}{2P}(U(x_{k+1}) + U(x_k)) \Big]
   \end{split}
 \ee
