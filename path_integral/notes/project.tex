@@ -49,6 +49,7 @@ We know from introductory quantum mechanics that the energies of a harmonic osci
 \be
   E_n = \hbar \omega(n + \frac{1}{2})
 \ee
+
 This can be derived from solving Schr\"odinger's equation with the hamiltonian in equation (\ref{eq:harm_osc}).
 Alternatively, the energies can be derived using Dirac's ladder operators, $\hat{a}$ and $\hat{a}^{\dagger}$.
 The "raising operator" $\hat{a}$ and "lowering operator" $\hat{a}^{\dagger}$ can be defined in terms of the position and momentum operators as
@@ -59,9 +60,61 @@ The "raising operator" $\hat{a}$ and "lowering operator" $\hat{a}^{\dagger}$ can
   \end{split}
 \ee
 where the prefactors are such that they allow the math to work out nicely when deriving the energies for a harmonic oscillator.
-The Hamiltonian can then be expressed in terms of the ladder operators.
+The ladder operators can then be used to obtain a function of the Hamiltonian by remembering the commutation relation $[\hat{x},\hat{p}] = i \hbar$. The hats will be ommited from the operators to simplify notation.
 \be
-  \hat{H} = \hbar \omega(\hat{a}{\hat{a}^{\dagger}} + \frac{1}{2})
+  \begin{split}
+    aa^{\dagger} &= \sqrt{\frac{m \omega}{2 \hbar}} \Big( x + \frac{i}{m \omega} p\Big) \sqrt{\frac{m \omega}{2 \hbar}} \Big( x - \frac{i}{m \omega} p\Big) \\
+    &= \frac{m \omega}{2 \hbar} \Big( x + \frac{i}{m \omega} p\Big) \Big( x - \frac{i}{m \omega} p\Big) \\
+    &= \frac{m \omega}{2 \hbar} \Big( x^2 - \frac{i}{m \omega}xp + \frac{i}{m \omega}px + \frac{p^2}{(m \omega)^2} \Big) \\
+    &= \frac{m \omega}{2 \hbar} \Big( x^2 + \frac{p^2}{(m \omega)^2} \Big) - \frac{i}{2 \hbar}xp + \frac{i}{2 \hbar}px \\
+    &= \frac{1}{2 \hbar} \Big( \frac{p^2}{m \omega} + m \omega x^2\Big) - \frac{i}{2 \hbar} [x,p] \\
+    &= \frac{1}{\hbar \omega} \Big( \frac{p^2}{2m} + \frac{(m \omega x)^2}{2m}\Big) - \frac{i}{2 \hbar} (i \hbar) \\
+    &= \frac{1}{\hbar \omega} H + \frac{1}{2}
+  \end{split}
+\ee
+So rearranging to solve for the hamiltonian gives us,
+\be \label{eq:h_plusminus}
+  \hat{H} = \hbar \omega \Big( \hat{a} \hat{a}^{\dagger} - \frac{1}{2} \Big)
+\ee
+If we reverse the ladder operators we get,
+\be
+  \begin{split}
+    a^{\dagger}a &= \sqrt{\frac{m \omega}{2 \hbar}} \Big( x - \frac{i}{m \omega} p\Big) \sqrt{\frac{m \omega}{2 \hbar}} \Big( x + \frac{i}{m \omega} p\Big) \\
+    &= \frac{m \omega}{2 \hbar} \Big( x - \frac{i}{m \omega} p\Big) \Big( x + \frac{i}{m \omega} p\Big) \\
+    &= \frac{m \omega}{2 \hbar} \Big( x^2 + \frac{i}{m \omega}xp - \frac{i}{m \omega}px + \frac{p^2}{(m \omega)^2}\Big) \\
+    &= \frac{m \omega}{2 \hbar} \Big( x^2 + \frac{p^2}{(m \omega)^2}\Big) + \frac{i}{2 \hbar}xp - \frac{i}{2 \hbar}px \\
+    &= \frac{1}{2 \hbar} \Big( \frac{p^2}{m \omega} + m \omega x^2 \Big) + \frac{i}{2 \hbar} [x,p] \\
+    &= \frac{1}{2 \hbar m \omega} \Big( p^2 + (m \omega x)^2 \Big) + \frac{i}{2 \hbar} (i \hbar) \\
+    &= \frac{1}{\hbar \omega} \Big( \frac{p^2}{2m} + \frac{(m \omega x)^2}{2m} \Big) - \frac{1}{2} \\
+    &= \frac{1}{\hbar \omega}H - \frac{1}{2}
+  \end{split}
+\ee
+And rearranging to solve for the hamiltonian gives us,
+\be \label{eq:h_minusplus}
+  \hat{H} = \hbar \omega \Big(\hat{a}^{\dagger} \hat{a} + \frac{1}{2} \Big)
+\ee
+We can imagine a set of vectors that make up the basis of eigenvectors $\ket{\psi_n}$ for the harmonic oscillator Hamiltonian that yield energies $E_n$.
+If we apply equation (\ref{eq:h_plusminus}) to a vector that is one state higher $\hat{a}\kat{\psi_n}$, we obtain
+\be
+  H \hat{a}\ket{\psi} = (E_n + \hbar \omega) \hat{a}\ket{\psi}
+\ee
+eigenvalues equal to the energy in the previous state plus $\hbar \omega$.
+Likewise, if we apply equation (\ref{eq:h_minusplus}) to a vector that is one state lower $\hat{a}^{\dagger}\ket{\psi_n}$, we obtain
+\be
+  H \hat{a}^{\dagger}\kat{\psi} = (E_n - \hbar \omega) \hat{a}^{\dagger}\ket{\psi}
+\ee
+It is for this reason that the operators $\hat{a}$ and $\hat{a}^{\dagger}$ are called ladder operators because they allow us to go up and down in energy.
+When we consider that there is ground state $\ket{\psi_0}$ such that $\het{a}^{\dagger}\ket{\psi_0} = 0$, we can plug in the defintion for $\hat{a}^{\dagger}$ and solve for $\ket{\psi_0}$, giving
+\be
+  \psi_0(x) = \frac{m \omega}{\pi \hbar}^{1/4} e^{-\frac{m \omega}{2 \hbar} x^2}
+\ee
+Plugging this into the Schr\"odinger equation gives the energy
+\be
+  E_0 = \frac{\hbar \omega}{2}
+\ee
+Since we know that applying the raising operator $\hat{a}$ increases the energy by $\hbar \omega$, the energy at the nth state can be defined as
+\be
+  E_n = \hbar \omega(n + \frac{1}{2})
 \ee
 
 \subsection{Path Integral Derivation}
