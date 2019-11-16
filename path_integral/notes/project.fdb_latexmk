@@ -1,5 +1,5 @@
 # Fdb version 3
-["pdflatex"] 1573925097 "project.tex" "project.pdf" "project" 1573925098
+["pdflatex"] 1573925504 "project.tex" "project.pdf" "project" 1573925521
   "/usr/local/texlive/2017/texmf-dist/fonts/map/fontname/texfonts.map" 1480098670 3287 e6b82fe08f5336d4d5ebc73fb1152e87 ""
   "/usr/local/texlive/2017/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm" 1480098698 1004 54797486969f23fa377b128694d548df ""
   "/usr/local/texlive/2017/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex8.tfm" 1480098698 988 bdf658c3bfc2d96d3c8b02cfc1c94c20 ""
@@ -98,9 +98,9 @@
   "/usr/local/texlive/2017/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1495593472 2350277 a699055bee05bf8a40b0504752487295 ""
   "/usr/local/texlive/2017/texmf-var/web2c/pdftex/pdflatex.fmt" 1495593487 4129592 0e6cfee100d68e6d96b92c0258f2ff73 ""
   "/usr/local/texlive/2017/texmf.cnf" 1495593465 577 2b71d4d888f9e5560b2e99985915a9fa ""
-  "project.aux" 1573925097 421 2a7ce65e27dfd054a46567afbd0b1adf ""
-  "project.tex" 1573925094 12533 fb5cee73de9e77e6c813c256d2810e26 ""
+  "project.aux" 1573925504 402 56d41f6eebe758c5dc0dcfd9bc7366fd ""
+  "project.tex" 1573925503 12506 06e7b50ab79f10ea2b66cc223d8a42ef ""
   (generated)
   "project.pdf"
-  "project.log"
   "project.aux"
+  "project.log"

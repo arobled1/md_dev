@@ -34,7 +34,7 @@
 \maketitle
 
 \section{Introduction}
-\subsection{Quantum Harmonic Oscillator Partition Function}
+\subsection{Quantum Harmonic Oscillator}
 Similar to the classical harmonic oscillator, we have a particle that is subject to a harmonic potential so that the 1D Hamiltonian looks like
 \be \label{eq:harm_osc}
   \hat{H} = \hat{K} + \hat{U} = \frac{\hat{p}^2}{2m} + \frac{1}{2}m \omega^2\hat{x}^2
@@ -65,8 +65,7 @@ The Hamiltonian can then be expressed in terms of the ladder operators.
 \ee
 
 \subsection{Path Integral Derivation}
-As always, we will start with the case of a single quantum particle moving in one dimension.
-So our Hamiltonian is the same as in equation (\ref{eq:harm_osc}).
+We will consider the case of a single quantum particle moving in one dimension so our Hamiltonian is the same as in equation (\ref{eq:harm_osc}).
 We consider the amplitude of a path that the particle can take when going from x to x' over some time t as the propagator written in position space.
 \be
   A = \braket{x'|e^{-iHt/\hbar}|x}
@@ -124,7 +123,7 @@ If we consider an element of the matrix,
 \be \label{eq:omega_mat}
   \braket{x_{k+1}|\Omega|x_k} = \braket{x_{k+1}|e^{-\beta \hat{U}/2P} e^{-\beta \hat{K}/P} e^{-\beta \hat{U}/2P}|x_k}
 \ee
-we can recognize that the set of $\ket{x_k}$ are eigenvectors of $e^{-\beta \hat{U}/2P}$ with eigenvalue $e^{-\beta U(x_k)}/2P$ because $\hat{U} = U(\hat{x})$ is a function of the coordinate operator.
+we can recognize that the set of $\ket{x_k}$ are eigenvectors of $e^{-\beta \hat{U}/2P}$ with eigenvalue $e^{-\beta U(x_k)/2P}$ because $\hat{U} = U(\hat{x})$ is a function of the coordinate operator.
 This can be shown easily by writing the exponential as a power series in $\hat{U}$.
 \be
   e^{-\beta \hat{U}/2P} = \sum_{n=0}^{\infty} \frac{\beta^n(2P)^{-n} \hat{U}^n}{n!}
@@ -148,7 +147,7 @@ We know that $\hat{K}$ is a function of the momentum operator, $\hat{K} = \hat{p
     &= \int e^{-\beta U(x_{k+1})/2P} e^{-\beta p^2/2mP} \braket{x_{k+1}|p}\braket{p|x_k} e^{-\beta U(x_k)/2P} dp
   \end{split}
 \ee
-where $\braket{x_{k+1}|p}$ is the momentum wavefunction expressed in the coordinate $x_{k+1}$, and $\braket{p|x_k}$ is the complex conjugate of the momentum wavefunction expressed in the coordinate $x_k$ basis, i.e. $\braket{p|x_k} = \braket{x_k|p}^*$.
+where $\braket{x_{k+1}|p}$ is the momentum wavefunction expressed in the coordinate basis $x_{k+1}$, and $\braket{p|x_k}$ is the complex conjugate of the momentum wavefunction expressed in the coordinate basis $x_k$, i.e. $\braket{p|x_k} = \braket{x_k|p}^*$.
 
 We can obtain a functional form of these wavefunctions by recalling the eigenvalue problem for the momentum operator,
 \be
@@ -187,7 +186,7 @@ Since our momentum basis extends from $+ \infty$ to $- \infty$, we end up having
 \be
   \begin{split}
     \frac{- \beta p^2}{2mP} + \frac{(x_{k+1} - x_k)ip}{\hbar} &= \frac{- \beta}{2mP} \Big[ p^2 - \frac{2imP(x_{k+1} - x_k)}{\beta \hbar} \Big] \\
-    &= \frac{- \beta}{2mP} \Big[ \Big( p -  \frac{mP(x_{k+1} - x_k)i}{\beta \hbar} \Big)^2 - \Big( \frac{imP(x_{k+1} - x_k)}{\beta \hbar} \Big)^2 \Big] \\
+    &= \frac{- \beta}{2mP} \Big[ \Big( p -  \frac{imP(x_{k+1} - x_k)}{\beta \hbar} \Big)^2 - \Big( \frac{imP(x_{k+1} - x_k)}{\beta \hbar} \Big)^2 \Big] \\
     &= \frac{- \beta}{2mP} \Big[ \Big( p -  \frac{imP(x_{k+1} - x_k)}{\beta \hbar} \Big)^2 + \frac{m^2P^2(x_{k+1} - x_k)^2}{\beta^2 \hbar^2} \Big] \\
     &= \frac{- \beta}{2mP} \Big( p -  \frac{imP(x_{k+1} - x_k)}{\beta \hbar} \Big)^2 - \frac{mP(x_{k+1} - x_k)^2}{2 \beta \hbar^2} \\
   \end{split}
