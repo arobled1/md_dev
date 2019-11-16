@@ -1,3 +1,19 @@
+#===============================================================================
+# Path integral molecular dynamics for a 1D harmonic oscillator.
+# This code uses velocity verlet to integrate the equations of motion for P
+# beads on a ring with harmonic nearest neighbors that are subject to an
+# external potential that is also harmonic.
+# Each bead is coupled to a langevin thermostat.
+#===============================================================================
+# Author: Alan Robledo
+# Date: 11/15/19
+#===============================================================================
+# Notes:
+#  The virial energy estimator should be close to the value of energy obtained
+#  when you plug in omega and KBT into the equation for the energy of a
+#  harmonic oscillator derived from the derivative of the canonical partition
+#  function.
+#===============================================================================
 import numpy as np
 import matplotlib.pyplot as plt
 
