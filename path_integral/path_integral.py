@@ -1,12 +1,15 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
+# Update velocity at a half step dt/2
 def upd_velocity(veloc, force, deltat, mass):
     return veloc + (force * deltat)/(2 * mass)
 
+# Update position at a half step dt/2
 def upd_position(posit, veloc, deltat):
     return posit + 0.5 * veloc * deltat
 
+# Use langevin thermostat to add randomness to your velocities
 def rand_kick(old_v, friction, boltz, mass, deltat):
     gaussian = np.random.normal(0,1)
     sqt1 = np.sqrt(1 - np.exp(-2*friction*deltat) )
@@ -15,9 +18,11 @@ def rand_kick(old_v, friction, boltz, mass, deltat):
     new_velocity = old_v * np.exp(- friction * deltat) + random
     return new_velocity
 
+# Compute force from the harmonic potential U = 1/2mw^2x^2
 def get_harmonic_force(xi, mass, frequency):
     return - mass * frequency**2 * xi
 
+# Transform primitive coordinates to staged coordinates
 def stage_coords(xi, num_beads):
     up_u = np.zeros(num_beads)
     # For the first bead
@@ -29,6 +34,7 @@ def stage_coords(xi, num_beads):
     up_u[num_beads-1] = xi[num_beads-1] - ( ( (num_beads-2)*xi[0] ) + xi[0] )/(num_beads - 1)
     return up_u
 
+# Transform staged coordinates to primitive coordinates
 def inverse_stage_coords(ui, xi, num_beads):
     up_x = np.zeros(num_beads)
     # For the first bead
@@ -40,6 +46,7 @@ def inverse_stage_coords(ui, xi, num_beads):
         up_x[k] = ui[k] + (k/(k+1))*up_x[k+1] + (1/(k+1))*ui[0]
     return up_x
 
+# Compute external potential in staged coordinates using external potential in primitive coordinates
 def inverse_force_transformation(force_x):
     new_ext_u = np.zeros(len(force_x))
     sum = 0
@@ -52,11 +59,11 @@ def inverse_force_transformation(force_x):
         new_ext_u[k] = force_x[k] + ((k-1)/k)*(new_ext_u[k-1])
     return new_ext_u
 
-n_steps = 20                           # Number of time steps
+n_steps = 20                          # Number of time steps
 tmin = 0                              # Starting time
 dt = 0.01                             # Delta t
 times = np.array([tmin + i * dt for i in range(n_steps)])
-gamma = 0                           # Friction
+gamma = 0                             # Friction
 kbt = 1                               # Temperature (KbT)
 w = 2                                 # Set Frequency
 m = 2                                 # Set Mass
@@ -95,8 +102,12 @@ for p in range(pbeads):
 # Compute initial forces in staged coords (eqn 12.6.12)
 f_u[:,0] = f_u[:,0] + (1/pbeads)*inverse_force_transformation(f_x[:,0])
 
-# MD code starts here!!!!!
+# !!!!!!!!!!!!!!!!!!!!! MD code starts here !!!!!!!!!!!!!!!!!!!!!!!!!!!
+count = 0    # MD Step counter
+steps = []
 for i in range(1,n_steps):
+    steps.append(count)
+    count +=1
     # Update velocity
     for p in range(pbeads):
         v[p,i] = upd_velocity(v[p, i-1], f_u[p, i-1], dt, new_m_vel[p])
@@ -130,17 +141,16 @@ for q in range(n_steps):
     for o in range(pbeads):
         sumv += 0.5*(m*w**2)*x[o,q]*x[o,q] + 0.5*x[o,q]*(-f_x[o,q])
     virial.append(sumv)
+# Convert from list to numpy array to scale elements quicker
 virial = np.asarray(virial)
+# Scale the estimator by the inverse of the number of beads
 virial = (1/pbeads)*virial
 
-# Compute cumulative average of the virial estimator
+# Compute cumulative averages of the virial estimator
 cume = np.zeros(len(virial))
 cume[0] = virial[0]
 for i in range(1,len(virial)):
     cume[i] = (i)/(i+1)*cume[i-1] + virial[i]/(i+1)
-steps = np.zeros(n_steps)
-for g in range(n_steps):
-    steps[g] = g
 
 filename = open("energies.txt", "a+")
 for l in range(len(virial)):
@@ -151,57 +161,12 @@ for l in range(len(virial)):
     filename.write(str(steps[l]) + "\n")
 filename.close()
 
-# plt.xlim(min(steps)-100, max(steps))
-# plt.ylim(min(energy[:60000])-2 ,max(energy[:60000])+2)
-# plt.plot(steps, energy[:60000], '-', color='black', alpha=0.4)
-# plt.plot(steps, cume[:60000], '-', color='blue')
-# plt.xlabel('# of Steps')
-# plt.ylabel('Energy')
-# plt.savefig('sunday_virial.pdf')
-# plt.clf()
-
-# # Plot positions of beads
-# plt.xlim(0, times[3000])
-# plt.ylim(min(x[1,:3000]) - 1,max(x[1,:3000]) + 1)
-# plt.plot(times[:3000], x[0,:3000], '-', color='blue', label='Atom 1')
-# plt.plot(times[:3000], x[1,:3000], '-', color='green', label='Atom 2')
-# plt.plot(times[:3000], x[2,:3000], '-', color='red', label='Atom 3')
-# plt.xlabel('time (dimensionless units)')
-# plt.ylabel('x (dimensionless units)')
-# plt.legend()
-# plt.savefig('posit.pdf')
-# plt.clf()
-
-# # Check conservation of energy with gamma = 0 and plot to make sure it is
-# # a straight line
-# energy = []
-# for j in range(n_steps):
-#     sum = 0
-#     for p in range(pbeads):
-#         sum = sum + 0.5*new_m[p]*v[p,j]*v[p,j] + (0.5*new_m[p]*w**2)*u[p,j]*u[p,j]
-#     energy.append(sum)
-# plt.xlim(0, times[500])
-# plt.ylim(min(energy[:500]) - .01,max(energy[:5000]) + .01)
-# plt.plot(times[:500], energy[:500], '.', color='blue')
-# plt.xlabel('time (dimensionless units)')
-# plt.ylabel('energy (dimensionless units)')
-# plt.title("$\gamma = 0$")
-# plt.savefig('gam0energy.pdf')
-# plt.clf()
-
-# # Histograms for checking x and p
-# _ = plt.hist(u[0,:], bins=100, normed=True)
-# plt.xlabel('X')
-# plt.ylabel('P(X)')
-# plt.savefig('xhist0.pdf')
-# plt.clf()
-# _ = plt.hist(u[pbeads-2,:], bins=100, normed=True)
-# plt.xlabel('X')
-# plt.ylabel('P(X)')
-# plt.savefig('xhistpm1.pdf')
-# plt.clf()
-# _ = plt.hist(u[pbeads -1,:], bins=100, normed=True)
-# plt.xlabel('X')
-# plt.ylabel('P(X)')
-# plt.savefig('xhistp.pdf')
-# plt.clf()
+# Plot the instantaneous energy estimators along with averages
+plt.xlim(min(steps)-100, max(steps))
+plt.ylim(min(virial)-2 ,max(virial)+2)
+plt.plot(steps, virial, '-', color='black', alpha=0.4)
+plt.plot(steps, cume, '-', color='blue')
+plt.xlabel('# of Steps')
+plt.ylabel('Energy')
+plt.savefig('sunday_virial.pdf')
+plt.clf()
