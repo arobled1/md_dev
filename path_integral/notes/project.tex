@@ -54,21 +54,19 @@ Alternatively, the energies can be derived using Dirac's ladder operators, $\hat
 The "raising operator" $\hat{a}$ and "lowering operator" $\hat{a}^{\dagger}$ can be defined in terms of the position and momentum operators as
 \be
   \begin{split}
-    \hat{a} = \sqrt{\frac{m \omega}{2 \hbar}} \Big( \hat{x} + \frac{i}{m \omega} \hat{p}\Big)
-    \hat{a}^{\dagger} = \sqrt{\frac{m \omega}{2 \hbar}} \Big( \hat{x} - \frac{i}{m \omega} \hat{p}\Big)
+    \hat{a} &= \sqrt{\frac{m \omega}{2 \hbar}} \Big( \hat{x} + \frac{i}{m \omega} \hat{p}\Big) \\
+    \hat{a}^{\dagger} &= \sqrt{\frac{m \omega}{2 \hbar}} \Big( \hat{x} - \frac{i}{m \omega} \hat{p}\Big)
   \end{split}
 \ee
-where the prefactors allow the math to work out nicely when deriving the energies for a harmonic oscillator.
+where the prefactors are such that they allow the math to work out nicely when deriving the energies for a harmonic oscillator.
 The Hamiltonian can then be expressed in terms of the ladder operators.
 \be
   \hat{H} = \hbar \omega(\hat{a}{\hat{a}^{\dagger}} + \frac{1}{2})
 \ee
 
-\subsection{Derivation of Path Integral for 1D Harmonic Oscillator}
-As always, we will start with the case of a single quantum particle moving in one dimension. So the Hamiltonian looks like,
-\be
-  H = \frac{p^2}{2m} + U(x)
-\ee
+\subsection{Path Integral Derivation}
+As always, we will start with the case of a single quantum particle moving in one dimension.
+So our Hamiltonian is the same as in equation (\ref{eq:harm_osc}).
 We consider the amplitude of a path that the particle can take when going from x to x' over some time t as the propagator written in position space.
 \be
   A = \braket{x'|e^{-iHt/\hbar}|x}
