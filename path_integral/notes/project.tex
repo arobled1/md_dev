@@ -36,7 +36,7 @@
 
 \maketitle
 
-The following are notes that I have created to better understand path integral molecular dynamics (PIMD) as applied to a harmonic oscillator and beyond. All the material in this paper can be found in mutliple resources. The ones that I used are listed in the references. Notes are still in development.
+I have created the following notes to better understand path integral molecular dynamics (PIMD) as applied to a harmonic oscillator and beyond. All the material in this paper can be found in mutliple resources. The ones that I used are listed in the references. Notes are still in development.
 
 \section{Introduction}
 \subsection{Quantum Harmonic Oscillator}
@@ -52,8 +52,8 @@ We know that we can derive the properties of the harmonic oscillator from the ca
 where the sum is performed over all possible states of the system, which are discrete.\cite{tuckerman}
 We can derive the formula for the energies from introductory quantum mechanics.
 
-The energies can be obtained from solving Schr\"odinger's equation with the hamiltonian in equation (\ref{eq:harm_osc}).
-Alternatively, the energies can be derived using Dirac's ladder operators, $\hat{a}$ and $\hat{a}^{\dagger}$.\cite{griffiths,shankar}
+The energies can be obtained from solving Schr\"odinger's equation with the Hamiltonian in equation (\ref{eq:harm_osc}).
+Alternatively, the energies can be obtained using Dirac's ladder operators, $\hat{a}$ and $\hat{a}^{\dagger}$.\cite{griffiths,shankar}
 The "raising operator" $\hat{a}$ and "lowering operator" $\hat{a}^{\dagger}$ can be defined in terms of the position and momentum operators as
 \be
   \begin{split}
@@ -77,7 +77,7 @@ The ladder operators can then be used to obtain a function of the Hamiltonian by
 \ee
 So rearranging to solve for the hamiltonian gives us,
 \be \label{eq:h_plusminus}
-  \hat{H} = \hbar \omega \Big( \hat{a} \hat{a}^{\dagger} - \frac{1}{2} \Big)
+  \hat{H} = \hbar \omega \Big( \hat{a} \hat{a}^{\dagger} - \frac{1}{2} \Big) .
 \ee
 If we reverse the ladder operators we get,
 \be
@@ -93,78 +93,82 @@ If we reverse the ladder operators we get,
     &= \frac{1}{\hbar \omega}H - \frac{1}{2}
   \end{split}
 \ee
-And rearranging to solve for the hamiltonian gives us,
+And rearranging to solve for the Hamiltonian gives us,
 \be \label{eq:h_minusplus}
-  \hat{H} = \hbar \omega \Big(\hat{a}^{\dagger} \hat{a} + \frac{1}{2} \Big)
+  \hat{H} = \hbar \omega \Big(\hat{a}^{\dagger} \hat{a} + \frac{1}{2} \Big) .
 \ee
 We can imagine a set of vectors that make up the basis of eigenvectors $\ket{\psi_n}$ for the harmonic oscillator Hamiltonian that yield energies $E_n$.
-If we apply equation (\ref{eq:h_plusminus}) to a vector that is one state higher $\hat{a}\ket{\psi_n}$, we obtain
+If we apply equation (\ref{eq:h_plusminus}) to a vector that is one state higher $\hat{a}\ket{\psi_n}$, we obtain,
 \be
-  H \hat{a}\ket{\psi} = (E_n + \hbar \omega) \hat{a}\ket{\psi}
+  H \hat{a}\ket{\psi} = (E_n + \hbar \omega) \hat{a}\ket{\psi}.
 \ee
 eigenvalues equal to the energy in the previous state plus $\hbar \omega$.
-Likewise, if we apply equation (\ref{eq:h_minusplus}) to a vector that is one state lower $\hat{a}^{\dagger}\ket{\psi_n}$, we obtain
+Likewise, if we apply equation (\ref{eq:h_minusplus}) to a vector that is one state lower $\hat{a}^{\dagger}\ket{\psi_n}$, we obtain,
 \be
-  H \hat{a}^{\dagger}\ket{\psi} = (E_n - \hbar \omega) \hat{a}^{\dagger}\ket{\psi}
+  H \hat{a}^{\dagger}\ket{\psi} = (E_n - \hbar \omega) . \hat{a}^{\dagger}\ket{\psi}
 \ee
 It is for this reason that the operators $\hat{a}$ and $\hat{a}^{\dagger}$ are called ladder operators because they allow us to go up and down in energy.\cite{griffiths,shankar}
-When we consider that there is ground state $\ket{\psi_0}$ such that $\hat{a}^{\dagger}\ket{\psi_0} = 0$, we can plug in the defintion for $\hat{a}^{\dagger}$ and solve for $\ket{\psi_0}$, giving
+When we consider that there is a ground state $\ket{\psi_0}$ such that $\hat{a}^{\dagger}\ket{\psi_0} = 0$, we can plug in the defintion for $\hat{a}^{\dagger}$ and solve for $\ket{\psi_0}$, giving,
 \be
-  \psi_0(x) = \frac{m \omega}{\pi \hbar}^{1/4} e^{-\frac{m \omega}{2 \hbar} . x^2}
+  \psi_0(x) = \Big(\frac{m \omega}{\pi \hbar}\Big)^{1/4} e^{-\frac{m \omega x^2}{2 \hbar}}
 \ee
-Plugging this into the Schr\"odinger equation gives the energy
+Plugging this into the Schr\"odinger equation gives the energy,
 \be
-  E_0 = \frac{\hbar \omega}{2}
+  E_0 = \frac{\hbar \omega}{2} .
 \ee
-Since we know that applying the raising operator $\hat{a}$ increases the energy by $\hbar \omega$, the energy at the nth state can be defined as
+Since we know that applying the raising operator $\hat{a}$ increases the energy by $\hbar \omega$, applying $\hat{a}$ $n$ times increases the energy by $n \hbar \omega$.
+So the energy at the nth state can be defined as,
 \be
-  E_n = \hbar \omega(n + \frac{1}{2})
+  E_n = \hbar \omega(n + \frac{1}{2}) .
 \ee
 
-We can now plug our energies into equation (\ref{eq:harm_part_func}) for the partition function.
-\be
-  Q = \sum_k e^{-\beta \hbar \omega(n + \frac{1}{2})}
+Plugging our energies into equation (\ref{eq:harm_part_func}) gives us the partition function.
+\be \label{eq:harm_part_func}
+  Q = \sum_{n=0}^{\infty} e^{-\beta \hbar \omega(n + \frac{1}{2})}
 \ee
-We can actually evaluate the sum to get a more compact form of the partition function by remembering that $\frac{1}{1-x} = \sum_n x^n$ and that $\hbar, \omega, and \beta$, are just constants.
+We can actually evaluate the sum to get a more compact form of equation (\ref{eq:harm_part_func}) by remembering that $\hbar$, $\omega$, $\beta$, are just constants and $\sum\limits_{n=0}^{\infty} x^n = \frac{1}{1-x}$ where $0 < x < 1$.
 \be
   \begin{split}
-    Q &= \sum_n e^{-\beta \hbar \omega(n + \frac{1}{2})} \\
-    &= e^{-\frac{\beta \hbar \omega}{2}} \sum_n e^{- \beta \hbar \omega n} \\
-    &= e^{-\frac{\beta \hbar \omega}{2}} \sum_n \Big( e^{- \beta \hbar \omega} \Big)^n \\
+    Q &= \sum_{n=0}^{\infty} e^{-\beta \hbar \omega(n + \frac{1}{2})} \\
+    &= e^{-\frac{\beta \hbar \omega}{2}} \sum_{n=0}^{\infty} e^{- \beta \hbar \omega n} \\
+    &= e^{-\frac{\beta \hbar \omega}{2}} \sum_{n=0}^{\infty} \Big( e^{- \beta \hbar \omega} \Big)^n \\
     &= \frac{e^{-\frac{\beta \hbar \omega}{2}}}{1-e^{-\beta \hbar \omega}} \\
     &= \Big( \frac{e^{\frac{\beta \hbar \omega}{2}}}{e^{\frac{\beta \hbar \omega}{2}}} \Big) \frac{e^{-\frac{\beta \hbar \omega}{2}}}{1-e^{-\beta \hbar \omega}} \\
     &= \frac{1}{e^{\frac{\beta \hbar \omega}{2}} - e^{-\frac{\beta \hbar \omega}{2}}} \\
     &= \frac{1}{2 \sinh(\frac{\beta \hbar \omega}{2})}
   \end{split}
 \ee
-We already know the energies of the harmonic oscillator, but we can derive the energies in the canonical ensemble with the partition function using the relationship,
+The purpose of knowing the canonical partition function is so that we can derive the thermodynamic properties of our system in the canonical ensemble. One property we can derive is the total energy. We already know the energies of the harmonic oscillator, but we can derive the energies in the canonical ensemble with the partition function using the relationship,
 \be
   E = - \frac{\partial}{\partial \beta} \ln(Q) .
 \ee
 So plugging in the Q we found gives us,
 \be
-   \begin{split}
-     E &= - \frac{\partial}{\partial \beta} \ln \Big( \frac{1}{2 \sinh(\frac{\beta \hbar \omega}{2})} \Big) \\
-     &= - \frac{\partial}{\partial \beta} \Big[ \ln(1) - \ln \Big(2 \sinh(\frac{\beta \hbar \omega}{2})\Big) \Big] \\
-     &= \frac{\partial}{\partial \beta} \ln \Big(2 \sinh(\frac{\beta \hbar \omega}{2})\Big) \\
-     &= \frac{1}{2 \sinh(\frac{\beta \hbar \omega}{2})} \frac{\partial}{\partial \beta} 2 \sinh(\frac{\beta \hbar \omega}{2}) \\
-     &= \frac{2 \cosh(\frac{\beta \hbar \omega}{2})}{2 \sinh(\frac{\beta \hbar \omega}{2})} \frac{\partial}{\partial \beta} \frac{\beta \hbar \omega}{2} \\
-     &= \frac{\cosh(\frac{\beta \hbar \omega}{2})}{\sinh(\frac{\beta \hbar \omega}{2})} \Big( \frac{\hbar \omega}{2}\Big) \\
-     &= \frac{\hbar \omega}{2 \tanh(\frac{\hbar \omega}{2})}
-   \end{split}
- \ee
- The equation for the total energy can be made exactly the same as in Tuckerman's book \cite{tuckerman} by expressing the $\tanh$ function in terms of exponentials.
- \be
-   \begin{split}
-     E &= \frac{\hbar \omega}{2 \tanh(\frac{\hbar \omega}{2})} \\
-     &= \Big( \frac{\hbar \omega}{2} \Big) \frac{e^{\frac{\beta \hbar \omega}{2}} + e^{-\frac{\beta \hbar \omega}{2}} }{e^{\frac{\beta \hbar \omega}{2}} - e^{-\frac{\beta \hbar \omega}{2}}  }\\
-     &= \Big( \frac{\hbar \omega}{2} \Big) \Big( \frac{e^{-\frac{\beta \hbar \omega}{2}}}{e^{-\frac{\beta \hbar \omega}{2}}}\Big) \frac{e^{\frac{\beta \hbar \omega}{2}} + e^{-\frac{\beta \hbar \omega}{2}} }{e^{\frac{\beta \hbar \omega}{2}} - e^{-\frac{\beta \hbar \omega}{2}}  } \\
-     &= \Big( \frac{\hbar \omega}{2} \Big) \frac{1 + e^{- \beta \hbar \omega} }{1 - e^{- \beta \hbar \omega}} \\
-     &= \Big( \frac{\hbar \omega}{2} \Big) \frac{(1-e^{-\beta \hbar \omega} + 2e^{-\beta \hbar \omega})}{1-e^{-\beta \hbar \omega}} \\
-     &= \Big( \frac{\hbar \omega}{2} \Big) \frac{1-e^{-\beta \hbar \omega}}{1-e^{-\beta \hbar \omega}} + \Big( \frac{\hbar \omega}{2} \Big)\frac{2e^{-\beta \hbar \omega}}{1-e^{-\beta \hbar \omega}} \\
-     &= \frac{\hbar \omega}{2} + \frac{\hbar \omega e^{-\beta \hbar \omega}}{1-e^{-\beta \hbar \omega}}
-   \end{split}
- \ee
+  \begin{split}
+    E &= - \frac{\partial}{\partial \beta} \ln \Big( \frac{1}{2 \sinh(\frac{\beta \hbar \omega}{2})} \Big) \\
+    &= - \frac{\partial}{\partial \beta} \Big[ \ln(1) - \ln \Big(2 \sinh(\frac{\beta \hbar \omega}{2})\Big) \Big] \\
+    &= \frac{\partial}{\partial \beta} \ln \Big(2 \sinh(\frac{\beta \hbar \omega}{2})\Big) \\
+    &= \frac{1}{2 \sinh(\frac{\beta \hbar \omega}{2})} \frac{\partial}{\partial \beta} 2 \sinh(\frac{\beta \hbar \omega}{2}) \\
+    &= \frac{2 \cosh(\frac{\beta \hbar \omega}{2})}{2 \sinh(\frac{\beta \hbar \omega}{2})} \frac{\partial}{\partial \beta} \frac{\beta \hbar \omega}{2} \\
+    &= \frac{\cosh(\frac{\beta \hbar \omega}{2})}{\sinh(\frac{\beta \hbar \omega}{2})} \Big( \frac{\hbar \omega}{2}\Big) \\
+    &= \frac{\hbar \omega}{2 \tanh(\frac{\hbar \omega}{2})}
+  \end{split}
+\ee
+The equation for the total energy can be made exactly the same as in Tuckerman's book \cite{tuckerman} by expressing the inverse $\tanh$ function in terms of exponentials.
+\be \label{eq:harm_canonical_e}
+  \begin{split}
+    E &= \frac{\hbar \omega}{2 \tanh(\frac{\hbar \omega}{2})} \\
+    &= \Big( \frac{\hbar \omega}{2} \Big) \frac{e^{\frac{\beta \hbar \omega}{2}} + e^{-\frac{\beta \hbar \omega}{2}} }{e^{\frac{\beta \hbar \omega}{2}} - e^{-\frac{\beta \hbar \omega}{2}}  }\\
+    &= \Big( \frac{\hbar \omega}{2} \Big) \Big( \frac{e^{-\frac{\beta \hbar \omega}{2}}}{e^{-\frac{\beta \hbar \omega}{2}}}\Big) \frac{e^{\frac{\beta \hbar \omega}{2}} + e^{-\frac{\beta \hbar \omega}{2}} }{e^{\frac{\beta \hbar \omega}{2}} - e^{-\frac{\beta \hbar \omega}{2}}  } \\
+    &= \Big( \frac{\hbar \omega}{2} \Big) \frac{1 + e^{- \beta \hbar \omega} }{1 - e^{- \beta \hbar \omega}} \\
+    &= \Big( \frac{\hbar \omega}{2} \Big) \frac{(1-e^{-\beta \hbar \omega} + 2e^{-\beta \hbar \omega})}{1-e^{-\beta \hbar \omega}} \\
+    &= \Big( \frac{\hbar \omega}{2} \Big) \frac{1-e^{-\beta \hbar \omega}}{1-e^{-\beta \hbar \omega}} + \Big( \frac{\hbar \omega}{2} \Big)\frac{2e^{-\beta \hbar \omega}}{1-e^{-\beta \hbar \omega}} \\
+    &= \frac{\hbar \omega}{2} + \frac{\hbar \omega e^{-\beta \hbar \omega}}{1-e^{-\beta \hbar \omega}}
+  \end{split}
+\ee
+Remember that this is the exact form of the harmonic oscillator energies in the canonical ensemble and not an approximation. When we try to approximate the energies of a harmonic oscillator using PIMD, we will want to refer back to equation (\ref{eq:harm_canonical_e}) and plug in our values for $\omega$ and $\beta$ as a check to make sure that our code is working.
+
+To understand what a PIMD code does, we have to first understand the idea of representing partition functions like equation (\ref{eq:harm_part_func}) as a path integral. So now let's talk about where the path integral representation comes from.
 
 \subsection{Path Integral Derivation}
 We will consider the case of a single quantum particle moving in one dimension so our Hamiltonian is the same as in equation (\ref{eq:harm_osc}).
