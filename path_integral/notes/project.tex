@@ -24,6 +24,7 @@
 \newcommand{\eenum}{\end{enumerate}}
 \newcommand{\pd}{\partial}
 \newcommand{\dg}{\dagger}
+
 %==============================================================================%
 %                             Title Information                                %
 %==============================================================================%
@@ -68,6 +69,7 @@ The ladder operators can then be used to obtain a function of the Hamiltonian by
     &= \frac{m \omega}{2 \hbar} \Big( x + \frac{i}{m \omega} p\Big) \Big( x - \frac{i}{m \omega} p\Big) \\
     &= \frac{m \omega}{2 \hbar} \Big( x^2 - \frac{i}{m \omega}xp + \frac{i}{m \omega}px + \frac{p^2}{(m \omega)^2} \Big) \\
     &= \frac{m \omega}{2 \hbar} \Big( x^2 + \frac{p^2}{(m \omega)^2} \Big) - \frac{i}{2 \hbar}xp + \frac{i}{2 \hbar}px \\
+    &= \frac{m \omega}{2 \hbar} \Big( \frac{m \omega}{m \omega} \Big) \Big( x^2 + \frac{p^2}{(m \omega)^2} \Big) - \frac{i}{2 \hbar}xp + \frac{i}{2 \hbar}px \\
     &= \frac{1}{2 \hbar} \Big( \frac{p^2}{m \omega} + m \omega x^2\Big) - \frac{i}{2 \hbar} [x,p] \\
     &= \frac{1}{\hbar \omega} \Big( \frac{p^2}{2m} + \frac{(m \omega x)^2}{2m}\Big) - \frac{i}{2 \hbar} (i \hbar) \\
     &= \frac{1}{\hbar \omega} H + \frac{1}{2}
@@ -84,6 +86,7 @@ If we reverse the ladder operators we get,
     &= \frac{m \omega}{2 \hbar} \Big( x - \frac{i}{m \omega} p\Big) \Big( x + \frac{i}{m \omega} p\Big) \\
     &= \frac{m \omega}{2 \hbar} \Big( x^2 + \frac{i}{m \omega}xp - \frac{i}{m \omega}px + \frac{p^2}{(m \omega)^2}\Big) \\
     &= \frac{m \omega}{2 \hbar} \Big( x^2 + \frac{p^2}{(m \omega)^2}\Big) + \frac{i}{2 \hbar}xp - \frac{i}{2 \hbar}px \\
+    &= \frac{m \omega}{2 \hbar} \Big( \frac{m \omega}{m \omega} \Big) \Big( x^2 + \frac{p^2}{(m \omega)^2}\Big) + \frac{i}{2 \hbar}xp - \frac{i}{2 \hbar}px \\
     &= \frac{1}{2 \hbar} \Big( \frac{p^2}{m \omega} + m \omega x^2 \Big) + \frac{i}{2 \hbar} [x,p] \\
     &= \frac{1}{2 \hbar m \omega} \Big( p^2 + (m \omega x)^2 \Big) + \frac{i}{2 \hbar} (i \hbar) \\
     &= \frac{1}{\hbar \omega} \Big( \frac{p^2}{2m} + \frac{(m \omega x)^2}{2m} \Big) - \frac{1}{2} \\
@@ -140,25 +143,29 @@ We already know the energies of the harmonic oscillator, but we can derive the e
 \ee
 So plugging in the Q we found gives us,
 \be
-  \begin{split}
-    E &= - \frac{\partial}{\partial \beta} \ln \Big( \frac{1}{2 \sinh(\frac{\beta \hbar \omega}{2})} \Big) \\
-    &= - \frac{\partial}{\partial \beta} \Big[ \ln1 - \ln \Big(2 \sinh(\frac{\beta \hbar \omega}{2})\Big) \Big] \\
-    &= \frac{\partial}{\partial \beta} \ln \Big(2 \sinh(\frac{\beta \hbar \omega}{2})\Big) \\
-    &= \frac{1}{2 \sinh(\frac{\beta \hbar \omega}{2})} \frac{\partial}{\partial \beta} 2 \sinh(\frac{\beta \hbar \omega}{2}) \\
-    &= \frac{2 \cosh(\frac{\beta \hbar \omega}{2})}{2 \sinh(\frac{\beta \hbar \omega}{2})} \frac{\partial}{\partial \beta} \frac{\beta \hbar \omega}{2} \\
-    &= \frac{\cosh(\frac{\beta \hbar \omega}{2})}{\sinh(\frac{\beta \hbar \omega}{2})} \Big( \frac{\hbar \omega}{2}\Big) \\
-    &= \frac{\hbar \omega}{2 \tanh(\frac{\hbar \omega}{2})}
-  \end{split}
-\ee
-The equation for the total energy can be made exactly the same as in Tuckerman's book \cite{tuckerman} by expressing the $\tanh$ function in terms of exponentials.
-\be
-  \begin{split}
-    E &= \frac{\hbar \omega}{2 \tanh(\frac{\hbar \omega}{2})} \\
-    &= \Big( \frac{\hbar \omega}{2} \Big) \frac{e^{\frac{\beta \hbar \omega}{2}} + e^{-\frac{\beta \hbar \omega}{2}} }{e^{\frac{\beta \hbar \omega}{2}} - e^{-\frac{\beta \hbar \omega}{2}}  }\\
-    &= \Big( \frac{\hbar \omega}{2} \Big) \Big( \frac{e^{-\frac{\beta \hbar \omega}{2}}}{e^{-\frac{\beta \hbar \omega}{2}}}\Big) \frac{e^{\frac{\beta \hbar \omega}{2}} + e^{-\frac{\beta \hbar \omega}{2}} }{e^{\frac{\beta \hbar \omega}{2}} - e^{-\frac{\beta \hbar \omega}{2}}  } \\
-    &= \Big( \frac{\hbar \omega}{2} \Big) \frac{1 + e^{- \beta \hbar \omega} }{1 - e^{- \beta \hbar \omega}}
-  \end{split}
-\ee
+   \begin{split}
+     E &= - \frac{\partial}{\partial \beta} \ln \Big( \frac{1}{2 \sinh(\frac{\beta \hbar \omega}{2})} \Big) \\
+     &= - \frac{\partial}{\partial \beta} \Big[ \ln(1) - \ln \Big(2 \sinh(\frac{\beta \hbar \omega}{2})\Big) \Big] \\
+     &= \frac{\partial}{\partial \beta} \ln \Big(2 \sinh(\frac{\beta \hbar \omega}{2})\Big) \\
+     &= \frac{1}{2 \sinh(\frac{\beta \hbar \omega}{2})} \frac{\partial}{\partial \beta} 2 \sinh(\frac{\beta \hbar \omega}{2}) \\
+     &= \frac{2 \cosh(\frac{\beta \hbar \omega}{2})}{2 \sinh(\frac{\beta \hbar \omega}{2})} \frac{\partial}{\partial \beta} \frac{\beta \hbar \omega}{2} \\
+     &= \frac{\cosh(\frac{\beta \hbar \omega}{2})}{\sinh(\frac{\beta \hbar \omega}{2})} \Big( \frac{\hbar \omega}{2}\Big) \\
+     &= \frac{\hbar \omega}{2 \tanh(\frac{\hbar \omega}{2})}
+   \end{split}
+ \ee
+ The equation for the total energy can be made exactly the same as in Tuckerman's book \cite{tuckerman} by expressing the $\tanh$ function in terms of exponentials.
+ \be
+   \begin{split}
+     E &= \frac{\hbar \omega}{2 \tanh(\frac{\hbar \omega}{2})} \\
+     &= \Big( \frac{\hbar \omega}{2} \Big) \frac{e^{\frac{\beta \hbar \omega}{2}} + e^{-\frac{\beta \hbar \omega}{2}} }{e^{\frac{\beta \hbar \omega}{2}} - e^{-\frac{\beta \hbar \omega}{2}}  }\\
+     &= \Big( \frac{\hbar \omega}{2} \Big) \Big( \frac{e^{-\frac{\beta \hbar \omega}{2}}}{e^{-\frac{\beta \hbar \omega}{2}}}\Big) \frac{e^{\frac{\beta \hbar \omega}{2}} + e^{-\frac{\beta \hbar \omega}{2}} }{e^{\frac{\beta \hbar \omega}{2}} - e^{-\frac{\beta \hbar \omega}{2}}  } \\
+     &= \Big( \frac{\hbar \omega}{2} \Big) \frac{1 + e^{- \beta \hbar \omega} }{1 - e^{- \beta \hbar \omega}} \\
+     &= \Big( \frac{\hbar \omega}{2} \Big) \frac{(1-e^{-\beta \hbar \omega} + 2e^{-\beta \hbar \omega})}{1-e^{-\beta \hbar \omega}} \\
+     &= \Big( \frac{\hbar \omega}{2} \Big) \frac{1-e^{-\beta \hbar \omega}}{1-e^{-\beta \hbar \omega}} + \Big( \frac{\hbar \omega}{2} \Big)\frac{2e^{-\beta \hbar \omega}}{1-e^{-\beta \hbar \omega}} \\
+     &= \frac{\hbar \omega}{2} + \frac{\hbar \omega e^{-\beta \hbar \omega}}{1-e^{-\beta \hbar \omega}}
+   \end{split}
+ \ee
+
 \subsection{Path Integral Derivation}
 We will consider the case of a single quantum particle moving in one dimension so our Hamiltonian is the same as in equation (\ref{eq:harm_osc}).
 The amplitude of a path that the particle can take when going from x to x' over some time t as the propagator written in position space.
