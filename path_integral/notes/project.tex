@@ -6,12 +6,14 @@
 \usepackage[utf8]{inputenc}
 \usepackage{graphicx}
 \usepackage{amsmath}
+\usepackage{mathtools}
 \usepackage{amssymb}
 \usepackage{braket}
 \usepackage{float}
 \usepackage{subcaption}
 \usepackage[margin=0.7in]{geometry}
 \usepackage[version=4]{mhchem}
+\usepackage{cite}
 %==============================================================================%
 %                           User-Defined Commands                              %
 %==============================================================================%
@@ -25,13 +27,15 @@
 %==============================================================================%
 %                             Title Information                                %
 %==============================================================================%
-\title{}
+\title{PIMD Notes}
 \date{11/14/19}
 \author{Alan Robledo}
 %==============================================================================%
 \begin{document}
 
 \maketitle
+
+The following are notes that I have created to better understand path integral molecular dynamics (PIMD) as applied to a harmonic oscillator and beyond. All the material in this paper can be found in mutliple resources. The ones that I used are listed in the references. Notes are still in development.
 
 \section{Introduction}
 \subsection{Quantum Harmonic Oscillator}
@@ -41,17 +45,14 @@ Similar to the classical harmonic oscillator, we have a particle that is subject
 \ee
 where $m$ is the particle's mass and $\omega$ is the angular frequency of the oscillator.
 We know that we can derive the properties of the harmonic oscillator from the canonical ensemble. To do this, we start with the canonical partition function,
-\be
+\be \label{eq:harm_part_func}
   Q = \sum_k e^{-\beta E_k}
 \ee
-where the sum is performed over all possible states of the system, which are discrete.
-We know from introductory quantum mechanics that the energies of a harmonic oscillator are
-\be
-  E_n = \hbar \omega(n + \frac{1}{2})
-\ee
+where the sum is performed over all possible states of the system, which are discrete.\cite{tuckerman}
+We can derive the formula for the energies from introductory quantum mechanics.
 
-This can be derived from solving Schr\"odinger's equation with the hamiltonian in equation (\ref{eq:harm_osc}).
-Alternatively, the energies can be derived using Dirac's ladder operators, $\hat{a}$ and $\hat{a}^{\dagger}$.
+The energies can be obtained from solving Schr\"odinger's equation with the hamiltonian in equation (\ref{eq:harm_osc}).
+Alternatively, the energies can be derived using Dirac's ladder operators, $\hat{a}$ and $\hat{a}^{\dagger}$.\cite{griffiths,shankar}
 The "raising operator" $\hat{a}$ and "lowering operator" $\hat{a}^{\dagger}$ can be defined in terms of the position and momentum operators as
 \be
   \begin{split}
@@ -103,10 +104,10 @@ Likewise, if we apply equation (\ref{eq:h_minusplus}) to a vector that is one st
 \be
   H \hat{a}^{\dagger}\ket{\psi} = (E_n - \hbar \omega) \hat{a}^{\dagger}\ket{\psi}
 \ee
-It is for this reason that the operators $\hat{a}$ and $\hat{a}^{\dagger}$ are called ladder operators because they allow us to go up and down in energy.
+It is for this reason that the operators $\hat{a}$ and $\hat{a}^{\dagger}$ are called ladder operators because they allow us to go up and down in energy.\cite{griffiths,shankar}
 When we consider that there is ground state $\ket{\psi_0}$ such that $\hat{a}^{\dagger}\ket{\psi_0} = 0$, we can plug in the defintion for $\hat{a}^{\dagger}$ and solve for $\ket{\psi_0}$, giving
 \be
-  \psi_0(x) = \frac{m \omega}{\pi \hbar}^{1/4} e^{-\frac{m \omega}{2 \hbar} x^2}
+  \psi_0(x) = \frac{m \omega}{\pi \hbar}^{1/4} e^{-\frac{m \omega}{2 \hbar} . x^2}
 \ee
 Plugging this into the Schr\"odinger equation gives the energy
 \be
@@ -117,13 +118,18 @@ Since we know that applying the raising operator $\hat{a}$ increases the energy 
   E_n = \hbar \omega(n + \frac{1}{2})
 \ee
 
+We can now plug our energies into equation (\ref{eq:harm_part_func}) for the partition function.
+\be
+  Q = \sum_k e^{-\beta \hbar \omega(n + \frac{1}{2})}
+\ee
+
 \subsection{Path Integral Derivation}
 We will consider the case of a single quantum particle moving in one dimension so our Hamiltonian is the same as in equation (\ref{eq:harm_osc}).
 We consider the amplitude of a path that the particle can take when going from x to x' over some time t as the propagator written in position space.
 \be
   A = \braket{x'|e^{-iHt/\hbar}|x}
 \ee
-This is useful to know because the probability of the particle choosing a particular path would simply be $|A|^2$.
+This is useful to know because the probability of the particle choosing a particular path would simply be $|A|^2$.\cite{tuckerman}
 In terms of state vectors, the initial state of our particle can be represented as $\ket{\Psi(0)}$, so the state of our particle can be represented as the inital state vector being acted upon by the propagator
 \be
   \ket{\Psi(t)} = e^{-iHt/\hbar} \ket{\Psi(0)}
@@ -144,9 +150,9 @@ The physical representation of our problem is that we have a particle at some po
 
 By going to imaginary time, which is done by substituting $it/\hbar = \beta$, we can express the coordinate-space quantum propagator as the canonical density matrix,
 \be \label{eq:density_mat}
-  \rho(x,x') = \braket{x'|e^{-\beta \hat{H}}| x}
+  \rho(x,x') = \braket{x'|e^{-\beta \hat{H}}| x} .
 \ee
-The motive behind doing this is so that we can deal with a damped exponential as opposed to a complex exponential.
+The motive behind doing this is so that we can deal with a damped exponential as opposed to a complex exponential.\cite{tuckerman}
 Therefore, we can derive the path integral form of the density matrix and simply resubstitute time in place of $\beta$ to obtain the path integral form of the time propagator.
 
 We would like to separate the hamiltonian into its kinetic and potential energy components, $\hat{H} = \hat{K} + \hat{U}$.
@@ -167,7 +173,7 @@ So our density matrix becomes,
 \be
   \rho(x,x') = \lim_{P \to\infty} \braket{x'|\Omega^P|x}
 \ee
-We can insert the resolution of identity in terms of the position basis P-1 times between each of the omegas, remembering that $\Omega^P = \Omega \Omega \cdots \Omega$,
+We can insert the resolution of identity in terms of the position basis P-1 times between each of the omegas, remembering that $\Omega^P = \Omega \Omega \cdots \Omega$.
 \be \label{eq:density_omega}
   \rho(x,x') = \lim_{P \to\infty} \int \cdots \int dx_P \cdots dx_2 \braket{x'|\Omega|x_P} \braket{x_P|\Omega|x_{P-1}} \bra{x_{P-1}} \cdots \ket{x_3} \braket{x_3|\Omega|x_2} \braket{x_2|\Omega|x}
 \ee
@@ -176,7 +182,7 @@ If we consider an element of the matrix,
 \be \label{eq:omega_mat}
   \braket{x_{k+1}|\Omega|x_k} = \braket{x_{k+1}|e^{-\beta \hat{U}/2P} e^{-\beta \hat{K}/P} e^{-\beta \hat{U}/2P}|x_k}
 \ee
-we can recognize that the set of $\ket{x_k}$ are eigenvectors of $e^{-\beta \hat{U}/2P}$ with eigenvalue $e^{-\beta U(x_k)/2P}$ because $\hat{U} = U(\hat{x})$ is a function of the coordinate operator.
+we can recognize that the set of $\ket{x_k}$ are eigenvectors of $e^{-\beta \hat{U}/2P}$ with eigenvalue $e^{-\beta U(x_k)/2P}$ because $\hat{U} = U(\hat{x})$ is a function of the coordinate operator.\cite{griffiths,shankar}
 This can be shown easily by writing the exponential as a power series in $\hat{U}$.
 \be
   e^{-\beta \hat{U}/2P} = \sum_{n=0}^{\infty} \frac{\beta^n(2P)^{-n} \hat{U}^n}{n!}
@@ -193,7 +199,7 @@ So equation (\ref{eq:omega_mat}) simplifies to
 \be
   \braket{x_{k+1}|\Omega|x_k} = e^{-\beta U(x_{k+1})/2P} \braket{x_{k+1}|e^{-\beta \hat{K}/P} |x_k} e^{-\beta U(x_k)/2P} .
 \ee
-We know that $\hat{K}$ is a function of the momentum operator, $\hat{K} = \hat{p}^2/2m$, so we can use the same technique as we did with $\hat{U}$ and the position eigenvectors by introducing the resolution of identity in terms of the momentum basis
+We know that $\hat{K}$ is a function of the momentum operator, $\hat{K} = \hat{p}^2/2m$. \cite{griffiths,shankar} So we can use the same technique as we did with $\hat{U}$ and the position eigenvectors by introducing the resolution of identity in terms of the momentum basis,
 \be
   \begin{split}
     \braket{x_{k+1}|\Omega|x_k} &= \int e^{-\beta U(x_{k+1})/2P} \bra{x_{k+1}}e^{-\beta \hat{K}/P} \ket{p}\braket{p|x_k} e^{-\beta U(x_k)/2P} \\
@@ -264,4 +270,8 @@ Plugging in our matrix elements into equation (\ref{eq:density_omega}) P times f
   \rho(x,x') = \lim_{P \to\infty} \Big( \frac{mP}{2 \pi \beta \hbar^2} \Big)^{P/2} \int \cdots \int dx_P \cdots dx_2 \quad \text{exp}\Big( \sum_{k=1}^P \Big[ \frac{mP}{2 \beta \hbar^2}(x_{k+1} - x_k)^2 - \frac{\beta}{2P}(U(x_{k+1}) + U(x_k)) \Big] \Big)
 \ee
 where $x_1 = x$ and $x_P = x'$.
+
+\bibliography{mybib}
+\bibliographystyle{unsrt}
+
 \end{document}
