@@ -46,7 +46,7 @@ Similar to the classical harmonic oscillator, we have a particle that is subject
 where $m$ is the particle's mass and $\omega$ is the angular frequency of the oscillator.
 We know that we can derive the properties of the harmonic oscillator from the canonical ensemble. To do this, we start with the canonical partition function,
 \be \label{eq:harm_part_func}
-  Q = \sum_k e^{-\beta E_k}
+  Q = \sum_n e^{-\beta E_n}
 \ee
 where the sum is performed over all possible states of the system, which are discrete.\cite{tuckerman}
 We can derive the formula for the energies from introductory quantum mechanics.
@@ -122,10 +122,46 @@ We can now plug our energies into equation (\ref{eq:harm_part_func}) for the par
 \be
   Q = \sum_k e^{-\beta \hbar \omega(n + \frac{1}{2})}
 \ee
-
+We can actually evaluate the sum to get a more compact form by remembering that $\frac{1}{1-x} = \sum_n x^n$ and that $\hbar, \omega, and \beta$, are just constants.
+\be
+  \begin{split}
+    Q &= \sum_n e^{-\beta \hbar \omega(n + \frac{1}{2})} \\
+    &= e^{-\frac{\beta \hbar \omega}{2}} \sum_n e^{- \beta \hbar \omega n} \\
+    &= e^{-\frac{\beta \hbar \omega}{2}} \sum_n \Big( e^{- \beta \hbar \omega} \Big)^n \\
+    &= \frac{e^{-\frac{\beta \hbar \omega}{2}}}{1-e^{-\beta \hbar \omega}} \\
+    &= \Big( \frac{e^{\frac{\beta \hbar \omega}{2}}}{e^{\frac{\beta \hbar \omega}{2}}} \Big) \frac{e^{-\frac{\beta \hbar \omega}{2}}}{1-e^{-\beta \hbar \omega}} \\
+    &= \frac{1}{e^{\frac{\beta \hbar \omega}{2}} - e^{-\frac{\beta \hbar \omega}{2}}} \\
+    &= \frac{1}{2 \sinh(\frac{\beta \hbar \omega}{2})}
+  \end{split}
+\ee
+We already know the energies of the harmonic oscillator, but we can derive the energies in the canonical ensemble with the partition function using the relationship,
+\be
+  E = - \frac{\partial}{\partial \beta} \ln(Q) .
+\ee
+So plugging in the Q we found gives us,
+\be
+  \begin{split}
+    E &= - \frac{\partial}{\partial \beta} \ln \Big( \frac{1}{2 \sinh(\frac{\beta \hbar \omega}{2})} \Big) \\
+    &= - \frac{\partial}{\partial \beta} \Big[ \ln1 - \ln \Big(2 \sinh(\frac{\beta \hbar \omega}{2})\Big) \Big] \\
+    &= \frac{\partial}{\partial \beta} \ln \Big(2 \sinh(\frac{\beta \hbar \omega}{2})\Big) \\
+    &= \frac{1}{2 \sinh(\frac{\beta \hbar \omega}{2})} \frac{\partial}{\partial \beta} 2 \sinh(\frac{\beta \hbar \omega}{2}) \\
+    &= \frac{2 \cosh(\frac{\beta \hbar \omega}{2})}{2 \sinh(\frac{\beta \hbar \omega}{2})} \frac{\partial}{\partial \beta} \frac{\beta \hbar \omega}{2} \\
+    &= \frac{\cosh(\frac{\beta \hbar \omega}{2})}{\sinh(\frac{\beta \hbar \omega}{2})} \Big( \frac{\hbar \omega}{2}\Big) \\
+    &= \frac{\hbar \omega}{2 \tanh(\frac{\hbar \omega}{2})}
+  \end{split}
+\ee
+The equation for the total energy can be made exactly the same as in Tuckerman's book \cite{tuckerman} by expressing the $\tanh$ function in terms of exponentials.
+\be
+  \begin{split}
+    E &= \frac{\hbar \omega}{2 \tanh(\frac{\hbar \omega}{2})} \\
+    &= \Big( \frac{\hbar \omega}{2} \Big) \frac{e^{\frac{\beta \hbar \omega}{2}} + e^{-\frac{\beta \hbar \omega}{2}} }{e^{\frac{\beta \hbar \omega}{2}} - e^{-\frac{\beta \hbar \omega}{2}}  }\\
+    &= \Big( \frac{\hbar \omega}{2} \Big) \Big( \frac{e^{-\frac{\beta \hbar \omega}{2}}}{e^{-\frac{\beta \hbar \omega}{2}}}\Big) \frac{e^{\frac{\beta \hbar \omega}{2}} + e^{-\frac{\beta \hbar \omega}{2}} }{e^{\frac{\beta \hbar \omega}{2}} - e^{-\frac{\beta \hbar \omega}{2}}  } \\
+    &= \Big( \frac{\hbar \omega}{2} \Big) \frac{1 + e^{- \beta \hbar \omega} }{1 - e^{- \beta \hbar \omega}}
+  \end{split}
+\ee
 \subsection{Path Integral Derivation}
 We will consider the case of a single quantum particle moving in one dimension so our Hamiltonian is the same as in equation (\ref{eq:harm_osc}).
-We consider the amplitude of a path that the particle can take when going from x to x' over some time t as the propagator written in position space.
+The amplitude of a path that the particle can take when going from x to x' over some time t as the propagator written in position space.
 \be
   A = \braket{x'|e^{-iHt/\hbar}|x}
 \ee
