@@ -108,11 +108,19 @@ Likewise, if we apply equation (\ref{eq:h_minusplus}) to a vector that is one st
   H \hat{a}^{\dagger}\ket{\psi} = (E_n - \hbar \omega) \hat{a}^{\dagger}\ket{\psi} .
 \ee
 It is for this reason that the operators $\hat{a}$ and $\hat{a}^{\dagger}$ are called ladder operators because they allow us to go up and down in energy.\cite{griffiths,shankar}
-When we consider that there is a ground state $\ket{\psi_0}$ such that $\hat{a}^{\dagger}\ket{\psi_0} = 0$, we can plug in the defintion for $\hat{a}^{\dagger}$ and solve for $\ket{\psi_0}$, giving,
+When we consider that there is a ground state $\ket{\psi_0}$ such that $\hat{a}^{\dagger}\ket{\psi_0} = 0$, we can plug in the defintion for $\hat{a}^{\dagger}$ in position space,
 \be
-  \psi_0(x) = \Big(\frac{m \omega}{\pi \hbar}\Big)^{1/4} e^{-\frac{m \omega x^2}{2 \hbar}}
+  \hat{a}^{\dagger} \ket{\psi_0} = \sqrt{\frac{m \omega}{2\hbar}}\Big(\hat{x} - \frac{i}{m \omega} \hat{p} \Big)\ket{\psi_0} = 0 \quad \Rightarrow \quad \sqrt{\frac{m \omega}{2\hbar}}\Big(x - \frac{i}{m \omega} (-i \hbar) \frac{\partial}{\partial x} \Big) \psi_0(x) = \sqrt{\frac{m \omega}{2\hbar}}\Big(x - \frac{\hbar}{m \omega} \frac{\partial}{\partial x} \Big) \psi_0(x) = 0
 \ee
-Plugging this into the Schr\"odinger equation gives the energy,
+and solve for $\ket{\psi_0} = \psi_0(x)$ by solving the differential equation,
+\be
+  \sqrt{\frac{m \omega}{2\hbar}}\Big(x - \frac{\hbar}{m \omega} \frac{\partial}{\partial x} \Big) \psi_0(x) \quad \Rightarrow \quad \frac{\partial \psi_0(x)}{\partial x} - \frac{m \omega}{\hbar} x \psi_0(x) = 0
+\ee
+The solution to which is a gaussian that is expressed as, with proper normalization,
+\be
+  \psi_0(x) = \Big(\frac{m \omega}{\pi \hbar}\Big)^{1/4} e^{-\frac{m \omega x^2}{2 \hbar}} .
+\ee
+Plugging the solution into the Schr\"odinger equation gives us the ground state energy,
 \be
   E_0 = \frac{\hbar \omega}{2} .
 \ee
@@ -410,7 +418,8 @@ which resembles the classical partition function for a cyclic polymer chain of b
 $\omega_P = \sqrt{P}/(\beta \hbar)$ is called the chain frequency, because it is the frequency associated with each spring between nearest neighbors.
 This is the classical system that we evolve in time during a PIMD simulation.
 
-Remember that all of this math was to show that PIMD considers evolving a classical system of cyclic chains and obtianing quantum properties of the system that the chains are representing.
+Remember that all of this math was to show that PIMD considers evolving a classical system of cyclic chains and obtianing approximate quantum properties of the system that the chains are representing.
+In the limit of infinite beads however, the classical system would yield exact quantum properties.
 Going back to the 1D quantum harmonic oscillator, a PIMD calculation would consist of computing the dynamics for one chain of P beads with each bead subject to an external potential $U(x) = (1/2)m \omega^2 x^2$, which defines the quantum oscillator.
 \bibliography{mybib}
 \bibliographystyle{unsrt}
