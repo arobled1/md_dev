@@ -1,13 +1,13 @@
 # Fdb version 3
-["bibtex project"] 1574373845 "project.aux" "project.bbl" "project" 1574374450
+["bibtex project"] 1574394076 "project.aux" "project.bbl" "project" 1574394116
   "/usr/local/texlive/2019/texmf-dist/bibtex/bst/base/unsrt.bst" 1292289607 18030 1376b4b231b50c66211e47e42eda2875 ""
   "mybib.bib" 1574017312 678 cd4706c4a132f1c57a59d6324ff1ffcf ""
-  "project.aux" 1574374450 963 a029b17990679a92284a0714c7e75a25 "pdflatex"
+  "project.aux" 1574394116 1050 8b565afccebabbd89b5c330cf2aa7e1a "pdflatex"
   (generated)
   "project.blg"
   "project.bbl"
-["pdflatex"] 1574374449 "project.tex" "project.pdf" "project" 1574374450
-  "/dev/null" 1574374435 0 d41d8cd98f00b204e9800998ecf8427e ""
+["pdflatex"] 1574394115 "project.tex" "project.pdf" "project" 1574394116
+  "/dev/null" 1574394112 0 d41d8cd98f00b204e9800998ecf8427e ""
   "/usr/local/texlive/2019/texmf-dist/fonts/map/fontname/texfonts.map" 1511824771 3332 103109f5612ad95229751940c61aada0 ""
   "/usr/local/texlive/2019/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm" 1246382020 1004 54797486969f23fa377b128694d548df ""
   "/usr/local/texlive/2019/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex8.tfm" 1246382020 988 bdf658c3bfc2d96d3c8b02cfc1c94c20 ""
@@ -108,10 +108,10 @@
   "/usr/local/texlive/2019/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1557342064 3277517 23507ed665b4dd9046f0f2a94bbef2be ""
   "/usr/local/texlive/2019/texmf-var/web2c/pdftex/pdflatex.fmt" 1557342086 4259635 562fc36ec496993777a6c428d8bfb811 ""
   "/usr/local/texlive/2019/texmf.cnf" 1557341546 577 d150fef99ac436ad1156e86b0892f6ef ""
-  "project.aux" 1574374450 963 a029b17990679a92284a0714c7e75a25 "pdflatex"
-  "project.bbl" 1574373846 511 2ecca3b9f420ffb9bccee00676cc34fd "bibtex project"
-  "project.tex" 1574374448 26201 48b0e058010d1eb5453c3bddab66acd7 ""
+  "project.aux" 1574394116 1050 8b565afccebabbd89b5c330cf2aa7e1a "pdflatex"
+  "project.bbl" 1574394076 511 2ecca3b9f420ffb9bccee00676cc34fd "bibtex project"
+  "project.tex" 1574394115 29216 40ed8e48c544bb45b88c4ff963d19676 ""
   (generated)
-  "project.aux"
   "project.log"
   "project.pdf"
+  "project.aux"

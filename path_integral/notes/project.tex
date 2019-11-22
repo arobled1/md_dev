@@ -46,7 +46,7 @@ Similar to the classical harmonic oscillator, we have a particle that is subject
 \ee
 where $m$ is the particle's mass and $\omega$ is the angular frequency of the oscillator.
 We know that we can derive the properties of the harmonic oscillator from the canonical ensemble. To do this, we start with the canonical partition function,
-\be \label{eq:harm_part_func}
+\be \label{eq:classical_part_func}
   Q = \sum_n e^{-\beta E_n}
 \ee
 where the sum is performed over all possible states of the system, which are discrete.\cite{tuckerman}
@@ -105,7 +105,7 @@ If we apply equation (\ref{eq:h_plusminus}) to a vector that is one state higher
 eigenvalues equal to the energy in the previous state plus $\hbar \omega$.
 Likewise, if we apply equation (\ref{eq:h_minusplus}) to a vector that is one state lower $\hat{a}^{\dagger}\ket{\psi_n}$, we obtain,
 \be
-  H \hat{a}^{\dagger}\ket{\psi} = (E_n - \hbar \omega) . \hat{a}^{\dagger}\ket{\psi}
+  H \hat{a}^{\dagger}\ket{\psi} = (E_n - \hbar \omega) \hat{a}^{\dagger}\ket{\psi} .
 \ee
 It is for this reason that the operators $\hat{a}$ and $\hat{a}^{\dagger}$ are called ladder operators because they allow us to go up and down in energy.\cite{griffiths,shankar}
 When we consider that there is a ground state $\ket{\psi_0}$ such that $\hat{a}^{\dagger}\ket{\psi_0} = 0$, we can plug in the defintion for $\hat{a}^{\dagger}$ and solve for $\ket{\psi_0}$, giving,
@@ -122,7 +122,7 @@ So the energy at the nth state can be defined as,
   E_n = \hbar \omega(n + \frac{1}{2}) .
 \ee
 
-Plugging our energies into equation (\ref{eq:harm_part_func}) gives us the partition function.
+Plugging our energies into equation (\ref{eq:classical_part_func}) gives us the partition function.
 \be \label{eq:harm_part_func}
   Q = \sum_{n=0}^{\infty} e^{-\beta \hbar \omega(n + \frac{1}{2})}
 \ee
@@ -374,14 +374,44 @@ which evaluates to,
 \be
   \begin{split}
     \braket{x_{k+1}|\Omega|x_k} &= \frac{1}{2 \pi \hbar} \text{exp} \Big[ -\frac{\beta}{2P}(U(x_{k+1}) + U(x_k)) \Big] \text{exp} \Big[ -\frac{mP}{2 \beta \hbar^2}(x_{k+1} - x_k)^2 \Big] \Big( \frac{2 \pi m P}{\beta} \Big)^{1/2} \\
-    &= \Big( \frac{mP}{2 \pi \beta \hbar^2} \Big)^{1/2} \text{exp} \Big[ \frac{mP}{2 \beta \hbar^2}(x_{k+1} - x_k)^2 - \frac{\beta}{2P}(U(x_{k+1}) + U(x_k)) \Big]
+    &= \Big( \frac{mP}{2 \pi \beta \hbar^2} \Big)^{1/2} \text{exp} \Big[ - \frac{mP}{2 \beta \hbar^2}(x_{k+1} - x_k)^2 - \frac{\beta}{2P}(U(x_{k+1}) + U(x_k)) \Big]
   \end{split}
 \ee
 Plugging in our matrix elements into equation (\ref{eq:part_func_path_int}) P times for each element gives us the discretized path integral representation of the quantum partition function.
-\be
-  Q = \lim_{P \to\infty} \Big( \frac{mP}{2 \pi \beta \hbar^2} \Big)^{P/2} \int \cdots \int dx_P \cdots dx_1 \quad \text{exp}\Big( \sum_{k=1}^P \Big[ \frac{mP}{2 \beta \hbar^2}(x_{k+1} - x_k)^2 - \frac{\beta}{2P}(U(x_{k+1}) + U(x_k)) \Big] \Big) .
+\be \label{eq:part_func_with_omega}
+  Q = \lim_{P \to\infty} \Big( \frac{mP}{2 \pi \beta \hbar^2} \Big)^{P/2} \int \cdots \int dx_P \cdots dx_1 \quad \text{exp}\Big( \sum_{k=1}^P \Big[ - \frac{mP}{2 \beta \hbar^2}(x_{k+1} - x_k)^2 - \frac{\beta}{2P}(U(x_{k+1}) + U(x_k)) \Big] \Big) .
 \ee
 
+For PIMD, we take advantage of the constant in front of equation (\ref{eq:part_func_with_omega}) by considering an integral over momentum variables that would evaluate to the constant.
+It turns out that such an integral exists as a P dimensional gaussian integral.
+\be
+  \int \cdots \int dp_1 \cdots dp_P \quad \text{exp}\Big( \sum_{k=1}^P \frac{-\beta p^2_k}{2m'} \Big) = \Big( \frac{mP}{2 \pi \beta \hbar^2} \Big)^{P/2}
+\ee
+where $m' = mP/(2 \pi \hbar)^2$.
+The integral can be easily evaluated by noticing that it is just the same integral multiplied P times.
+\be
+  \begin{split}
+    \int \cdots \int dp_1 \cdots dp_P \quad \text{exp}\Big( \sum_{k=1}^P \frac{-\beta p^2_k}{2m'} \Big) &= \int \cdots \int dp_1 \cdots dp_P \quad \text{exp}\Big(\frac{-\beta p^2_1}{2m'} \Big) \text{exp}\Big( \frac{-\beta p^2_2}{2m'}\Big) \cdots \text{exp}\Big( \frac{-\beta p^2_P}{2m'} \Big) \\
+    &= \Big[ \int dp_1 \quad \text{exp} \Big( \frac{-\beta p^2_1}{2m'} \Big)\Big]^P \\
+    &= \Big[ \Big( \frac{2 \pi m'}{\beta} \Big)^{1/2} \Big]^P \\
+    &= \Big[ \Big( \frac{2 \pi m P}{(2 \pi \hbar)^2 \beta } \Big)^{1/2} \Big]^P \\
+    &= \Big( \frac{mP}{2 \pi \beta \hbar^2} \Big)^{P/2}
+  \end{split}
+\ee
+Substituting the momentum integrals into equation (\ref{eq:part_func_with_omega}) with more clever manipulation gives us,
+\be \label{eq:pimd_partition}
+  \begin{split}
+    Q &= \lim_{P \to\infty} \int dp_1 \cdots dp_P \int dx_P \cdots dx_1 \quad \text{exp}\Big( \sum_{k=1}^P \Big[ \frac{-\beta p^2_k}{2m'} - \frac{mP}{2 \beta \hbar^2}(x_{k+1} - x_k)^2 - \frac{\beta}{2P}(U(x_{k+1}) + U(x_k)) \Big] \Big) \\
+    &= \lim_{P \to\infty} \int dp_1 \cdots dp_P \int dx_P \cdots dx_1 \quad \text{exp}\Big( - \beta \sum_{k=1}^P \Big[ \frac{p^2_k}{2m'} + \frac{mP}{2 \beta^2 \hbar^2}(x_{k+1} - x_k)^2 + \frac{1}{2P}(U(x_{k+1}) + U(x_k)) \Big] \Big) \\
+    &= \lim_{P \to\infty} \int dp_1 \cdots dp_P \int dx_P \cdots dx_1 \quad \text{exp}\Big( - \beta \sum_{k=1}^P \Big[ \frac{p^2_k}{2m'} + \frac{1}{2} m \omega^2_P (x_{k+1} - x_k)^2 + \frac{1}{P} U(x_k) \Big] \Big) \\
+  \end{split}
+\ee
+which resembles the classical partition function for a cyclic polymer chain of beads all with the same fictious mass m' and with harmonic nearest neighbors subject to an external potential $U(x)$ that is defined by the quantum system.
+$\omega_P = \sqrt{P}/(\beta \hbar)$ is called the chain frequency, because it is the frequency associated with each spring between nearest neighbors.
+This is the classical system that we evolve in time during a PIMD simulation.
+
+Remember that all of this math was to show that PIMD considers evolving a classical system of cyclic chains and obtianing quantum properties of the system that the chains are representing.
+Going back to the 1D quantum harmonic oscillator, a PIMD calculation would consist of computing the dynamics for one chain of P beads with each bead subject to an external potential $U(x) = (1/2)m \omega^2 x^2$, which defines the quantum oscillator.
 \bibliography{mybib}
 \bibliographystyle{unsrt}
 
