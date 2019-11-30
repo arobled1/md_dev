@@ -72,62 +72,26 @@ Using equation (\ref{eq:harm_part_func}), we find (see Appendix 2) that the ener
 
 Remember that this is the exact form of the harmonic oscillator energies in the canonical ensemble and not an approximation. When we try to approximate the energies of a harmonic oscillator using PIMD, we will want to refer back to equation (\ref{eq:harm_canonical_e}) and plug in our values for $\omega$ and $\beta$ as a check to make sure that our code is working.
 
-To understand what a PIMD code does, we have to first understand the idea of representing partition functions like equation (\ref{eq:harm_part_func}) as a path integral. So now let's talk about where the path integral representation comes from.
+To understand what a PIMD code does, we have to first understand the idea of representing partition functions like equation (\ref{eq:harm_part_func}) as a path integral.
 
-\subsection{Path Integral Derivation}
+\subsection{Path Integral}
 We will consider the case of a single quantum particle moving in one dimension subject to some potential $U(x)$.
 Remember that our Hamiltonian is, in general,
 \be
   \hat{H} = \hat{K} + \hat{U} .
 \ee
 We already know from classical statistical mechanics that the canonical partition function can be written as equation (\ref{eq:harm_part_func}).
-In Quantum Statistical Mechanics, the parition function is written more formally as,
+In Quantum Statistical Mechanics, the parition function is written more formally as (see Appendix 3),
 \be \label{eq:quan_part_func}
   Q(N, V, T) = \text{Tr}\Big[ e^{- \beta \hat{H}} \Big]
 \ee
 where $\beta = 1/k_BT$ and $\hat{H}$ is the Hamiltonian of our system.
 
-You can obtain the form of the partition function in equation (\ref{eq:harm_part_func}) by writing the exponential in equation (\ref{eq:quan_part_func}) as a power series in $\hat{H}$ (remember that $e^x = \sum\limits_{n=0}^{\infty} \frac{x^n}{n!}$).
-\be
-  e^{-\beta \hat{H}} = \sum_{n=0}^{\infty} \frac{(-\beta)^n \hat{H}^n}{n!}
-\ee
-We can perform a unitary transformation on $\hat{H}$ so that it becomes a diagonal matrix of its eigenvalues with $\hat{H} = \textbf{U}\textbf{D}\textbf{U}^{-1}$, where $\textbf{D}$ is the diagonal matrix of eigenvalues and $\textbf{U}$ is a matrix with the ith column being the eigenvector corresponding to the ith eigenvalue on the diagonal matrix.
-\be
-  e^{-\beta \hat{H}} = \sum_{n=0}^{\infty} \frac{(-\beta)^n (\textbf{U}\textbf{D}\textbf{U}^{-1})^n}{n!}
-\ee
-If we write out the first few terms we can see that the $\textbf{U}^{-1}$ and $\textbf{U}$ can be taken out of the sum,
-\be
-  \begin{split}
-    e^{-\beta \hat{H}} &= [\textbf{I} + \frac{(-\beta)^1}{1!} (\textbf{U}\textbf{D}\textbf{U}^{-1}) + \frac{(-\beta)^2}{2!} (\textbf{U}\textbf{D}\textbf{U}^{-1})^2 + \dots] \\
-    &= [\textbf{I} + \frac{(-\beta)^1}{1!} (\textbf{U}\textbf{D}\textbf{U}^{-1}) + \frac{(-\beta)^2}{2!} (\textbf{U}\textbf{D}\textbf{U}^{-1})(\textbf{U}\textbf{D}\textbf{U}^{-1}) + \dots] \\
-    &= [\textbf{I} + \frac{(-\beta)^1}{1!} (\textbf{U}\textbf{D}\textbf{U}^{-1}) + \frac{(-\beta)^2}{2!} (\textbf{U}\textbf{D}\textbf{D}\textbf{U}^{-1}) + \dots] \\
-    &= [\textbf{U}\textbf{U}^{-1} + \frac{(-\beta)^1}{1!} (\textbf{U}\textbf{D}\textbf{U}^{-1}) + \frac{(-\beta)^2}{2!} (\textbf{U}\textbf{D}\textbf{D}\textbf{U}^{-1}) + \dots] \\
-    &= \textbf{U} [\textbf{I} + \frac{(-\beta)^1}{1!} \textbf{D} + \frac{(-\beta)^2}{2!} + \textbf{D}^2 + \dots] \textbf{U}^{-1} \\
-    &= \textbf{U} e^{-\beta \textbf{D}} \textbf{U}^{-1}
-  \end{split}
-\ee
-exploiting the property of unitary matrices $\textbf{U}\textbf{U}^{-1} = \textbf{I}$.
-Then we use the cyclic property of the trace to show that the trace of a matrix is independent of the basis we choose to represent the matrix in,
-\be
-  \begin{split}
-    \text{Tr} \Big[e^{-\beta \hat{H}}\Big] &= \text{Tr} \Big[ \textbf{U} e^{-\beta \textbf{D}} \textbf{U}^{-1} \Big] \\
-    &= \text{Tr} \Big[ e^{-\beta \textbf{D}} \textbf{U} \textbf{U}^{-1} \Big]\\
-    &= \text{Tr} \Big[ e^{-\beta \textbf{D}} \Big]
-  \end{split}
-\ee
-And since $\textbf{D}$ is a diagonal matrix of the Hamiltonian eigenvalues $E_i$, the exponential matrix is just a diagonal matrix with the ith diagonal entry being $e^{-\beta E_i}$.
-So the trace just becomes a sum of exponentials,
-\be
-  \text{Tr} \Big[e^{-\beta \hat{H}}\Big] = \sum_i e^{-\beta E_i}
-\ee
-giving us equation (\ref{eq:harm_part_func}).
-Anybody who has a background in physics and believes that this is trivial will simply say that if the Hamiltonian is written in the basis of its eigenvectors then its trace becomes a sum of its eigenvalues, rather than show why that is the case.
-I have chosen to show this to make a point that it is completely valid to work with the trace of $e^{-\beta \hat{H}}$ when we consider the quantum partition function.
-
-We can now confidently write the partition function for our system in the coordinate basis as,
+If we perform the trace in the coordinate basis, we obtain an integral
 \be \label{eq:part_func_coord}
-  Q = \text{Tr} \Big[e^{-\beta \hat{H}}\Big] = \int dx \braket{x|e^{-\beta \hat{H}}|x}
+  Q = \text{Tr} \Big[e^{-\beta \hat{H}}\Big] = \int dx \braket{x|e^{-\beta \hat{H}}|x} .
 \ee
+After going through a long process (see Appendix 4), equation (\ref{eq:part_func_coord}) can be represented equaivalently in terms of path integrals,
 % Might use bottom later
 %===========================================================================%
 % The amplitude of a path that the particle can take when going from x to x' over some time t as the propagator written in position space.
@@ -160,163 +124,21 @@ We can now confidently write the partition function for our system in the coordi
 % The motive behind doing this is so that we can deal with a damped exponential as opposed to a complex exponential.\cite{tuckerman}
 % Therefore, we can derive the path integral form of the density matrix and simply resubstitute time in place of $\beta$ to obtain the path integral form of the time propagator.
 %===========================================================================%
-We would like to separate the Hamiltonian into its kinetic and potential energy components, $\hat{H} = \hat{K} + \hat{U}$.
-However, we cannot split the exponentials because for two operators that do not commute $\text{exp}(\hat{H}) \neq \text{exp}(\hat{K}) \text{exp}(\hat{U})$.
-To get around this we employ the trotter decompositon
-\be
-  e^{- \beta \hat{H}} = e^{- \beta (\hat{K} + \hat{U})} = \lim_{P \to\infty} \Big[ e^{- \beta \hat{U}/2P} e^{-\beta \hat{K}/P} e^{-\beta{U}/2P} \Big]^P .
-\ee
-Substituting this into equation (\ref{eq:part_func_coord}) gives us,
-\be
-  Q = \lim_{P \to\infty} \int dx \bra{x} \Big[ e^{- \beta \hat{U}/2P} e^{-\beta \hat{K}/P} e^{-\beta{U}/2P} \Big]^P \ket{x}
-\ee
-which can be condensed by defining another operator $\Omega$ as
-\be
-  \Omega = e^{-\beta \hat{U}/2P} e^{-\beta \hat{K}/P} e^{-\beta \hat{U}/2P} .
-\ee
-So our partition function becomes,
-\be
-  Q = \lim_{P \to\infty} \int dx \braket{x|\Omega^P|x}
-\ee
-We can insert the resolution of identity in terms of the position basis P-1 times between each of the omegas, remembering that $\Omega^P = \Omega \Omega \cdots \Omega$.
-\be
-  Q = \lim_{P \to\infty} \int \cdots \int dx_P \cdots dx_2 dx \braket{x|\Omega|x_P} \braket{x_P|\Omega|x_{P-1}} \bra{x_{P-1}} \cdots \ket{x_3} \braket{x_3|\Omega|x_2} \braket{x_2|\Omega|x}
-\ee
-In order to ensure that we obtain all the diagonal elements in the trace, we set $x_{P+1} = x_1 = x$,
-\be \label{eq:part_func_path_int}
-  Q = \lim_{P \to\infty} \int \cdots \int dx_P \cdots dx_2 dx_1 \braket{x_1|\Omega|x_P} \braket{x_P|\Omega|x_{P-1}} \bra{x_{P-1}} \cdots \ket{x_3} \braket{x_3|\Omega|x_2} \braket{x_2|\Omega|x_1}
-\ee
-which gives us the reason for why the system in path integral molecular dynamics is often portrayed as a periodic lattice of beads.
-If we think of each $x_i$ as the coordinate for the ith bead, then the only way for the condition $x_{P+1} = x_1$ to make sense physically is if the beads are arranged as a necklace.
-% Might use bottom later
-%===========================================================================%
-% The integrations over $x_1,\dots,x_P$ can then be thought of as the sum over all possible paths that your particle can take in imaginary time $-i \beta \hbar$ from because we can obtain integrations over all possible paths when P $\rightarrow \infty$.
-%===========================================================================%
-
-In order to evaluate $\Omega$ we want to consider an element of the matrix,
-\be \label{eq:omega_mat}
-  \braket{x_{k+1}|\Omega|x_k} = \braket{x_{k+1}|e^{-\beta \hat{U}/2P} e^{-\beta \hat{K}/P} e^{-\beta \hat{U}/2P}|x_k} .
-\ee
-We can recognize that the set of $\ket{x_k}$ are eigenvectors of $e^{-\beta \hat{U}/2P}$ with eigenvalue $e^{-\beta U(x_k)/2P}$ because $\hat{U} = U(\hat{x})$ is a function of the coordinate operator.\cite{griffiths,shankar}
-This can be shown easily by writing the exponential as a power series in $\hat{U}$.
-\be
-  e^{-\beta \hat{U}/2P} = \sum_{n=0}^{\infty} \frac{\beta^n(2P)^{-n} \hat{U}^n}{n!}
-\ee
-and if we operate on an eigenvector $\ket{x_k}$, we get
-\be
-  \begin{split}
-    e^{-\beta \hat{U}/2P} \ket{x_k} &= \sum_{n=0}^{\infty} \frac{\beta^n(2P)^{-n}}{n!} \hat{U}^n \ket{x_k} \\
-    &= \sum_{n=0}^{\infty} \frac{\beta^n(2P)^{-n}}{n!} (U(x_k))^n \ket{x_k} \\
-    &= e^{-\beta U(x_k)/2P} \ket{x_k}
-  \end{split}
-\ee
-So equation (\ref{eq:omega_mat}) simplifies to
-\be
-  \braket{x_{k+1}|\Omega|x_k} = e^{-\beta U(x_{k+1})/2P} \braket{x_{k+1}|e^{-\beta \hat{K}/P} |x_k} e^{-\beta U(x_k)/2P} .
-\ee
-We know that $\hat{K}$ is a function of the momentum operator, $\hat{K} = \hat{p}^2/2m$. \cite{griffiths,shankar} So we can use the same technique as we did with $\hat{U}$ and the position eigenvectors by introducing the resolution of identity in terms of the momentum basis,
-\be
-  \begin{split}
-    \braket{x_{k+1}|\Omega|x_k} &= \int e^{-\beta U(x_{k+1})/2P} \bra{x_{k+1}}e^{-\beta \hat{K}/P} \ket{p}\braket{p|x_k} e^{-\beta U(x_k)/2P} \\
-    &= \int e^{-\beta U(x_{k+1})/2P} e^{-\beta p^2/2mP} \braket{x_{k+1}|p}\braket{p|x_k} e^{-\beta U(x_k)/2P} dp
-  \end{split}
-\ee
-where $\braket{x_{k+1}|p}$ is the momentum wavefunction expressed in the coordinate basis $x_{k+1}$, and $\braket{p|x_k}$ is the complex conjugate of the momentum wavefunction expressed in the coordinate basis $x_k$, i.e. $\braket{p|x_k} = \braket{x_k|p}^*$.
-
-We can obtain a functional form of these wavefunctions by recalling the eigenvalue problem for the momentum operator,
-\be
-  \hat{p} \ket{p} = p \ket{p}
-\ee
-If we project this equation on the coordinate basis, we can make use of the hermitian property of the momentum operator to obtain
-\be
-  \braket{x|\hat{p}|p} = p \braket{x|p} \quad \Rightarrow \quad \braket{\hat{p} x|p} =  p \braket{x|p} \quad \Rightarrow \quad -i \hbar \frac{\partial}{\partial x} \braket{x|p} = p \braket{x|p}
-\ee
-And if we write $\braket{x|p} = \psi_p(x)$, then we just have a first order differential equation.
-The solution to this equation can easily be found
-\be
-  - i \hbar \frac{\partial}{\partial x} \psi_p(x) = p \psi_p(x) \quad \Rightarrow \quad \int \frac{d \psi_p}{\psi_p} dx = \int \frac{ip}{\hbar} dx \quad \Rightarrow \quad \ln \psi_p(x) = \frac{ipx}{\hbar} + C_1 \quad \Rightarrow \quad \psi_p(x) = C_2 e^{ipx/\hbar}
-\ee
-where $C_2$ is a normalization constant.
-With proper normalization, the momentum wavefunction looks like
-\be
-  \braket{x|p} = \psi_p(x) = \frac{1}{\sqrt{2 \pi \hbar}} e^{ipx/\hbar} .
-\ee
-And its complex conjugate looks like,
-\be
-  \braket{x|p}^* = \braket{p|x} = \frac{1}{\sqrt{2 \pi \hbar}} e^{-ipx/\hbar}
-\ee
-
-Our matrix elements for $\Omega$ can be rewritten as
-\be
-  \begin{split}
-    \braket{x_{k+1}|\Omega|x_k} &= \int e^{-\beta U(x_{k+1})/2P} e^{-\beta p^2/2mP} \braket{x_{k+1}|p}\braket{p|x_k} e^{-\beta U(x_k)/2P} dp \\
-    &= \frac{1}{2 \pi \hbar} \int e^{-\beta p^2/2mP} e^{-\beta(U(x_{k+1}) + U(x_k))/2P} e^{ip(x_{k+1} - x_k)/\hbar} dp
-  \end{split}
-\ee
-We can move the exponential without the momenta outside of the integral and combine the exponentials with the momenta to obtain
-\be
-  \braket{x_{k+1}|\Omega|x_k} = \frac{1}{2 \pi \hbar} e^{-\beta(U(x_{k+1}) + U(x_k))/2P} \int e^{-\beta p^2/2mP + ip(x_{k+1} - x_k)/\hbar} dp
-\ee
-Since our momentum basis extends from $+ \infty$ to $- \infty$, we end up having an integral of a gaussian if we complete the square,
-\be
-  \begin{split}
-    \frac{- \beta p^2}{2mP} + \frac{(x_{k+1} - x_k)ip}{\hbar} &= \frac{- \beta}{2mP} \Big[ p^2 - \frac{2imP(x_{k+1} - x_k)}{\beta \hbar} \Big] \\
-    &= \frac{- \beta}{2mP} \Big[ \Big( p -  \frac{imP(x_{k+1} - x_k)}{\beta \hbar} \Big)^2 - \Big( \frac{imP(x_{k+1} - x_k)}{\beta \hbar} \Big)^2 \Big] \\
-    &= \frac{- \beta}{2mP} \Big[ \Big( p -  \frac{imP(x_{k+1} - x_k)}{\beta \hbar} \Big)^2 + \frac{m^2P^2(x_{k+1} - x_k)^2}{\beta^2 \hbar^2} \Big] \\
-    &= \frac{- \beta}{2mP} \Big( p -  \frac{imP(x_{k+1} - x_k)}{\beta \hbar} \Big)^2 - \frac{mP(x_{k+1} - x_k)^2}{2 \beta \hbar^2} \\
-  \end{split}
-\ee
-and make a variable substitution,
-\be
-  u = p -  \frac{imP(x_{k+1} - x_k)}{\beta \hbar} .
-\ee
-Our integral is now,
-\be
-  \braket{x_{k+1}|\Omega|x_k} = \frac{1}{2 \pi \hbar} \text{exp} \Big[ \frac{-\beta(U(x_{k+1}) + U(x_k))}{2P} \Big] \text{exp} \Big[ \frac{-mP(x_{k+1} - x_k)^2}{2 \beta \hbar^2} \Big] \int e^\frac{-\beta u^2}{2mP} du
-\ee
-which evaluates to,
-\be
-  \begin{split}
-    \braket{x_{k+1}|\Omega|x_k} &= \frac{1}{2 \pi \hbar} \text{exp} \Big[ -\frac{\beta}{2P}(U(x_{k+1}) + U(x_k)) \Big] \text{exp} \Big[ -\frac{mP}{2 \beta \hbar^2}(x_{k+1} - x_k)^2 \Big] \Big( \frac{2 \pi m P}{\beta} \Big)^{1/2} \\
-    &= \Big( \frac{mP}{2 \pi \beta \hbar^2} \Big)^{1/2} \text{exp} \Big[ - \frac{mP}{2 \beta \hbar^2}(x_{k+1} - x_k)^2 - \frac{\beta}{2P}(U(x_{k+1}) + U(x_k)) \Big]
-  \end{split}
-\ee
-Plugging in our matrix elements into equation (\ref{eq:part_func_path_int}) P times for each element gives us the discretized path integral representation of the quantum partition function.
-\be \label{eq:part_func_with_omega}
-  Q = \lim_{P \to\infty} \Big( \frac{mP}{2 \pi \beta \hbar^2} \Big)^{P/2} \int \cdots \int dx_P \cdots dx_1 \quad \text{exp}\Big( \sum_{k=1}^P \Big[ - \frac{mP}{2 \beta \hbar^2}(x_{k+1} - x_k)^2 - \frac{\beta}{2P}(U(x_{k+1}) + U(x_k)) \Big] \Big) .
-\ee
-
-For PIMD, we take advantage of the constant in front of equation (\ref{eq:part_func_with_omega}) by considering an integral over momentum variables that would evaluate to the constant.
-It turns out that such an integral exists as a P dimensional gaussian integral.
-\be
-  \int \cdots \int dp_1 \cdots dp_P \quad \text{exp}\Big( \sum_{k=1}^P \frac{-\beta p^2_k}{2m'} \Big) = \Big( \frac{mP}{2 \pi \beta \hbar^2} \Big)^{P/2}
-\ee
-where $m' = mP/(2 \pi \hbar)^2$.
-The integral can be easily evaluated by noticing that it is just the same integral multiplied P times.
-\be
-  \begin{split}
-    \int \cdots \int dp_1 \cdots dp_P \quad \text{exp}\Big( \sum_{k=1}^P \frac{-\beta p^2_k}{2m'} \Big) &= \int \cdots \int dp_1 \cdots dp_P \quad \text{exp}\Big(\frac{-\beta p^2_1}{2m'} \Big) \text{exp}\Big( \frac{-\beta p^2_2}{2m'}\Big) \cdots \text{exp}\Big( \frac{-\beta p^2_P}{2m'} \Big) \\
-    &= \Big[ \int dp_1 \quad \text{exp} \Big( \frac{-\beta p^2_1}{2m'} \Big)\Big]^P \\
-    &= \Big[ \Big( \frac{2 \pi m'}{\beta} \Big)^{1/2} \Big]^P \\
-    &= \Big[ \Big( \frac{2 \pi m P}{(2 \pi \hbar)^2 \beta } \Big)^{1/2} \Big]^P \\
-    &= \Big( \frac{mP}{2 \pi \beta \hbar^2} \Big)^{P/2}
-  \end{split}
-\ee
-Substituting the momentum integrals into equation (\ref{eq:part_func_with_omega}) with more clever manipulation gives us,
 \be \label{eq:pimd_partition}
-  \begin{split}
-    Q &= \lim_{P \to\infty} \int dp_1 \cdots dp_P \int dx_P \cdots dx_1 \quad \text{exp}\Big( \sum_{k=1}^P \Big[ \frac{-\beta p^2_k}{2m'} - \frac{mP}{2 \beta \hbar^2}(x_{k+1} - x_k)^2 - \frac{\beta}{2P}(U(x_{k+1}) + U(x_k)) \Big] \Big) \\
-    &= \lim_{P \to\infty} \int dp_1 \cdots dp_P \int dx_P \cdots dx_1 \quad \text{exp}\Big( - \beta \sum_{k=1}^P \Big[ \frac{p^2_k}{2m'} + \frac{mP}{2 \beta^2 \hbar^2}(x_{k+1} - x_k)^2 + \frac{1}{2P}(U(x_{k+1}) + U(x_k)) \Big] \Big) \\
-    &= \lim_{P \to\infty} \int dp_1 \cdots dp_P \int dx_P \cdots dx_1 \quad \text{exp}\Big( - \beta \sum_{k=1}^P \Big[ \frac{p^2_k}{2m'} + \frac{1}{2} m \omega^2_P (x_{k+1} - x_k)^2 + \frac{1}{P} U(x_k) \Big] \Big) \\
-  \end{split}
+  Q = \lim_{P \to\infty} \int dp_1 \cdots dp_P \int dx_P \cdots dx_1 \quad \text{exp}\Big( - \beta \sum_{k=1}^P \Big[ \frac{p^2_k}{2m'} + \frac{1}{2} m \omega^2_P (x_{k+1} - x_k)^2 + \frac{1}{P} U(x_k) \Big] \Big) .
 \ee
-which resembles the classical partition function for a cyclic polymer chain of beads all with the same fictious mass m' and with harmonic nearest neighbors subject to an external potential $U(x)$ that is defined by the quantum system.
-$\omega_P = \sqrt{P}/(\beta \hbar)$ is called the chain frequency, because it is the frequency associated with each spring between nearest neighbors.
-This is the classical system that we evolve in time during a PIMD simulation.
+The interesting thing about the path integral representation is that equation (\ref{eq:pimd_partition}) resembles the classical partition function for a cyclic chain of beads.
+Each bead can be thought of as having the same fictious mass m' along with harmonic nearest neighbors.
+In other words, each bead is connected to one another with a spring that is defined by the chain frequency $\omega_P = \sqrt{P}/(\beta \hbar)$.
+Lastly, each bead is subjected to an external potential $U(x)$ that is defined by the quantum system.
 
-Remember that all of this math was to show that PIMD considers evolving a classical system of cyclic chains and obtianing approximate quantum properties of the system that the chains are representing.
-In the limit of infinite beads however, the classical system would yield exact quantum properties.
-Going back to the 1D quantum harmonic oscillator, a PIMD calculation would consist of computing the dynamics for one chain of P beads with each bead subject to an external potential $U(x) = (1/2)m \omega^2 x^2$, which defines the quantum oscillator.
+Therefore, the properties of our quantum system can be obtained directly from the classical system in the infinite bead limit.
+Alternatively, these quantities can be approximated by performing calculations with a finite number of beads and is the main idea behind a PIMD calculation.
+It is worth mentioning that quantum properties of interest can also be uncovered by decreasing the temperature of our system or the masses of our beads.
+
+Going back to the 1D quantum harmonic oscillator, a PIMD calculation would consist of performing a moecular dynamics simulation on one chain of P beads with each bead subject to an external potential $U(x) = (1/2)m \omega^2 x^2$, which defines the quantum oscillator.
+The temperature of our system can be controlled by introducing a thermostat.
+Thermostats also allow us to make sure that we are sampling the canonical distribution when running a molecular dynamics code.
 
 \section{Results}
 Since a PIMD code consists of combining velocity verlet with a langevin thermostat, several tests were done to check that each piece of the PIMD code was implemented properly.
@@ -483,6 +305,201 @@ The equation for the total energy can be made exactly the same as in equation (\
     &= \Big( \frac{\hbar \omega}{2} \Big) \frac{(1-e^{-\beta \hbar \omega} + 2e^{-\beta \hbar \omega})}{1-e^{-\beta \hbar \omega}} \\
     &= \Big( \frac{\hbar \omega}{2} \Big) \frac{1-e^{-\beta \hbar \omega}}{1-e^{-\beta \hbar \omega}} + \Big( \frac{\hbar \omega}{2} \Big)\frac{2e^{-\beta \hbar \omega}}{1-e^{-\beta \hbar \omega}} \\
     &= \frac{\hbar \omega}{2} + \frac{\hbar \omega e^{-\beta \hbar \omega}}{1-e^{-\beta \hbar \omega}}
+  \end{split}
+\ee
+\subsection{Quantum Partition Function}
+This section serves to show that the canonical partition function can be written as a sum over states or equivalently as a trace of the density matrix.
+
+We can obtain the form of the partition function in equation (\ref{eq:harm_part_func}) by writing the density matrix as a power series in $\hat{H}$ (remember that $e^x = \sum\limits_{n=0}^{\infty} \frac{x^n}{n!}$).
+\be
+  e^{-\beta \hat{H}} = \sum_{n=0}^{\infty} \frac{(-\beta)^n \hat{H}^n}{n!}
+\ee
+Next, we perform a unitary transformation on $\hat{H}$ so that it becomes a diagonal matrix of its eigenvalues with $\hat{H} = \textbf{U}\textbf{D}\textbf{U}^{-1}$, where $\textbf{D}$ is the diagonal matrix of eigenvalues and $\textbf{U}$ is a matrix with the ith column being the eigenvector corresponding to the ith eigenvalue on the diagonal matrix.
+\be
+  e^{-\beta \hat{H}} = \sum_{n=0}^{\infty} \frac{(-\beta)^n (\textbf{U}\textbf{D}\textbf{U}^{-1})^n}{n!}
+\ee
+If we write out the first few terms we can see that the $\textbf{U}^{-1}$ and $\textbf{U}$ can be taken out of the sum,
+\be
+  \begin{split}
+    e^{-\beta \hat{H}} &= [\textbf{I} + \frac{(-\beta)^1}{1!} (\textbf{U}\textbf{D}\textbf{U}^{-1}) + \frac{(-\beta)^2}{2!} (\textbf{U}\textbf{D}\textbf{U}^{-1})^2 + \dots] \\
+    &= [\textbf{I} + \frac{(-\beta)^1}{1!} (\textbf{U}\textbf{D}\textbf{U}^{-1}) + \frac{(-\beta)^2}{2!} (\textbf{U}\textbf{D}\textbf{U}^{-1})(\textbf{U}\textbf{D}\textbf{U}^{-1}) + \dots] \\
+    &= [\textbf{I} + \frac{(-\beta)^1}{1!} (\textbf{U}\textbf{D}\textbf{U}^{-1}) + \frac{(-\beta)^2}{2!} (\textbf{U}\textbf{D}\textbf{D}\textbf{U}^{-1}) + \dots] \\
+    &= [\textbf{U}\textbf{U}^{-1} + \frac{(-\beta)^1}{1!} (\textbf{U}\textbf{D}\textbf{U}^{-1}) + \frac{(-\beta)^2}{2!} (\textbf{U}\textbf{D}\textbf{D}\textbf{U}^{-1}) + \dots] \\
+    &= \textbf{U} [\textbf{I} + \frac{(-\beta)^1}{1!} \textbf{D} + \frac{(-\beta)^2}{2!} + \textbf{D}^2 + \dots] \textbf{U}^{-1} \\
+    &= \textbf{U} e^{-\beta \textbf{D}} \textbf{U}^{-1}
+  \end{split}
+\ee
+exploiting the property of unitary matrices $\textbf{U}\textbf{U}^{-1} = \textbf{I}$.
+Then we use the cyclic property of the trace to show that the trace of a matrix is independent of the basis we choose to represent the matrix in,
+\be
+  \begin{split}
+    \text{Tr} \Big[e^{-\beta \hat{H}}\Big] &= \text{Tr} \Big[ \textbf{U} e^{-\beta \textbf{D}} \textbf{U}^{-1} \Big] \\
+    &= \text{Tr} \Big[ e^{-\beta \textbf{D}} \textbf{U} \textbf{U}^{-1} \Big]\\
+    &= \text{Tr} \Big[ e^{-\beta \textbf{D}} \Big]
+  \end{split}
+\ee
+And since $\textbf{D}$ is a diagonal matrix of the Hamiltonian eigenvalues $E_i$, the exponential matrix is just a diagonal matrix with the ith diagonal entry being $e^{-\beta E_n}$.
+So the trace just becomes a sum of exponentials,
+\be
+  \text{Tr} \Big[e^{-\beta \hat{H}}\Big] = \sum_n e^{-\beta E_n}
+\ee
+giving us equation (\ref{eq:harm_part_func}).
+Anybody who has a background in physics and believes that this is trivial will simply say that if the Hamiltonian is written in the basis of its eigenvectors then its trace becomes a sum of its eigenvalues, rather than show why that is the case.
+I have chosen to show this to make a point that it is completely valid to work with the trace of $e^{-\beta \hat{H}}$ when we consider the quantum partition function.
+\subsection{Path Integral Derivation}
+This section serves to derive the path integral representation of the partition function starting from the defintion (equation \ref{eq:part_func_coord}),
+\be
+  Q = \int dx \braket{x|e^{-\beta \hat{H}}|x}
+\ee
+
+The first thing we need to do is separate the Hamiltonian into its kinetic and potential energy components, $\hat{H} = \hat{K} + \hat{U}$.
+However, we cannot split the exponentials because for two operators that do not commute $\text{exp}(\hat{H}) \neq \text{exp}(\hat{K}) \text{exp}(\hat{U})$.
+To get around this we employ the trotter decompositon
+\be
+  e^{- \beta \hat{H}} = e^{- \beta (\hat{K} + \hat{U})} = \lim_{P \to\infty} \Big[ e^{- \beta \hat{U}/2P} e^{-\beta \hat{K}/P} e^{-\beta{U}/2P} \Big]^P .
+\ee
+Substituting this into equation (\ref{eq:part_func_coord}) gives us,
+\be
+  Q = \lim_{P \to\infty} \int dx \bra{x} \Big[ e^{- \beta \hat{U}/2P} e^{-\beta \hat{K}/P} e^{-\beta{U}/2P} \Big]^P \ket{x}
+\ee
+which can be condensed by defining another operator $\Omega$ as
+\be
+  \Omega = e^{-\beta \hat{U}/2P} e^{-\beta \hat{K}/P} e^{-\beta \hat{U}/2P} .
+\ee
+So our partition function becomes,
+\be
+  Q = \lim_{P \to\infty} \int dx \braket{x|\Omega^P|x}
+\ee
+We can insert the resolution of identity in terms of the position basis P-1 times between each of the omegas, remembering that $\Omega^P = \Omega \Omega \cdots \Omega$.
+\be
+  Q = \lim_{P \to\infty} \int \cdots \int dx_P \cdots dx_2 dx \braket{x|\Omega|x_P} \braket{x_P|\Omega|x_{P-1}} \bra{x_{P-1}} \cdots \ket{x_3} \braket{x_3|\Omega|x_2} \braket{x_2|\Omega|x}
+\ee
+In order to ensure that we obtain all the diagonal elements in the trace, we set $x_{P+1} = x_1 = x$,
+\be \label{eq:part_func_path_int}
+  Q = \lim_{P \to\infty} \int \cdots \int dx_P \cdots dx_2 dx_1 \braket{x_1|\Omega|x_P} \braket{x_P|\Omega|x_{P-1}} \bra{x_{P-1}} \cdots \ket{x_3} \braket{x_3|\Omega|x_2} \braket{x_2|\Omega|x_1}
+\ee
+which gives us the reason for why the system in path integral molecular dynamics is often portrayed as a periodic lattice of beads.
+If we think of each $x_i$ as the coordinate for the ith bead, then the only way for the condition $x_{P+1} = x_1$ to make sense physically is if the beads are arranged as a necklace.
+% Might use bottom later
+%===========================================================================%
+% The integrations over $x_1,\dots,x_P$ can then be thought of as the sum over all possible paths that your particle can take in imaginary time $-i \beta \hbar$ from because we can obtain integrations over all possible paths when P $\rightarrow \infty$.
+%===========================================================================%
+
+In order to evaluate $\Omega$ we want to consider an element of the matrix,
+\be \label{eq:omega_mat}
+  \braket{x_{k+1}|\Omega|x_k} = \braket{x_{k+1}|e^{-\beta \hat{U}/2P} e^{-\beta \hat{K}/P} e^{-\beta \hat{U}/2P}|x_k} .
+\ee
+We can recognize that the set of $\ket{x_k}$ are eigenvectors of $e^{-\beta \hat{U}/2P}$ with eigenvalue $e^{-\beta U(x_k)/2P}$ because $\hat{U} = U(\hat{x})$ is a function of the coordinate operator.\cite{griffiths,shankar}
+This can be shown easily by writing the exponential as a power series in $\hat{U}$.
+\be
+  e^{-\beta \hat{U}/2P} = \sum_{n=0}^{\infty} \frac{\beta^n(2P)^{-n} \hat{U}^n}{n!}
+\ee
+and if we operate on an eigenvector $\ket{x_k}$, we get
+\be
+  \begin{split}
+    e^{-\beta \hat{U}/2P} \ket{x_k} &= \sum_{n=0}^{\infty} \frac{\beta^n(2P)^{-n}}{n!} \hat{U}^n \ket{x_k} \\
+    &= \sum_{n=0}^{\infty} \frac{\beta^n(2P)^{-n}}{n!} (U(x_k))^n \ket{x_k} \\
+    &= e^{-\beta U(x_k)/2P} \ket{x_k}
+  \end{split}
+\ee
+So equation (\ref{eq:omega_mat}) simplifies to
+\be
+  \braket{x_{k+1}|\Omega|x_k} = e^{-\beta U(x_{k+1})/2P} \braket{x_{k+1}|e^{-\beta \hat{K}/P} |x_k} e^{-\beta U(x_k)/2P} .
+\ee
+We know that $\hat{K}$ is a function of the momentum operator, $\hat{K} = \hat{p}^2/2m$. \cite{griffiths,shankar} So we can use the same technique as we did with $\hat{U}$ and the position eigenvectors by introducing the resolution of identity in terms of the momentum basis,
+\be
+  \begin{split}
+    \braket{x_{k+1}|\Omega|x_k} &= \int e^{-\beta U(x_{k+1})/2P} \bra{x_{k+1}}e^{-\beta \hat{K}/P} \ket{p}\braket{p|x_k} e^{-\beta U(x_k)/2P} \\
+    &= \int e^{-\beta U(x_{k+1})/2P} e^{-\beta p^2/2mP} \braket{x_{k+1}|p}\braket{p|x_k} e^{-\beta U(x_k)/2P} dp
+  \end{split}
+\ee
+where $\braket{x_{k+1}|p}$ is the momentum wavefunction expressed in the coordinate basis $x_{k+1}$, and $\braket{p|x_k}$ is the complex conjugate of the momentum wavefunction expressed in the coordinate basis $x_k$, i.e. $\braket{p|x_k} = \braket{x_k|p}^*$.
+
+We can obtain a functional form of these wavefunctions by recalling the eigenvalue problem for the momentum operator,
+\be
+  \hat{p} \ket{p} = p \ket{p}
+\ee
+If we project this equation on the coordinate basis, we can make use of the hermitian property of the momentum operator to obtain
+\be
+  \braket{x|\hat{p}|p} = p \braket{x|p} \quad \Rightarrow \quad \braket{\hat{p} x|p} =  p \braket{x|p} \quad \Rightarrow \quad -i \hbar \frac{\partial}{\partial x} \braket{x|p} = p \braket{x|p}
+\ee
+And if we write $\braket{x|p} = \psi_p(x)$, then we just have a first order differential equation.
+The solution to this equation can easily be found
+\be
+  - i \hbar \frac{\partial}{\partial x} \psi_p(x) = p \psi_p(x) \quad \Rightarrow \quad \int \frac{d \psi_p}{\psi_p} dx = \int \frac{ip}{\hbar} dx \quad \Rightarrow \quad \ln \psi_p(x) = \frac{ipx}{\hbar} + C_1 \quad \Rightarrow \quad \psi_p(x) = C_2 e^{ipx/\hbar}
+\ee
+where $C_2$ is a normalization constant.
+With proper normalization, the momentum wavefunction looks like
+\be
+  \braket{x|p} = \psi_p(x) = \frac{1}{\sqrt{2 \pi \hbar}} e^{ipx/\hbar} .
+\ee
+And its complex conjugate looks like,
+\be
+  \braket{x|p}^* = \braket{p|x} = \frac{1}{\sqrt{2 \pi \hbar}} e^{-ipx/\hbar}
+\ee
+
+Our matrix elements for $\Omega$ can be rewritten as
+\be
+  \begin{split}
+    \braket{x_{k+1}|\Omega|x_k} &= \int e^{-\beta U(x_{k+1})/2P} e^{-\beta p^2/2mP} \braket{x_{k+1}|p}\braket{p|x_k} e^{-\beta U(x_k)/2P} dp \\
+    &= \frac{1}{2 \pi \hbar} \int e^{-\beta p^2/2mP} e^{-\beta(U(x_{k+1}) + U(x_k))/2P} e^{ip(x_{k+1} - x_k)/\hbar} dp
+  \end{split}
+\ee
+We can move the exponential without the momenta outside of the integral and combine the exponentials with the momenta to obtain
+\be
+  \braket{x_{k+1}|\Omega|x_k} = \frac{1}{2 \pi \hbar} e^{-\beta(U(x_{k+1}) + U(x_k))/2P} \int e^{-\beta p^2/2mP + ip(x_{k+1} - x_k)/\hbar} dp
+\ee
+Since our momentum basis extends from $+ \infty$ to $- \infty$, we end up having an integral of a gaussian if we complete the square,
+\be
+  \begin{split}
+    \frac{- \beta p^2}{2mP} + \frac{(x_{k+1} - x_k)ip}{\hbar} &= \frac{- \beta}{2mP} \Big[ p^2 - \frac{2imP(x_{k+1} - x_k)}{\beta \hbar} \Big] \\
+    &= \frac{- \beta}{2mP} \Big[ \Big( p -  \frac{imP(x_{k+1} - x_k)}{\beta \hbar} \Big)^2 - \Big( \frac{imP(x_{k+1} - x_k)}{\beta \hbar} \Big)^2 \Big] \\
+    &= \frac{- \beta}{2mP} \Big[ \Big( p -  \frac{imP(x_{k+1} - x_k)}{\beta \hbar} \Big)^2 + \frac{m^2P^2(x_{k+1} - x_k)^2}{\beta^2 \hbar^2} \Big] \\
+    &= \frac{- \beta}{2mP} \Big( p -  \frac{imP(x_{k+1} - x_k)}{\beta \hbar} \Big)^2 - \frac{mP(x_{k+1} - x_k)^2}{2 \beta \hbar^2} \\
+  \end{split}
+\ee
+and make a variable substitution,
+\be
+  u = p -  \frac{imP(x_{k+1} - x_k)}{\beta \hbar} .
+\ee
+Our integral is now,
+\be
+  \braket{x_{k+1}|\Omega|x_k} = \frac{1}{2 \pi \hbar} \text{exp} \Big[ \frac{-\beta(U(x_{k+1}) + U(x_k))}{2P} \Big] \text{exp} \Big[ \frac{-mP(x_{k+1} - x_k)^2}{2 \beta \hbar^2} \Big] \int e^\frac{-\beta u^2}{2mP} du
+\ee
+which evaluates to,
+\be
+  \begin{split}
+    \braket{x_{k+1}|\Omega|x_k} &= \frac{1}{2 \pi \hbar} \text{exp} \Big[ -\frac{\beta}{2P}(U(x_{k+1}) + U(x_k)) \Big] \text{exp} \Big[ -\frac{mP}{2 \beta \hbar^2}(x_{k+1} - x_k)^2 \Big] \Big( \frac{2 \pi m P}{\beta} \Big)^{1/2} \\
+    &= \Big( \frac{mP}{2 \pi \beta \hbar^2} \Big)^{1/2} \text{exp} \Big[ - \frac{mP}{2 \beta \hbar^2}(x_{k+1} - x_k)^2 - \frac{\beta}{2P}(U(x_{k+1}) + U(x_k)) \Big]
+  \end{split}
+\ee
+Plugging in our matrix elements into equation (\ref{eq:part_func_path_int}) P times for each element gives us the discretized path integral representation of the quantum partition function.
+\be \label{eq:part_func_with_omega}
+  Q = \lim_{P \to\infty} \Big( \frac{mP}{2 \pi \beta \hbar^2} \Big)^{P/2} \int \cdots \int dx_P \cdots dx_1 \quad \text{exp}\Big( \sum_{k=1}^P \Big[ - \frac{mP}{2 \beta \hbar^2}(x_{k+1} - x_k)^2 - \frac{\beta}{2P}(U(x_{k+1}) + U(x_k)) \Big] \Big) .
+\ee
+
+For PIMD, we take advantage of the constant in front of equation (\ref{eq:part_func_with_omega}) by considering an integral over momentum variables that would evaluate to the constant.
+It turns out that such an integral exists as a P dimensional gaussian integral.
+\be
+  \int \cdots \int dp_1 \cdots dp_P \quad \text{exp}\Big( \sum_{k=1}^P \frac{-\beta p^2_k}{2m'} \Big) = \Big( \frac{mP}{2 \pi \beta \hbar^2} \Big)^{P/2}
+\ee
+where $m' = mP/(2 \pi \hbar)^2$.
+The integral can be easily evaluated by noticing that it is just the same integral multiplied P times.
+\be
+  \begin{split}
+    \int \cdots \int dp_1 \cdots dp_P \quad \text{exp}\Big( \sum_{k=1}^P \frac{-\beta p^2_k}{2m'} \Big) &= \int \cdots \int dp_1 \cdots dp_P \quad \text{exp}\Big(\frac{-\beta p^2_1}{2m'} \Big) \text{exp}\Big( \frac{-\beta p^2_2}{2m'}\Big) \cdots \text{exp}\Big( \frac{-\beta p^2_P}{2m'} \Big) \\
+    &= \Big[ \int dp_1 \quad \text{exp} \Big( \frac{-\beta p^2_1}{2m'} \Big)\Big]^P \\
+    &= \Big[ \Big( \frac{2 \pi m'}{\beta} \Big)^{1/2} \Big]^P \\
+    &= \Big[ \Big( \frac{2 \pi m P}{(2 \pi \hbar)^2 \beta } \Big)^{1/2} \Big]^P \\
+    &= \Big( \frac{mP}{2 \pi \beta \hbar^2} \Big)^{P/2}
+  \end{split}
+\ee
+Finally, substituting the momentum integrals into equation (\ref{eq:part_func_with_omega}) with more clever manipulation gives us,
+\be
+  \begin{split}
+    Q &= \lim_{P \to\infty} \int dp_1 \cdots dp_P \int dx_P \cdots dx_1 \quad \text{exp}\Big( \sum_{k=1}^P \Big[ \frac{-\beta p^2_k}{2m'} - \frac{mP}{2 \beta \hbar^2}(x_{k+1} - x_k)^2 - \frac{\beta}{2P}(U(x_{k+1}) + U(x_k)) \Big] \Big) \\
+    &= \lim_{P \to\infty} \int dp_1 \cdots dp_P \int dx_P \cdots dx_1 \quad \text{exp}\Big( - \beta \sum_{k=1}^P \Big[ \frac{p^2_k}{2m'} + \frac{mP}{2 \beta^2 \hbar^2}(x_{k+1} - x_k)^2 + \frac{1}{2P}(U(x_{k+1}) + U(x_k)) \Big] \Big) \\
+    &= \lim_{P \to\infty} \int dp_1 \cdots dp_P \int dx_P \cdots dx_1 \quad \text{exp}\Big( - \beta \sum_{k=1}^P \Big[ \frac{p^2_k}{2m'} + \frac{1}{2} m \omega^2_P (x_{k+1} - x_k)^2 + \frac{1}{P} U(x_k) \Big] \Big) \\
   \end{split}
 \ee
 
