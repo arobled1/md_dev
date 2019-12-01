@@ -571,7 +571,7 @@ We can move the exponential without the momenta outside of the integral and comb
 \be
   \braket{x_{k+1}|\Omega|x_k} = \frac{1}{2 \pi \hbar} e^{-\beta(U(x_{k+1}) + U(x_k))/2P} \int e^{-\beta p^2/2mP + ip(x_{k+1} - x_k)/\hbar} dp
 \ee
-Since our momentum basis extends from $+ \infty$ to $- \infty$, we end up having an integral of a gaussian if we complete the square,
+Since our momentum basis extends from $- \infty$ to $+ \infty$, we end up having an integral of a gaussian if we complete the square,
 \be
   \begin{split}
     \frac{- \beta p^2}{2mP} + \frac{(x_{k+1} - x_k)ip}{\hbar} &= \frac{- \beta}{2mP} \Big[ p^2 - \frac{2imP(x_{k+1} - x_k)}{\beta \hbar} \Big] \\
@@ -616,7 +616,7 @@ The integral can be easily evaluated by noticing that it is just the same integr
     &= \Big( \frac{mP}{2 \pi \beta \hbar^2} \Big)^{P/2}
   \end{split}
 \ee
-Finally, substituting the momentum integrals into equation (\ref{eq:part_func_with_omega}) with more clever manipulation gives us,
+Finally, substituting the momentum integrals into equation (\ref{eq:part_func_with_omega}) with some rearranging gives us,
 \be
   \begin{split}
     Q &= \lim_{P \to\infty} \int dp_1 \cdots dp_P \int dx_P \cdots dx_1 \quad \text{exp}\Big( \sum_{k=1}^P \Big[ \frac{-\beta p^2_k}{2m'} - \frac{mP}{2 \beta \hbar^2}(x_{k+1} - x_k)^2 - \frac{\beta}{2P}(U(x_{k+1}) + U(x_k)) \Big] \Big) \\
