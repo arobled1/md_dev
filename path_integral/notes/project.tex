@@ -75,7 +75,7 @@ Remember that this is the exact form of the harmonic oscillator energies in the 
 
 To understand what a PIMD code does, we have to first understand the idea of representing partition functions like equation (\ref{eq:harm_part_func}) as a path integral.
 
-\subsection{Path Integral}
+\subsection{Path Integral Representation}
 We will consider the case of a single quantum particle moving in one dimension subject to some potential $U(x)$.
 Remember that our Hamiltonian is, in general,
 \be
@@ -141,10 +141,72 @@ Going back to the 1D quantum harmonic oscillator, a PIMD calculation would consi
 The temperature of our system can be controlled by introducing a thermostat.
 Thermostats also allow us to make sure that we are sampling the canonical distribution when running a molecular dynamics code.
 
-\section{Results}
-Since a PIMD code consists of combining velocity verlet with a langevin thermostat, several tests were done to check that each piece of the PIMD code was implemented properly.
-\subsection{Velocity Verlet}
+\subsection{Path Integral Molecular Dynamics}
+Mapping a quantum system of interest onto a classical system of cyclic chains allows us to use a molecular dynamics scheme on a Hamiltonian of the form
+,
+\be \label{eq:chain_hamiltonian}
+  H = \Big[ \frac{p^2_k}{2m'} + \frac{1}{2} m \omega^2_P (x_{k+1} - x_k)^2 + \frac{1}{P} U(x_k) \Big] .
+\ee
+A more feasible way to perform an MD calculation on a coupled system is to introduce a coordinate transformation that de-couples each degree of freedom.
+The harmonic coupling term in equation (\ref{eq:chain_hamiltonian}) can become uncoupled by introducing staging coordinates.\cite{tuckerman}
+A staging coordinate transformation converts the original set of coordinates, which we refer to as primitive coordinates, $\{x_1 , x_2 , \dots , x_P \}$ into a set of staging coordinates $\{u_1 , u_2 , \dots , u_P \}$.
+In one dimension, each staging coordinate is defined as,
+\be
+  \begin{split}
+    u_1 &= x_1 \\
+    u_k &= x_k - \frac{(k-1)x_{k+1} + x_1}{k} \quad \quad k = 2, \dots, P\\
+  \end{split}
+\ee
+The Hamiltonian in staging coordinates becomes,
+\be
+  H = \Big[ \frac{p^2_k}{2m'_k} + \frac{1}{2} m_k \omega^2_P u_k^2 + \frac{1}{P} U(x_k(u)) \Big] .
+\ee
+where a set of fictitious masses $m_k$ are defined as,
+\be
+  \begin{split}
+    m_1 &= 0 \\
+    m_k &= \frac{k}{k-1} m \quad \quad k = 2, \dots, P
+  \end{split}
+\ee
+and $m'_k$ are defined as,
+\be
+  \begin{split}
+    m'_1 &= m \\
+    m'_k &= m_k = \frac{k}{k-1} m \quad \quad k = 2, \dots, P .
+  \end{split}
+\ee
+Since the potential $U(x_k(u)$ is defined as the potential from the original quantum system, a PIMD calculation requires performing an inverse staging coordinate transformation in order to compute the potential in the primitive coordinates.
 
+A typical PIMD simulation then makes use of the equations of motion defined in staging coordinates,
+\be
+  \begin{split}
+    \dot{u}_k &= \frac{p_k}{m'_k} \\
+    \dot{p}_k &= - m_k \omega_P^2 u_k - \frac{1}{P} \frac{\partial U}{\partial u_k} \\
+  \end{split}
+\ee
+where the forces on the staging coordinates $- \frac{\partial U}{\partial u_k}$ are defined recursively as,
+\be
+  \begin{split}
+    \frac{1}{P} \frac{\partial U}{\partial u_1} &= \frac{1}{P} \sum_{l-1}^{P} \frac{\partial U}{\partial x_l} \\
+    \frac{1}{P} \frac{\partial U}{\partial u_k} &= \frac{1}{P} \Big[ \frac{\partial U}{\partial x_k} + \frac{k-2}{k-1} \frac{\partial U}{\partial u_{k-1}}\Big] \quad \quad k = 2,\dots, P .
+  \end{split}
+\ee
+The thermostat is then implemented to ensure proper sampling of the canonical ensemble.\cite{Liu}
+
+When performing a PIMD calculation, thermodynamic estimators are often used to approximate values of thermodynamic quantities.
+The virial energy estimator is what we will focus on for testing a PIMD code.
+The virial energy,
+\be
+  E_vir = \frac{1}{P} \sum_{k=1}^P \Big[ \frac{1}{2}x_k \frac{\partial U}{\partial x_k} + U(x_k) \Big]
+\ee
+can be computed at every step of a simulation to obtain a plot of instantaneous virial energies and cumulative averages.
+The thermal coupling will cause the instantaneous virial energies to fluctuate, but the cumulative averages should stay consistent after the system begins to equilibrate.
+For a quantum harmonic oscillator, we can expect the virial energy to approximate the energies in the canonical ensemble (equation \ref{eq:canonical_energies}).
+
+\section{Results}
+Since the PIMD code that I have written consists of combining velocity verlet with a langevin thermostat, several test cases were done to check that each piece was implemented properly.
+
+\subsection{Velocity Verlet}
 The first test case was writing a velocity verlet code for a one dimensional harmonic oscillator.
 The dynamics for these simulations were entirely deterministic due to the lack of any thermostat coupling.
 Therefore, replicating key features of the classical harmonic oscillator became the goal to verify that the code was written well.
@@ -153,7 +215,6 @@ Therefore, replicating key features of the classical harmonic oscillator became 
   \centering
   \includegraphics[scale=0.7]{Figures/1dverlet/energies.pdf}
     \caption{Plot of total energy for a harmonic oscillator ($m = \omega = 1$) over an MD trajectory. The energy remains constant throughout an MD trajectory because there are no other external forces acting on the potential, which conserves total energy. Initial conditions for the simulation was: $x(0) = 0, v(0) = 1$. Plugging these values along with the mass and frequency into the Hamiltonian shows that the energy should be 0.5 throughout the trajectory.}
-  % \label{fig:under_damped}
 \end{figure}
 
 Since there is no energy exhange occuring throughout a simulation, the energy of the oscillator should remain constant throughout a trajectory. The exact value of the energy at each time step will vary by some amount depending on the precision of each calculation, but a plot of the energy over time should yield a horizontal line (Figure 1).
@@ -219,11 +280,16 @@ For this reason, histograms of the positions and momenta for the oscillator shou
     \caption{Histograms of position (a) and momenta (b) for the one dimensional harmonic oscillator ($m = 1$). Initial conditions for the simulation was: $x(0) = 0, v(0) = 0.1$. The friction $\gamma = K_B T$ in this simulation. The choice for this value of the friction came from the optimum value of the friction coefficient being $\gamma = \omega_P$, as stated in the paper by Liu.\cite{Liu} In this case, P = 1.}
 \end{figure}
 
-\subsection{PIMD}
+\subsection{Path Integral Molecular Dynamics}
+Finally, the PIMD code was written to replicate the results done by Tuckerman et al.\cite{tuckerman}
+The system defined by Tuckerman et al consisted of a one dimensional quantum harmonic oscillator with $\beta \hbar \omega = 15.8$, $m \omega / \hbar = 0.03$, and $P = 400$.
+These parameters are used so that the thermodynamic energy is dominated by the ground state energy.
+Therefore, we expect a proper PIMD calculation to yield energies equal to $\hbar \omega / 2$ (Figure 6).
+
 \begin{figure}[H]
   \centering
   \includegraphics[scale=0.7]{Figures/pimd/smallkt.pdf}
-    \caption{Plot of positions for each mass over time for 3 non-periodic coupled harmonic oscillators without thermostat coupling and with fixed boundary conditions. The purpose of this plot was to replicate the results of the same calculation done by Gren and Wahnstr\"om.\cite{gren}}
+    \caption{Plot of the instantaneous virial estimator along with cumulative averages along a PIMD trajectory. Since the simulation was performed in using atomic units, we defined variables $\hbar = m = K_B = 1$ so that $\omega = 0.03$ and $T = 0.03/15.8$. Simulations were considered successful if the cumulative average of the virial estimator converged at $E_vir = \hbar \omega / 2 = 0.015$. This simulation converged at a value of 0.0156 after 2,500,000 million MD steps with $\Delta t = 0.01$. Initial conditions for this simulation were $u_k(0) = 0$ and $v_k(0) = 1$.}
 \end{figure}
 
 \section{Appendix}

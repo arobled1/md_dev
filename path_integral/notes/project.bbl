@@ -15,16 +15,16 @@ R.~Shankar.
 \newblock {\em Principles of Quantum Mechanics}.
 \newblock Springer US, 1995.
 
-\bibitem{gren}
-M.~Gren and G.~Wahnstr\"om.
-\newblock Coupled harmonic oscillators.
-\newblock \url{http://web.student.chalmers.se/~gmartin/CompPhys/E1/E1.pdf}.
-\newblock (visited on 09/01/2019).
-
 \bibitem{Liu}
 Jian Liu, Dezhang Li, and Xinzijian Liu.
 \newblock A simple and accurate algorithm for path integral molecular dynamics
   with the langevin thermostat.
 \newblock {\em The Journal of Chemical Physics}, 145(2):024103, Jul 2016.
+
+\bibitem{gren}
+M.~Gren and G.~Wahnstr\"om.
+\newblock Coupled harmonic oscillators.
+\newblock \url{http://web.student.chalmers.se/~gmartin/CompPhys/E1/E1.pdf}.
+\newblock (visited on 09/01/2019).
 
 \end{thebibliography}
