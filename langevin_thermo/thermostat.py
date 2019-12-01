@@ -20,9 +20,9 @@ def get_force(posit, mass, frequency):
 
 tmin = 0            # Starting time
 dt = 0.001          # Delta t
-n_steps = 2000000   # Number of time steps
+n_steps = 3000000   # Number of time steps
 kbt = 1
-gamma = kbt
+gamma = 10
 
 times = np.array([tmin + i * dt for i in range(n_steps)])
 x = np.zeros((len(times)))      # Initialize Positions
@@ -48,18 +48,36 @@ for i in range(1,n_steps):
     # Update velocity based on random force
     v[i] = upd_velocity(v[i], f[i], dt, m)
 
-dens_mat = []
-sigma = kbt/(m*w**2)
-dens_x = np.arange(-5,5,0.1)
-for j in range(len(dens_x)):
-    # dens_mat.append( ((m*w)/(2*np.pi*np.sinh((kbt)**(-1) * w)))**(1/2) * np.exp(-((m*w)/(2*np.sinh((kbt)**(-1) * w))) * ( 2*dens_x[j]**2 * np.cosh((kbt)**(-1) * w) - 2*dens_x[j]**2 )))
-    dens_mat.append( (1/np.sqrt(2*np.pi*sigma))*np.exp(-0.5*(sigma)**(-1) * dens_x[j]**2))
+#dens_mat = []
+#sigma = kbt/(m*w**2)
+#dens_x = np.arange(-5,5,0.1)
+#for j in range(len(dens_x)):
+#    # dens_mat.append( ((m*w)/(2*np.pi*np.sinh((kbt)**(-1) * w)))**(1/2) * np.exp(-((m*w)/(2*np.sinh((kbt)**(-1) * w))) * ( 2*dens_x[j]**2 * np.cosh((kbt)**(-1) * w) - 2*dens_x[j]**2 )))
+#    dens_mat.append( (1/np.sqrt(2*np.pi*sigma))*np.exp(-0.5*(sigma)**(-1) * dens_x[j]**2))
 
-_ = plt.hist(x, bins=20, normed=True)
-# Keep all lines below for plots of histograms
+#_ = plt.hist(x, bins=20, normed=True)
+## Keep all lines below for plots of histograms
+#plt.xlim(-5, 5)
+#plt.ylim(-0.2,0.6)
+#plt.plot(dens_x, dens_mat, color='black')
+#plt.xlabel('x')
+#plt.ylabel('P(x)')
+#plt.savefig("histogram.pdf")
+
+# Histogram of the positions
+_ = plt.hist(x, bins=50, normed=True)
 plt.xlim(-5, 5)
-plt.ylim(-0.2,0.6)
-plt.plot(dens_x, dens_mat, color='black')
+plt.ylim(0,0.6)
 plt.xlabel('x')
 plt.ylabel('P(x)')
-plt.savefig("histogram.pdf")
+plt.savefig('xhist.pdf')
+plt.clf()
+
+# Histogram of the momenta
+_ = plt.hist(v*m, bins=50, normed=True)
+plt.xlim(-5, 5)
+plt.ylim(0,0.6)
+plt.xlabel('p')
+plt.ylabel('P(p)')
+plt.savefig('phist.pdf')
+plt.clf()
