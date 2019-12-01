@@ -152,7 +152,7 @@ Therefore, replicating key features of the classical harmonic oscillator became 
 \begin{figure}[H]
   \centering
   \includegraphics[scale=0.7]{Figures/1dverlet/energies.pdf}
-    \caption{Plot of total energy over an MD trajectory. The energy remains constant throughout an MD trajectory because there are no other external forces acting on the potential, which conserves total energy.}
+    \caption{Plot of total energy for a harmonic oscillator ($m = \omega = 1$) over an MD trajectory. The energy remains constant throughout an MD trajectory because there are no other external forces acting on the potential, which conserves total energy. Initial conditions for the simulation was: $x(0) = 0, v(0) = 1$. Plugging these values along with the mass and frequency into the Hamiltonian shows that the energy should be 0.5 throughout the trajectory.}
   % \label{fig:under_damped}
 \end{figure}
 
@@ -175,7 +175,7 @@ In contrast, plotting the position of an oscillator with a large frequency shoul
         \includegraphics[width=\textwidth]{Figures/1dverlet/positw10.pdf}
         \caption{Positions with $\omega = 10$}
     \end{subfigure}
-    \caption{Harmonic oscillator positions for different values of $\omega$.}
+    \caption{Harmonic oscillator ($m = 1$) positions for different values of frequency $\omega$. Initial conditions for the simulations were: $x(0) = 0, v(0) = 1$.}
 \end{figure}
 The Hamiltonian for a harmonic oscillator tells us that a phase space plot should result in an ellipse (Figure 3).
 Remembering that the equation for an ellipse centered at (0,0) is
@@ -186,8 +186,7 @@ we can define the semi-major axis of the phase space plot as $a = \sqrt{\frac{2E
 \begin{figure}[H]
   \centering
   \includegraphics[scale=0.7]{Figures/1dverlet/phasespace_w2.pdf}
-    \caption{Phase space plot of the one dimensional harmonic oscillator with $\omega = 2$. The phase space curve should follow the shape of an ellipse since the Hamiltonian is $H = \frac{1}{2m}p^2 + \frac{m \omega^2}{2}x^2$.}
-  % \label{fig:under_damped}
+    \caption{Phase space plot of the one dimensional harmonic oscillator ($m = 1$) with $\omega = 2$. The phase space curve should follow the shape of an ellipse since the Hamiltonian is $H = \frac{1}{2m}p^2 + \frac{m \omega^2}{2}x^2$. Initial conditions for the simulations was: $x(0) = 0, v(0) = 1$.}
 \end{figure}
 An MD simulation of 3 coupled harmonic oscillators ($m_1 = m_2 = m_3 = m$ , $\omega_1 = \omega_2 = \omega_3 = \omega$) was done to test the verlet code with a different potential.
 This system was non-periodic with fixed boundary conditions, i.e. mass 1 was connected to wall by a spring and mass 3 was connected another wall by another spring.
@@ -203,11 +202,29 @@ Therefore, if mass 1 starts to the right of mass 2, the simulation should show m
   \centering
   \includegraphics[scale=0.7]{Figures/1dverlet/3part_2walls.pdf}
     \caption{Plot of positions for each mass over time for 3 non-periodic coupled harmonic oscillators without thermostat coupling and with fixed boundary conditions. The purpose of this plot was to replicate the results of the same calculation done by Gren and Wahnstr\"om.\cite{gren}}
-  % \label{fig:under_damped}
 \end{figure}
 
 \subsection{Langevin Dynamics with Velocity Verlet}
+Another code was written for a classical one dimensional harmonic oscillator coupled to a langevin thermostat.
+The langevin step added to the velocity verlet is done so that a random kick is added to the system at each time step that depends on a random variable sampled from the normal distribution with mean $\mu = 0$ and standard deviation $\sigma^2 = 1$.
+For this reason, histograms of the positions and momenta for the oscillator should mimic a gaussian distribution (Figure 5).
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.49\textwidth}
+        \includegraphics[width=\textwidth]{Figures/langevin/xhist.pdf}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.49\textwidth}
+        \includegraphics[width=\textwidth]{Figures/langevin/phist.pdf}
+    \end{subfigure}
+    \caption{Histograms of position (a) and momenta (b) for the one dimensional harmonic oscillator ($m = 1$). Initial conditions for the simulation was: $x(0) = 0, v(0) = 0.1$. The friction $\gamma = K_B T$ in this simulation. The choice for this value of the friction came from the optimum value of the friction coefficient being $\gamma = \omega_P$, as stated in the paper by Liu.\cite{Liu} In this case, P = 1.}
+\end{figure}
 
+\subsection{PIMD}
+\begin{figure}[H]
+  \centering
+  \includegraphics[scale=0.7]{Figures/pimd/smallkt.pdf}
+    \caption{Plot of positions for each mass over time for 3 non-periodic coupled harmonic oscillators without thermostat coupling and with fixed boundary conditions. The purpose of this plot was to replicate the results of the same calculation done by Gren and Wahnstr\"om.\cite{gren}}
+\end{figure}
 
 \section{Appendix}
 \subsection{Quantum Harmonic Oscillator Energies}

@@ -30,29 +30,38 @@
 \newlabel{eq:pimd_partition}{{10}{2}{Path Integral}{equation.1.10}{}}
 \@writefile{toc}{\contentsline {section}{\numberline {2}Results}{2}{section.2}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {2.1}Velocity Verlet}{2}{subsection.2.1}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Plot of total energy over an MD trajectory. The energy remains constant throughout an MD trajectory because there are no other external forces acting on the potential, which conserves total energy.\relax }}{3}{figure.caption.1}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Harmonic oscillator positions for different values of $\omega $.\relax }}{3}{figure.caption.2}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Plot of total energy for a harmonic oscillator ($m = \omega = 1$) over an MD trajectory. The energy remains constant throughout an MD trajectory because there are no other external forces acting on the potential, which conserves total energy. Initial conditions for the simulation was: $x(0) = 0, v(0) = 1$. Plugging these values along with the mass and frequency into the Hamiltonian shows that the energy should be 0.5 throughout the trajectory.\relax }}{3}{figure.caption.1}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Harmonic oscillator ($m = 1$) positions for different values of frequency $\omega $. Initial conditions for the simulations were: $x(0) = 0, v(0) = 1$.\relax }}{3}{figure.caption.2}\protected@file@percent }
 \citation{gren}
 \citation{gren}
-\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Phase space plot of the one dimensional harmonic oscillator with $\omega = 2$. The phase space curve should follow the shape of an ellipse since the Hamiltonian is $H = \frac  {1}{2m}p^2 + \frac  {m \omega ^2}{2}x^2$.\relax }}{4}{figure.caption.3}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Phase space plot of the one dimensional harmonic oscillator ($m = 1$) with $\omega = 2$. The phase space curve should follow the shape of an ellipse since the Hamiltonian is $H = \frac  {1}{2m}p^2 + \frac  {m \omega ^2}{2}x^2$. Initial conditions for the simulations was: $x(0) = 0, v(0) = 1$.\relax }}{4}{figure.caption.3}\protected@file@percent }
+\citation{Liu}
+\citation{Liu}
+\citation{gren}
+\citation{gren}
 \@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Plot of positions for each mass over time for 3 non-periodic coupled harmonic oscillators without thermostat coupling and with fixed boundary conditions. The purpose of this plot was to replicate the results of the same calculation done by Gren and Wahnstr\"om.\cite  {gren}\relax }}{5}{figure.caption.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {3}Appendix}{5}{section.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Quantum Harmonic Oscillator Energies}{5}{subsection.3.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.2}Langevin Dynamics with Velocity Verlet}{5}{subsection.2.2}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Histograms of position (a) and momenta (b) for the one dimensional harmonic oscillator ($m = 1$). Initial conditions for the simulation was: $x(0) = 0, v(0) = 0.1$. The friction $\gamma = K_B T$ in this simulation. The choice for this value of the friction came from the optimum value of the friction coefficient being $\gamma = \omega _P$, as stated in the paper by Liu.\cite  {Liu} In this case, P = 1.\relax }}{5}{figure.caption.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.3}PIMD}{6}{subsection.2.3}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces Plot of positions for each mass over time for 3 non-periodic coupled harmonic oscillators without thermostat coupling and with fixed boundary conditions. The purpose of this plot was to replicate the results of the same calculation done by Gren and Wahnstr\"om.\cite  {gren}\relax }}{6}{figure.caption.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {3}Appendix}{6}{section.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Quantum Harmonic Oscillator Energies}{6}{subsection.3.1}\protected@file@percent }
 \citation{griffiths,shankar}
-\newlabel{eq:h_plusminus}{{17}{6}{Quantum Harmonic Oscillator Energies}{equation.3.17}{}}
-\newlabel{eq:h_minusplus}{{19}{6}{Quantum Harmonic Oscillator Energies}{equation.3.19}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Energies from the Partition Function}{7}{subsection.3.2}\protected@file@percent }
-\newlabel{eq:harm_canonical_e}{{31}{8}{Energies from the Partition Function}{equation.3.31}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}Quantum Partition Function}{8}{subsection.3.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.4}Path Integral Derivation}{9}{subsection.3.4}\protected@file@percent }
+\newlabel{eq:h_plusminus}{{17}{7}{Quantum Harmonic Oscillator Energies}{equation.3.17}{}}
+\newlabel{eq:h_minusplus}{{19}{7}{Quantum Harmonic Oscillator Energies}{equation.3.19}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Energies from the Partition Function}{8}{subsection.3.2}\protected@file@percent }
+\newlabel{eq:harm_canonical_e}{{31}{9}{Energies from the Partition Function}{equation.3.31}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}Quantum Partition Function}{9}{subsection.3.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.4}Path Integral Derivation}{10}{subsection.3.4}\protected@file@percent }
 \citation{griffiths,shankar}
 \citation{griffiths,shankar}
-\newlabel{eq:part_func_path_int}{{43}{10}{Path Integral Derivation}{equation.3.43}{}}
-\newlabel{eq:omega_mat}{{44}{10}{Path Integral Derivation}{equation.3.44}{}}
-\newlabel{eq:part_func_with_omega}{{60}{11}{Path Integral Derivation}{equation.3.60}{}}
+\newlabel{eq:part_func_path_int}{{43}{11}{Path Integral Derivation}{equation.3.43}{}}
+\newlabel{eq:omega_mat}{{44}{11}{Path Integral Derivation}{equation.3.44}{}}
+\newlabel{eq:part_func_with_omega}{{60}{12}{Path Integral Derivation}{equation.3.60}{}}
 \bibdata{mybib}
 \bibcite{tuckerman}{1}
 \bibcite{griffiths}{2}
 \bibcite{shankar}{3}
 \bibcite{gren}{4}
+\bibcite{Liu}{5}
 \bibstyle{unsrt}

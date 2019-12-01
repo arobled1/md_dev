@@ -21,4 +21,10 @@ M.~Gren and G.~Wahnstr\"om.
 \newblock \url{http://web.student.chalmers.se/~gmartin/CompPhys/E1/E1.pdf}.
 \newblock (visited on 09/01/2019).
 
+\bibitem{Liu}
+Jian Liu, Dezhang Li, and Xinzijian Liu.
+\newblock A simple and accurate algorithm for path integral molecular dynamics
+  with the langevin thermostat.
+\newblock {\em The Journal of Chemical Physics}, 145(2):024103, Jul 2016.
+
 \end{thebibliography}

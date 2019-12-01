@@ -3,8 +3,10 @@
 \BOOKMARK [2][-]{subsection.1.2}{Path Integral}{section.1}% 3
 \BOOKMARK [1][-]{section.2}{Results}{}% 4
 \BOOKMARK [2][-]{subsection.2.1}{Velocity Verlet}{section.2}% 5
-\BOOKMARK [1][-]{section.3}{Appendix}{}% 6
-\BOOKMARK [2][-]{subsection.3.1}{Quantum Harmonic Oscillator Energies}{section.3}% 7
-\BOOKMARK [2][-]{subsection.3.2}{Energies from the Partition Function}{section.3}% 8
-\BOOKMARK [2][-]{subsection.3.3}{Quantum Partition Function}{section.3}% 9
-\BOOKMARK [2][-]{subsection.3.4}{Path Integral Derivation}{section.3}% 10
+\BOOKMARK [2][-]{subsection.2.2}{Langevin Dynamics with Velocity Verlet}{section.2}% 6
+\BOOKMARK [2][-]{subsection.2.3}{PIMD}{section.2}% 7
+\BOOKMARK [1][-]{section.3}{Appendix}{}% 8
+\BOOKMARK [2][-]{subsection.3.1}{Quantum Harmonic Oscillator Energies}{section.3}% 9
+\BOOKMARK [2][-]{subsection.3.2}{Energies from the Partition Function}{section.3}% 10
+\BOOKMARK [2][-]{subsection.3.3}{Quantum Partition Function}{section.3}% 11
+\BOOKMARK [2][-]{subsection.3.4}{Path Integral Derivation}{section.3}% 12
