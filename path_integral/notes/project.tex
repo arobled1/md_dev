@@ -196,7 +196,7 @@ When performing a PIMD calculation, thermodynamic estimators are often used to a
 The virial energy estimator is what we will focus on for testing a PIMD code.
 The virial energy,
 \be
-  E_vir = \frac{1}{P} \sum_{k=1}^P \Big[ \frac{1}{2}x_k \frac{\partial U}{\partial x_k} + U(x_k) \Big]
+  E_{vir} = \frac{1}{P} \sum_{k=1}^P \Big[ \frac{1}{2}x_k \frac{\partial U}{\partial x_k} + U(x_k) \Big]
 \ee
 can be computed at every step of a simulation to obtain a plot of instantaneous virial energies and cumulative averages.
 The thermal coupling will cause the instantaneous virial energies to fluctuate, but the cumulative averages should stay consistent after the system begins to equilibrate.
