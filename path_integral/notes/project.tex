@@ -10,6 +10,7 @@
 \usepackage{amssymb}
 \usepackage{braket}
 \usepackage{float}
+\usepackage{hyperref}
 \usepackage{subcaption}
 \usepackage[margin=0.7in]{geometry}
 \usepackage[version=4]{mhchem}
@@ -142,8 +143,28 @@ Thermostats also allow us to make sure that we are sampling the canonical distri
 
 \section{Results}
 Since a PIMD code consists of combining velocity verlet with a langevin thermostat, several tests were done to check that each piece of the PIMD code was implemented properly.
+\subsection{Velocity Verlet}
 
 The first test case was writing a velocity verlet code for a one dimensional harmonic oscillator.
+The dynamics for these simulations were entirely deterministic due to the lack of any thermostat coupling.
+Therefore, replicating key features of the classical harmonic oscillator became the goal to verify that the code was written well.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[scale=0.7]{Figures/1dverlet/energies.pdf}
+    \caption{Plot of total energy over an MD trajectory. The energy remains constant throughout an MD trajectory because there are no other external forces acting on the potential, which conserves total energy.}
+  % \label{fig:under_damped}
+\end{figure}
+
+Since there is no energy exhange occuring throughout a simulation, the energy of the oscillator should remain constant throughout a trajectory. The exact value of the energy at each time step will vary by some amount depending on the precision of each calculation, but a plot of the energy over time should yield a horizontal line (Figure 1).
+
+Solving newton's equations for a harmonic oscillator yields,
+\be
+  x(t) = A \cos(\omega t + \phi)
+\ee
+where $\omega$ is the frequency of the oscillator.
+Therefore, plotting the position of an oscillator with a small frequency should result in a wave with a large wave period.
+In contrast, plotting the position of an oscillator with a large frequency should result in a wave with a small wave period (Figure 2).
 \begin{figure}[H]
     \centering
     \begin{subfigure}[b]{0.49\textwidth}
@@ -156,18 +177,37 @@ The first test case was writing a velocity verlet code for a one dimensional har
     \end{subfigure}
     \caption{Harmonic oscillator positions for different values of $\omega$.}
 \end{figure}
+The Hamiltonian for a harmonic oscillator tells us that a phase space plot should result in an ellipse (Figure 3).
+Remembering that the equation for an ellipse centered at (0,0) is
+\be
+  1 = \frac{x^2}{a^2} + \frac{y^2}{b^2}
+\ee
+we can define the semi-major axis of the phase space plot as $a = \sqrt{\frac{2E}{m \omega^2}}$ and the semi-minor axis of the phase space plot as $b = \sqrt{2mE}$.
 \begin{figure}[H]
   \centering
   \includegraphics[scale=0.7]{Figures/1dverlet/phasespace_w2.pdf}
     \caption{Phase space plot of the one dimensional harmonic oscillator with $\omega = 2$. The phase space curve should follow the shape of an ellipse since the Hamiltonian is $H = \frac{1}{2m}p^2 + \frac{m \omega^2}{2}x^2$.}
   % \label{fig:under_damped}
 \end{figure}
+An MD simulation of 3 coupled harmonic oscillators ($m_1 = m_2 = m_3 = m$ , $\omega_1 = \omega_2 = \omega_3 = \omega$) was done to test the verlet code with a different potential.
+This system was non-periodic with fixed boundary conditions, i.e. mass 1 was connected to wall by a spring and mass 3 was connected another wall by another spring.
+The Hamiltonian for this system is equal to
+\be
+  H = \sum_{i=1}^{3} \frac{p_i^2}{2 m} + m \omega^2 (x_{i+1} - x_{i})^2 .
+\ee
+The purpose of this test was to verify the positions of each mass during an MD simulation done by Gren and Wahnstr of the same system (Figure 4).
+The initial conditions were such that mass 1 started at $x_1 = 0.1$ and mass 2 and 3 started at $x_2 = x_3 = 0$.
+The plot in Figure 4 shows that mass 1 moves opposite of masses 2 and 3, which makes sense because the system is defined as mass 1 having some displacement to the left of mass 2.
+Therefore, if mass 1 starts to the right of mass 2, the simulation should show mass 1 moving to the left and mass 2 moving to the right for some $\Delta t$.
 \begin{figure}[H]
   \centering
-  \includegraphics[scale=0.7]{Figures/1dverlet/energies.pdf}
-    \caption{Plot of total energy over an MD trajectory. The energy remains constant throughout an MD trajectory because there are no other external forces acting on the potential, which conserves total energy.}
+  \includegraphics[scale=0.7]{Figures/1dverlet/3part_2walls.pdf}
+    \caption{Plot of positions for each mass over time for 3 non-periodic coupled harmonic oscillators without thermostat coupling and with fixed boundary conditions. The purpose of this plot was to replicate the results of the same calculation done by Gren and Wahnstr\"om.\cite{gren}}
   % \label{fig:under_damped}
 \end{figure}
+
+\subsection{Langevin Dynamics with Velocity Verlet}
+
 
 \section{Appendix}
 \subsection{Quantum Harmonic Oscillator Energies}

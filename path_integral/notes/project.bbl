@@ -6,7 +6,7 @@ M.E. Tuckerman.
 \newblock Oxford graduate texts. Oxford University Press, 2011.
 
 \bibitem{griffiths}
-D.J. Griffiths and P.D.J. Griffiths.
+D.J. Griffiths.
 \newblock {\em Introduction to Quantum Mechanics}.
 \newblock Pearson international edition. Pearson Prentice Hall, 2005.
 
@@ -14,5 +14,11 @@ D.J. Griffiths and P.D.J. Griffiths.
 R.~Shankar.
 \newblock {\em Principles of Quantum Mechanics}.
 \newblock Springer US, 1995.
+
+\bibitem{gren}
+M.~Gren and G.~Wahnstr\"om.
+\newblock Coupled harmonic oscillators.
+\newblock \url{http://web.student.chalmers.se/~gmartin/CompPhys/E1/E1.pdf}.
+\newblock (visited on 09/01/2019).
 
 \end{thebibliography}
