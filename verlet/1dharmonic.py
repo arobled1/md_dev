@@ -6,7 +6,7 @@ def get_force(position): # F = - grad(U) = - grad(.5 k x^2) = - kx = - m w^2 x
 
 tmin = 0        # Starting time
 dt = 0.01       # Time step
-n_steps = 3000  # Number of time steps
+n_steps = 500  # Number of time steps
 
 times = np.array([tmin + i * dt for i in range(n_steps)])
 x = np.zeros((len(times)))      # Initialize Positions
@@ -15,7 +15,7 @@ f = np.zeros((len(times)))      # Initialize Forces
 x[0] = 0                # Initial position
 v[0] = 1                # Initial velocity
 m = 1                   # Set mass
-w = 1                   # Angular Frequency for spring
+w = 2                   # Angular Frequency for spring
 f[0] = get_force(x[0])  # Compute inital force
 
 for i in range(1,n_steps):
