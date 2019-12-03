@@ -266,7 +266,11 @@ Therefore, if mass 1 starts to the right of mass 2, the simulation should show m
 
 \subsection{Langevin Dynamics with Velocity Verlet}
 Another code was written for a classical one dimensional harmonic oscillator coupled to a langevin thermostat.
-The langevin step added to the velocity verlet is done so that a random kick is added to the system at each time step that depends on a random variable sampled from the normal distribution with mean $\mu = 0$ and standard deviation $\sigma^2 = 1$.
+The langevin step
+\be
+  v(t) = v(0)e^{- \gamma \Delta t} + \sqrt{\frac{m}{\beta}}\sqrt{1-e^{-2 \gamma \Delta t}} \xi^{k}
+\ee
+is added to velocity verlet so that a random kick is added to the system at each time step that depends on a random variable sampled from the normal distribution with mean $\mu = 0$ and standard deviation $\sigma^2 = 1$.
 For this reason, histograms of the positions and momenta for the oscillator should mimic a gaussian distribution (Figure 5).
 \begin{figure}[H]
     \centering
@@ -343,15 +347,23 @@ So rearranging to solve for the Hamiltonian gives us,
 \be \label{eq:h_minusplus}
   \hat{H} = \hbar \omega \Big(\hat{a}^{\dagger} \hat{a} + \frac{1}{2} \Big) .
 \ee
-We can imagine a set of vectors that make up the basis of eigenvectors $\ket{\psi_n}$ for the harmonic oscillator Hamiltonian that yield energies $E_n$.
-If we apply equation (\ref{eq:h_plusminus}) to a vector that is one state higher $\hat{a}\ket{\psi_n}$, we obtain,
+The raising operator is defined so that if it acts upon a state vector on energy level n, $\ket{psi_n}$, the result is a state vector at energy level n+1 with a factor,
 \be
-  H \hat{a}\ket{\psi} = (E_n + \hbar \omega) \hat{a}\ket{\psi}.
+  \hat{a}^{\dagger}\ket{\psi_n} = \sqrt{n+1}\ket{\psi_{n+1}} .
+\ee
+Likewise, the lowering operator is defined so that if it acts upon a state vector at energy level n, $\ket{psi_n}$, the result is a state vector at energy level n-1 with a factor,
+\be
+  \hat{a}\ket{\psi_n} = \sqrt{n}\ket{\psi_{n-1}} .
+\ee
+
+So if we apply equation (\ref{eq:h_plusminus}) to a vector that is one state higher $\hat{a}\ket{\psi_n}$, we obtain,
+\be
+  H \hat{a}\ket{\psi_n} = (E_n + \hbar \omega) \hat{a}\ket{\psi_n}.
 \ee
 eigenvalues equal to the energy in the previous state plus $\hbar \omega$.
 Likewise, if we apply equation (\ref{eq:h_minusplus}) to a vector that is one state lower $\hat{a}^{\dagger}\ket{\psi_n}$, we obtain,
 \be
-  H \hat{a}^{\dagger}\ket{\psi} = (E_n - \hbar \omega) \hat{a}^{\dagger}\ket{\psi} .
+  H \hat{a}^{\dagger}\ket{\psi_n} = (E_n - \hbar \omega) \hat{a}^{\dagger}\ket{\psi_n} .
 \ee
 It is for this reason that the operators $\hat{a}$ and $\hat{a}^{\dagger}$ are called ladder operators because they allow us to go up and down in energy.\cite{griffiths,shankar}
 When we consider that there is a ground state $\ket{\psi_0}$ such that $\hat{a}^{\dagger}\ket{\psi_0} = 0$, we can plug in the defintion for $\hat{a}^{\dagger}$ in position space,
