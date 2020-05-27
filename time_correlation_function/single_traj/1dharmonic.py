@@ -50,6 +50,24 @@ plt.xlabel("t")
 plt.ylabel('Velocity Autocorrelation')
 plt.ticklabel_format(axis="y", style="sci", scilimits=(0,0))
 plt.tight_layout()
-plt.savefig("autocorrelation.pdf")
+plt.savefig("1d_velocity_auto.pdf")
+plt.clf()
+
+#============================================================================
+# This block is for computing position autocorrelation
+x_auto = []
+for n in range(K):
+    sum = 0
+    for m in range((n_steps-n)):
+        sum += x[m]*x[m+n]
+    sum = (1/(n_steps-n)) * sum
+    x_auto.append(sum)
+
+plt.plot(auto_times,x_auto, '-', color = "blue")
+plt.xlabel("t")
+plt.ylabel('Position Autocorrelation')
+plt.ticklabel_format(axis="y", style="sci", scilimits=(0,0))
+plt.tight_layout()
+plt.savefig("1d_position_auto.pdf")
 plt.clf()
 #============================================================================
