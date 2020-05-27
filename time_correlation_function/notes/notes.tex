@@ -44,5 +44,142 @@ where the time dependent operator can be defined in the interaction picture as,
 $\hat{H}_0$ is supposed to represent an unperturbed Hamiltonian describing our system. Time dependent systems can be easily described in the context of Perturbation Theory and this is exactly what we will discuss to show that QTCFs arise naturally when computing frequency spectra.
 \section{Time-Dependent Perturbation Theory}
 
-
+\section{Appendix}
+\subsection{Fourier Transform of the Symmetrized Correlation Function}
+In this section, we want to show how to derive the fourier transform of the symmetrized correlation function from the fourier transform of the nonsymmetrized correlation function, i.e. show that
+\be
+  \tilde{G}_{AB}(\omega) = e^{-\beta \hbar \omega/2} \tilde{C}_{AB}(\omega) .
+\ee
+Equation 14.6.1 in Tuckerman's book gives the formula for the nonsymmetrized time correlation function.
+\be
+  \begin{split}
+    C_{AB}(t) = \frac{1}{Q} \text{Tr}\Big[ e^{- \beta H} \ha e^{iHt/ \hbar} \hb e^{-iHt/ \hbar} \Big]
+  \end{split}
+\ee
+The trace can be evaluated in the energy basis as,
+\be
+  \begin{split}
+    C_{AB}(t) = \frac{1}{Q} \sum_n \bra{E_n} e^{- \beta H} \ha e^{iHt/ \hbar} \hb e^{-iHt/ \hbar} \ket{E_n} .
+  \end{split}
+\ee
+Then the resolution of identity can be inserted between A and B.
+\be
+  \begin{split}
+    C_{AB}(t) &= \frac{1}{Q} \sum_n \sum_m \bra{E_n} e^{- \beta H} \ha e^{iHt/ \hbar} \ket{E_m} \bra{E_m} \hb e^{-i H t/ \hbar} \ket{E_n} \\
+    &= \frac{1}{Q} \sum_n \sum_m \bra{E_n} \ha \ket{E_m} \bra{E_m} \hb \ket{E_n} e^{- \beta E_n} e^{i E_m t/ \hbar} e^{-i E_n t/ \hbar} \\
+    &= \frac{1}{Q} \sum_n \sum_m \bra{E_n} \ha \ket{E_m} \bra{E_m} \hb \ket{E_n} e^{- \beta E_n} e^{i (E_m - E_n) t/ \hbar}
+  \end{split}
+\ee
+Taking the fourier transform of $C_{AB}(t)$ gives a function in terms of $\omega$, $\tilde{C}_{AB}(\omega)$.
+\be
+  \begin{split}
+    \tilde{C}_{AB}(\omega) &= \frac{1}{\sqrt{2\pi}} \int_{- \infty}^{\infty} e^{-i \omega t} C_{AB}(t) dt \\
+    &= \frac{1}{Q} \sum_n \sum_m \bra{E_n} \ha \ket{E_m} \bra{E_m} \hb \ket{E_n} e^{- \beta E_n} \frac{1}{\sqrt{2\pi}} \int_{- \infty}^{\infty} e^{-i \omega t} e^{i (E_m - E_n) t/ \hbar} dt \\
+    &= \frac{1}{Q} \sum_n \sum_m \bra{E_n} \ha \ket{E_m} \bra{E_m} \hb \ket{E_n} e^{- \beta E_n} \frac{1}{\sqrt{2\pi}} \int_{- \infty}^{\infty} e^{i (E_m - E_n - \hbar \omega) t/ \hbar} dt \\
+    &= \frac{1}{Q} \sum_n \sum_m \bra{E_n} \ha \ket{E_m} \bra{E_m} \hb \ket{E_n} e^{- \beta E_n} \frac{1}{\sqrt{2\pi}} \Big[ 2 \pi \hbar \delta(E_m - E_n - \hbar\omega) \Big]\\
+    &= \frac{1}{Q} \sum_n \sum_m \bra{E_n} \ha \ket{E_m} \bra{E_m} \hb \ket{E_n} e^{- \beta E_n} \sqrt{2 \pi} \hbar \delta(E_m - E_n - \hbar \omega)\\
+  \end{split}
+\ee
+We can do the exact same procedure to find the fourier transform of the symmetrized time correlation function $\tilde{G}_{AB}$.
+Equation 14.6.4 gives us our starting point,
+\be
+  G_{AB}(t) = \frac{1}{Q} \text{Tr}[ \ha e^{iH \tau^* / \hbar} \hb e^{- iH \tau / \hbar}]
+\ee
+where $\tau$ is a complex time variable $\tau = t - i \beta \hbar/2$.
+Now we evaluate $G_{AB}(t)$ in the energy basis.
+\be
+  \begin{split}
+    G_{AB}(t) &= \frac{1}{Q} \sum_n \bra{E_n} \ha e^{iH \tau^* / \hbar} \hb e^{- iH \tau / \hbar} \ket{E_n} \\
+    &= \frac{1}{Q} \sum_n \sum_m \bra{E_n} \ha e^{iH \tau^* / \hbar} \ket{E_m} \bra{E_m} \hb e^{- iH \tau / \hbar} \ket{E_n}  \\
+    &= \frac{1}{Q} \sum_n \sum_m \bra{E_n} \ha \ket{E_m} \bra{E_m} \hb \ket{E_n} e^{iE_m \tau^* / \hbar} e^{- iE_n \tau / \hbar} \\
+    &= \frac{1}{Q} \sum_n \sum_m \bra{E_n} \ha \ket{E_m} \bra{E_m} \hb \ket{E_n} e^{iE_m (t + i \beta \hbar / 2) / \hbar} e^{- iE_n (t - i \beta \hbar / 2) / \hbar} \\
+    &= \frac{1}{Q} \sum_n \sum_m \bra{E_n} \ha \ket{E_m} \bra{E_m} \hb \ket{E_n} e^{- \beta E_m / 2} e^{- \beta E_n / 2} e^{i (E_m - E_n) t/ \hbar} \\
+  \end{split}
+\ee
+Performing a fourier transform gives us,
+\be
+  \begin{split}
+    \tilde{G}_{AB}(\omega) &= \frac{1}{\sqrt{2 \pi}} \int_{-\infty}^{\infty} e^{-i \omega t} G_{AB}(t) dt \\
+    &= \frac{1}{Q} \sum_n \sum_m \bra{E_n} \ha \ket{E_m} \bra{E_m} \hb \ket{E_n} e^{- \beta E_m / 2} e^{- \beta E_n / 2} \frac{1}{\sqrt{2 \pi}} \int_{-\infty}^{\infty} e^{-i \omega t} e^{i (E_m - E_n) t/ \hbar} dt \\
+    &= \frac{1}{Q} \sum_n \sum_m \bra{E_n} \ha \ket{E_m} \bra{E_m} \hb \ket{E_n} e^{- \beta E_m / 2} e^{- \beta E_n / 2} \sqrt{2 \pi} \hbar \delta(E_m - E_n - \hbar \omega)
+  \end{split}
+\ee
+If we mutliply $\tilde{G}_{AB}(\omega)$ with $e^{\beta \hbar \omega /2}$,
+we can make use of the fact that the delta function will make every term in the sums zero except for the ones where $E_m - E_n = \hbar \omega$.
+This gives us the relationship $E_m = E_n + \hbar \omega$, which we can now plug in to get,
+\be
+  \begin{split}
+  e^{\beta \hbar \omega /2} \tilde{G}_{AB}(\omega) &= \frac{1}{Q} \sum_n \sum_m \bra{E_n} \ha \ket{E_m} \bra{E_m} \hb \ket{E_n} e^{\beta \hbar \omega /2} e^{- \beta E_m / 2} e^{- \beta E_n / 2} \sqrt{2 \pi} \hbar \delta(E_m - E_n - \hbar \omega) \\
+  &= \frac{1}{Q} \sum_n \sum_m \bra{E_n} \ha \ket{E_m} \bra{E_m} \hb \ket{E_n} e^{\beta \hbar \omega /2} e^{- \beta (E_n + \hbar \omega) / 2} e^{- \beta E_n / 2} \sqrt{2 \pi} \hbar \delta(E_m - E_n - \hbar \omega) \\
+  &= \frac{1}{Q} \sum_n \sum_m \bra{E_n} \ha \ket{E_m} \bra{E_m} \hb \ket{E_n} e^{( \beta \hbar \omega - \beta E_n - \beta \hbar \omega - \beta E_n)/2} \sqrt{2 \pi} \hbar \delta(E_m - E_n - \hbar \omega) \\
+  &= \frac{1}{Q} \sum_n \sum_m \bra{E_n} \ha \ket{E_m} \bra{E_m} \hb \ket{E_n} e^{( - 2 \beta E_n)/2} \sqrt{2 \pi} \hbar \delta(E_m - E_n - \hbar \omega) \\
+  &= \frac{1}{Q} \sum_n \sum_m \bra{E_n} \ha \ket{E_m} \bra{E_m} \hb \ket{E_n} e^{- \beta E_n} \sqrt{2 \pi} \hbar \delta(E_m - E_n - \hbar \omega) \\
+  &= \tilde{C}_{AB}(\omega) .
+  \end{split}
+\ee
+\subsection{Fourier Transform of the Kubo-Transformed Correlation Function}
+In this section, we want to show how to derive the fourier transform of the nonsymmetrized correlation function from the fourier transform of the kubo-transformed correlation function, i.e. show that
+\be
+  \tilde{C}_{AB}(\omega) = \Big[ \frac{\beta \hbar \omega}{1 - e^{- \beta \hbar \omega}} \Big] \tilde{K}_{AB}(\omega)
+\ee
+We start with the definition of the kubo-transformed correlation function,
+\be
+  K_{AB}(t) = \frac{1}{\beta Q} \int_{0}^{\beta} d \lambda \; \text{Tr} \Big[ e^{-(\beta - \lambda)H} \ha e^{- \lambda H} e^{i Ht / \hbar} \hb e^{-i Ht / \hbar} \Big]
+\ee
+Just as we did in the previous section, we start by finding $K_{AB}(t)$ in the energy basis.
+\be
+  \begin{split}
+  K_{AB}(t) &= \frac{1}{\beta Q} \int_{0}^{\beta} d \lambda \; \text{Tr} \Big[ e^{-(\beta - \lambda)H} \ha e^{- \lambda H} e^{i Ht / \hbar} \hb e^{-i Ht / \hbar} \Big] \\
+  &= \frac{1}{\beta Q} \int_{0}^{\beta} d \lambda \; \sum_n \bra{E_n} e^{-(\beta - \lambda)H} \ha e^{- \lambda H} e^{i Ht / \hbar} \hb e^{-i Ht / \hbar} \ket{E_n} \\
+  &= \frac{1}{\beta Q} \int_{0}^{\beta} d \lambda \; \sum_n \sum_m \bra{E_n} e^{-(\beta - \lambda)H} \ha e^{- \lambda H} e^{i Ht / \hbar} \ket{E_m} \bra{E_m} \hb e^{-i Ht / \hbar} \ket{E_n} \\
+  &= \frac{1}{\beta Q} \int_{0}^{\beta} d \lambda \; \sum_n \sum_m \bra{E_n} \ha \ket{E_m} \bra{E_m} \hb \ket{E_n} e^{-(\beta - \lambda)E_n} e^{- \lambda E_m} e^{i E_m t / \hbar} e^{-i E_n t / \hbar} \\
+  &= \frac{1}{\beta Q} \int_{0}^{\beta} d \lambda \; \sum_n \sum_m \bra{E_n} \ha \ket{E_m} \bra{E_m} \hb \ket{E_n} e^{-(\beta - \lambda)E_n} e^{- \lambda E_m} e^{i (E_m - E_n) t / \hbar} \\
+  \end{split}
+\ee
+We can interchange the integral and the sum since they are both independent of each other,
+\be
+  K_{AB}(t) = \frac{1}{\beta Q} \sum_n \sum_m \bra{E_n} \ha \ket{E_m} \bra{E_m} \hb \ket{E_n} e^{i (E_m - E_n) t / \hbar} \int_{0}^{\beta} e^{-(\beta - \lambda)E_n} e^{- \lambda E_m} d \lambda
+\ee
+and evaluate the simple integral.
+\be
+  \begin{split}
+  \int_{0}^{\beta} e^{-(\beta - \lambda)E_n} e^{- \lambda E_m} d \lambda
+  &= e^{- \beta E_n} \int_{0}^{\beta} e^{\lambda(E_n - E_m)} d \lambda \\
+  &= \frac{e^{- \beta E_n}}{E_n - E_m} e^{\lambda(E_n - E_m)} \Big| _{0}^{\beta} \\
+  &= \frac{e^{- \beta E_n}}{E_n - E_m} \Big[ e^{\beta(E_n - E_m)} - 1 \Big]
+  \end{split}
+\ee
+So our correlation function becomes,
+\be
+  K_{AB}(t) = \frac{1}{\beta Q} \sum_n \sum_m \bra{E_n} \ha \ket{E_m} \bra{E_m} \hb \ket{E_n} e^{i (E_m - E_n) t / \hbar} \frac{e^{- \beta E_n}}{E_n - E_m} \Big[ e^{\beta(E_n - E_m)} - 1 \Big]
+\ee
+And now we find $\tilde{K}_{AB}$ with the fourier transform,
+\be
+  \begin{split}
+    \tilde{K}_{AB}(\omega) &= \frac{1}{\sqrt{2 \pi}} \int_{-\infty}^{\infty} e^{-i \omega t} K_{AB}(t) \\
+    &= \frac{1}{\beta Q} \sum_n \sum_m \bra{E_n} \ha \ket{E_m} \bra{E_m} \hb \ket{E_n} \frac{e^{- \beta E_n}}{E_n - E_m} \Big[ e^{\beta(E_n - E_m)} - 1 \Big] \frac{1}{\sqrt{2 \pi}} \int_{-\infty}^{\infty} e^{-i \omega t} e^{i (E_m - E_n) t / \hbar} dt \\
+    &= \frac{1}{\beta Q} \sum_n \sum_m \bra{E_n} \ha \ket{E_m} \bra{E_m} \hb \ket{E_n} \frac{e^{- \beta E_n}}{E_n - E_m} \Big[ e^{\beta(E_n - E_m)} - 1 \Big] \sqrt{2 \pi} \hbar \delta(E_m - E_n - \hbar \omega) \\
+  \end{split}
+\ee
+Then we mutliply $\tilde{K}_{AB}$ by the factor of interest,
+\be
+  \Big[ \frac{\beta \hbar \omega}{1 - e^{- \beta \hbar \omega}} \Big] \tilde{K}_{AB}(\omega) = \frac{1}{\beta Q} \sum_n \sum_m \bra{E_n} \ha \ket{E_m} \bra{E_m} \hb \ket{E_n} \Big( \frac{\beta \hbar \omega}{1 - e^{- \beta \hbar \omega}} \Big) \Big( \frac{e^{- \beta E_n}}{E_n - E_m} \Big) \Big(e^{\beta(E_n - E_m)} - 1 \Big) \sqrt{2 \pi} \hbar \delta(E_m - E_n - \hbar \omega)
+\ee
+and use the fact that the only nonzero terms in the sums are the ones where $E_m = E_n + \hbar \omega$ to replace $E_m$.
+So the multiplication of all 3 terms in paranthesis becomes,
+\be
+  \begin{split}
+    \Big( \frac{\beta \hbar \omega}{1 - e^{- \beta \hbar \omega}} \Big) \Big( \frac{e^{- \beta E_n}}{E_n - E_m} \Big) \Big(e^{\lambda(E_n - E_m)} - 1 \Big) &= \Big( \frac{\beta \hbar \omega}{1 - e^{- \beta \hbar \omega}} \Big) \Big( \frac{e^{- \beta E_n}}{E_n - (E_n + \hbar \omega)} \Big) \Big(e^{\beta(E_n - (E_n + \hbar \omega))} - 1 \Big)\\
+    &= \Big(\frac{- \beta e^{- \beta E_n}}{1 - e^{- \beta \hbar \omega}} \Big) \Big( e^{-\beta \hbar \omega} - 1\Big) \\
+    &= \beta e^{- \beta E_n} .
+  \end{split}
+\ee
+This gives us,
+\be
+  \begin{split}
+    \Big[ \frac{\beta \hbar \omega}{1 - e^{- \beta \hbar \omega}} \Big] \tilde{K}_{AB}(\omega) &= \frac{1}{\beta Q} \sum_n \sum_m \bra{E_n} \ha \ket{E_m} \bra{E_m} \hb \ket{E_n} \beta e^{- \beta E_n} \sqrt{2 \pi} \hbar \delta(E_m - E_n - \hbar \omega) \\
+    &= \frac{1}{Q} \sum_n \sum_m \bra{E_n} \ha \ket{E_m} \bra{E_m} \hb \ket{E_n} e^{- \beta E_n} \sqrt{2 \pi} \hbar \delta(E_m - E_n - \hbar \omega) \\
+    &= \tilde{C}_{AB}(\omega) .
+  \end{split}
+\ee
 \end{document}
