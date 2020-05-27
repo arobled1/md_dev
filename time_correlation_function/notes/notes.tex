@@ -1,0 +1,48 @@
+\documentclass{article}
+%==============================================================================%
+%                                 Packages                                     %
+%==============================================================================%
+% Packages
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{braket}
+\usepackage{subcaption}
+\usepackage[margin=0.7in]{geometry}
+\usepackage[version=4]{mhchem}
+%==============================================================================%
+%                           User-Defined Commands                              %
+%==============================================================================%
+% User-Defined Commands
+\newcommand{\be}{\begin{equation*}}
+\newcommand{\ee}{\end{equation*}}
+\newcommand{\benum}{\begin{enumerate}}
+\newcommand{\eenum}{\end{enumerate}}
+\newcommand{\pd}{\partial}
+\newcommand{\dg}{\dagger}
+\newcommand{\ha}{\hat{A}}
+\newcommand{\hb}{\hat{B}}
+\newcommand{\hc}{\hat{C}}
+%==============================================================================%
+%                             Title Information                                %
+%==============================================================================%
+\title{Quantum Time Correlation Function notes}
+\date{\today}
+\author{Alan Robledo}
+\begin{document}
+\maketitle
+Quantum Time Correlation Functions (QTCFs) are defined as the equilibrium average over a product of hermitian operators $\hat{A}$ and $\hat{B}$,
+\be
+  C_{AB} = \braket{\hat{A}(0) \hat{B}(t)}
+\ee
+where the time dependent operator can be defined in the interaction picture as,
+\be
+  \hat{B}(t) = e^{i \hat{H}_0 t/ \hbar} \hat{B}(0) e^{-i \hat{H}_0 t/ \hbar} .
+\ee
+$\hat{H}_0$ is supposed to represent an unperturbed Hamiltonian describing our system. Time dependent systems can be easily described in the context of Perturbation Theory and this is exactly what we will discuss to show that QTCFs arise naturally when computing frequency spectra.
+\section{Time-Dependent Perturbation Theory}
+
+
+\end{document}
