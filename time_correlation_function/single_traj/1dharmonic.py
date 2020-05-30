@@ -18,8 +18,8 @@ x = np.zeros((len(times)))      # Initialize Positions
 v = np.zeros((len(times)))      # Initialize Velocities
 f = np.zeros((len(times)))      # Initialize Forces
 x[0] = 1                # Initial position
-v[0] = 0                # Initial velocity
-m = 1                   # Set mass
+v[0] = 1                # Initial velocity
+m = 3                   # Set mass
 w = 2                   # Angular Frequency for spring
 f[0] = get_force(x[0])  # Compute inital force
 
@@ -39,25 +39,6 @@ for i in range(1,n_steps):
 # This block is for computing velocity autocorrelation
 K = 500    # User specified number of points in each segment  k << M
 auto_times = [tmin + i * dt for i in range(K)]
-
-v_auto = []
-for n in range(K):
-    sum = 0
-    for m in range((n_steps-n)):
-        sum += v[m]*v[m+n]
-    sum = (1/(n_steps-n)) * sum
-    v_auto.append(sum)
-
-plt.plot(auto_times,v_auto, '-', color = "blue")
-plt.xlabel("t")
-plt.ylabel('Velocity Autocorrelation')
-plt.ticklabel_format(axis="y", style="sci", scilimits=(0,0))
-plt.tight_layout()
-plt.savefig("1d_velocity_auto.pdf")
-plt.clf()
-
-#============================================================================
-# This block is for computing position autocorrelation
 x_auto = []
 for n in range(K):
     sum = 0
@@ -65,8 +46,9 @@ for n in range(K):
         sum += x[m]*x[m+n]
     sum = (1/(n_steps-n)) * sum
     x_auto.append(sum)
-
-plt.plot(auto_times,x_auto, '-', color = "blue")
+#============================================================================
+# This block is for plotting
+plt.plot(auto_times, x_auto, '-', color = "blue")
 plt.xlabel("t")
 plt.ylabel('Position Autocorrelation')
 plt.ticklabel_format(axis="y", style="sci", scilimits=(0,0))
