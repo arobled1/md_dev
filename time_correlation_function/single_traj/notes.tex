@@ -1,0 +1,100 @@
+\documentclass{article}
+%==============================================================================%
+%                                 Packages                                     %
+%==============================================================================%
+% Packages
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{braket}
+\usepackage{subcaption}
+\usepackage[margin=0.7in]{geometry}
+\usepackage[version=4]{mhchem}
+%==============================================================================%
+%                           User-Defined Commands                              %
+%==============================================================================%
+% User-Defined Commands
+\newcommand{\be}{\begin{equation*}}
+\newcommand{\ee}{\end{equation*}}
+\newcommand{\benum}{\begin{enumerate}}
+\newcommand{\eenum}{\end{enumerate}}
+\newcommand{\pd}{\partial}
+\newcommand{\dg}{\dagger}
+\newcommand{\ha}{\hat{A}}
+\newcommand{\hb}{\hat{B}}
+\newcommand{\hc}{\hat{C}}
+%==============================================================================%
+%                             Title Information                                %
+%==============================================================================%
+\title{Position Autocorrelation Function for a Harmonic Oscillator}
+\date{\today}
+\author{Alan Robledo}
+\begin{document}
+\maketitle
+As always we define the Hamiltonian for the 1D system.
+\be
+  H = \frac{p^2}{2m} + \frac{1}{2} m \omega^2 x^2
+\ee
+In the canonical ensemble, $C_{xx}(t)$ for a 1D HO has a simple form,
+\be
+  C_{xx}(t) = \frac{kT}{m \omega^2} \cos(\omega t)
+\ee
+where $k$ is Boltzmann's constant and $T$ is temperature. Computing this value numerically with a Molecular Dynamics trajectory poses an issue because the correlation function requires that the dynamics be realistic - something that cannot be generated for a system coupled to a thermal bath. We can overcome this issue by defining the correlation function in the microcanonical ensemble.
+
+The first thing we need to do is compute the partition function for a Harmonic Oscillator in the microcanonical ensemble, i.e. we need to compute,
+\be
+  \Omega = \frac{E_o}{h} \int_{-\infty}^{\infty} dp \int_{-\infty}^{\infty} dx \; \delta(H(x,p) - E) = \frac{E_o}{h} \int_{-\infty}^{\infty} dp \int_{-\infty}^{\infty} dx \; \delta\left( \frac{p^2}{2m} + \frac{1}{2} m \omega^2 x^2 - E \right)
+\ee
+which is non-trivial but doable. We begin by defining some new coordinates,
+\be
+  \begin{split}
+    \bar{p} &= \frac{p}{\sqrt{2m}} \quad \quad \sqrt{2m} d\bar{p} = dp \\
+    \bar{x} &= \sqrt{ \frac{m \omega^2}{2} } x \quad \quad \sqrt{ \frac{2}{m \omega^2} } d\bar{x} = dx
+  \end{split}
+\ee
+and substitute into the partition function.
+\be
+  \Omega = \frac{E_o}{h} \sqrt{2m} \sqrt{ \frac{2}{m \omega^2} } \int_{-\infty}^{\infty} d \bar{p} \int_{-\infty}^{\infty} d\bar{x} \; \delta\left( \bar{p}^2 + \bar{x}^2 - E \right) = \frac{2 E_o}{h \omega} \int_{-\infty}^{\infty} d \bar{p} \int_{-\infty}^{\infty} d\bar{x} \; \delta\left( \bar{p}^2 + \bar{x}^2 - E \right)
+\ee
+The delta function requires that we consider points where $p^2 + x^2 = E$ which resembles the equation for a circle so we can consider a conversion to polar coordinates.
+\be
+  \begin{split}
+    \bar{p} &= \sqrt{r \omega} \cos(\theta) \\
+    \bar{x} &= \sqrt{r \omega} \sin(\theta)
+  \end{split}
+\ee
+We define the coordinates this way so that the jacobian equals $\omega$ when redefining the integrals.
+\be
+  |J| =
+  \begin{vmatrix}
+    \frac{\partial \bar{p}}{\partial r} & \frac{\partial \bar{p}}{\partial \theta}\\[6pt]
+    \frac{\partial \bar{x}}{\partial r} & \frac{\partial \bar{x}}{\partial \theta}
+  \end{vmatrix}
+  =
+  \begin{vmatrix}
+    \sqrt{\omega} \cos(\theta) / 2\sqrt{r} & - \sqrt{r \omega} \sin(\theta) \\
+    \sqrt{\omega} \sin(\theta) / 2\sqrt{r} & \sqrt{r \omega} \cos(\theta) \\
+  \end{vmatrix}
+  = 
+\ee
+\be
+  \int_{-\infty}^{\infty} d \bar{p} \int_{-\infty}^{\infty} d\bar{x} = \int_{-0}^{2 \pi} d \theta \int_{0}^{\infty} d r |J|
+\ee
+
+% We start with the definition of $C_{xx}(t)$ in the microcanonical ensemble (we take $t=0$ to be our initial time) as a phase space average,
+% \be
+%   C_{xx}(t) = \braket{x(0) x(t)} = \frac{E_o}{h \Omega} \int_{-\infty}^{\infty} dp \int_{-\infty}^{\infty} dx \; x(0) \; x(t) \delta(H(x,p) - E)
+% \ee
+% where $E_o/h$ is a constant from the partition function $\Omega$.
+% Integrating Hamilton's equations for a Harmonic Oscillator yields the equation of motion
+% \be
+%   x(t) = x(0) \cos(\omega t) + \frac{p(0)}{m \omega} \sin(\omega t)
+% \ee
+% where $p(0)$ is the initial momentum. We can drop the 0 in the initial x and p since we need to consider each point in phase space as an initial condition in order to compute the integral. Plugging $x(t)$ into our defintion leaves us with,
+% \be
+%   C_{xx}(t) = \frac{E_o}{h \Omega} \int_{-\infty}^{\infty} dp \int_{-\infty}^{\infty} dx \; x \left[ x \cos(\omega t) + \frac{p}{m \omega} \sin(\omega t) \right] \delta \left( \frac{p^2}{2m} + \frac{1}{2} m \omega^2 x^2 - E \right)
+% \ee
+
+\end{document}
