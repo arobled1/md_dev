@@ -4,6 +4,9 @@ import matplotlib.pyplot as plt
 def get_force(position): # F = - grad(U) = - grad(.5 k x^2) = - kx = - m w^2 x
     return - m * w**2 * position
 
+def upd_velocity(veloc, force, deltat, mass):
+    return veloc + (force * deltat)/(2 * mass)
+
 #============================================================================
 # This block is for setting up paramters
 tmin = 0                # Starting time
@@ -26,11 +29,11 @@ for i in range(1,n_steps):
     # Update position
     x[i] = x[i - 1] + v[i - 1] * dt + ((f[i - 1])/(2 * m) * dt**2)
     # Compute velocity at half step
-    v_half = v[i - 1] + (f[i - 1]/(2 * m)) * dt
+    v_half = upd_velocity(v[i - 1], f[i - 1], dt, m)
     # Update force
     f[i] = get_force(x[i])
     # Update velocity
-    v[i] = v_half + (f[i]/(2 * m)) * dt
+    v[i] = upd_velocity(v_half, f[i], dt, m)
 
 #============================================================================
 # This block is for computing velocity autocorrelation
