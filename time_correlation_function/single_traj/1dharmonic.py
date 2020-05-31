@@ -55,8 +55,8 @@ ideal = [constant * np.cos(w * j) for j in auto_times]
 
 # This block is for plotting the correlation function
 plt.plot(auto_times, x_auto, '-', color = "blue")
-plt.xlabel("t")
-plt.ylabel(r'$C_{xx}(t)$')
+plt.xlabel("t",fontsize=14)
+plt.ylabel(r'$C_{xx}(t)$',fontsize=14)
 plt.ticklabel_format(axis="y", style="sci", scilimits=(0,0))
 plt.tight_layout()
 plt.savefig("1d_position_auto.pdf")
@@ -64,8 +64,8 @@ plt.clf()
 
 # This block is for plotting the ideal correlation function
 plt.plot(auto_times, ideal, '-', color = "red")
-plt.xlabel("t")
-plt.ylabel(r'$C_{xx}(t)$')
+plt.xlabel("t",fontsize=14)
+plt.ylabel(r'$C_{xx}(t)$',fontsize=14)
 plt.ticklabel_format(axis="y", style="sci", scilimits=(0,0))
 plt.tight_layout()
 plt.savefig("ideal.pdf")
