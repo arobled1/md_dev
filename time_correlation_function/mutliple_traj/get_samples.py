@@ -49,10 +49,14 @@ for i in range(1,n_steps):
     v[i] = upd_velocity(v[i], f[i], dt, m)
 
 save_frequency = 500
-samples = x[::save_frequency]
-samples = np.delete(samples,0)
+samples_x = x[::save_frequency]
+samples_x = np.delete(samples_x,0)
+samples_v = v[::save_frequency]
+samples_v = np.delete(samples_v,0)
 
 filename = open("sampled_pos.txt", "a+")
 for l in range(len(samples)):
-    filename.write(str(samples[l]) + "\n")
+    filename.write(str(samples_x[l]))
+    filename.write('              ')
+    filename.write(str(samples_v[l]) + "\n")
 filename.close()
