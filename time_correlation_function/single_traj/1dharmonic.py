@@ -47,12 +47,27 @@ for n in range(K):
     sum = (1/(n_steps-n)) * sum
     x_auto.append(sum)
 #============================================================================
-# This block is for plotting
+# This block is for computing the ideal correlation function
+total_E = 0.5 * m * v[0]**2 + 0.5 * m * (w**2) * x[0]**2
+constant = total_E / (m*w**2)
+ideal = [constant * np.cos(w * j) for j in auto_times]
+#============================================================================
+
+# This block is for plotting the correlation function
 plt.plot(auto_times, x_auto, '-', color = "blue")
 plt.xlabel("t")
-plt.ylabel('Position Autocorrelation')
+plt.ylabel(r'$C_{xx}(t)$')
 plt.ticklabel_format(axis="y", style="sci", scilimits=(0,0))
 plt.tight_layout()
 plt.savefig("1d_position_auto.pdf")
+plt.clf()
+
+# This block is for plotting the ideal correlation function
+plt.plot(auto_times, ideal, '-', color = "red")
+plt.xlabel("t")
+plt.ylabel(r'$C_{xx}(t)$')
+plt.ticklabel_format(axis="y", style="sci", scilimits=(0,0))
+plt.tight_layout()
+plt.savefig("ideal.pdf")
 plt.clf()
 #============================================================================
