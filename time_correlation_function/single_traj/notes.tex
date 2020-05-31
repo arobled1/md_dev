@@ -33,6 +33,8 @@
 \author{Alan Robledo}
 \begin{document}
 \maketitle
+\section{Theory}
+\subsection{Canonical ensemble}
 As always we define the Hamiltonian for the 1D system.
 \be
   H = \frac{p^2}{2m} + \frac{1}{2} m \omega^2 x^2
@@ -43,6 +45,7 @@ In the canonical ensemble, $C_{xx}(t)$ for a 1D Harmonic Oscillator has a simple
 \ee
 where $k$ is Boltzmann's constant and $T$ is temperature. Computing this value numerically with a Molecular Dynamics trajectory poses an issue because the correlation function requires that the dynamics be realistic --- something that cannot be generated for a system coupled to a thermal bath. We can overcome this issue by defining the correlation function in the microcanonical ensemble.
 
+\subsection{Microcanonical ensemble}
 The first thing we need to do is compute the partition function for a Harmonic Oscillator in the microcanonical ensemble, i.e. we need to compute,
 \be
   \Omega = \frac{E_o}{h} \int_{-\infty}^{\infty} dp \int_{-\infty}^{\infty} dx \; \delta(H(x,p) - E) = \frac{E_o}{h} \int_{-\infty}^{\infty} dp \int_{-\infty}^{\infty} dx \; \delta\left( \frac{p^2}{2m} + \frac{1}{2} m \omega^2 x^2 - E \right)
@@ -166,4 +169,14 @@ And we finally derive the position autocorrelation function in the microcanonica
   C_{xx}(t) = \frac{E}{m \omega^2} \cos(\omega t)
 \ee
 where $E$ is the constant total energy of the system.
+
+\section{Code results}
+The code '1dharmonic.py' defines a Harmonic Oscillator with mass $m=3$ and frequency $\omega = 2$. Thefore, $E = \frac{3}{2} v^2 + 6 x^2$. A single trajectory is generated with 50,000 total MD steps and a time step of 0.01. Then the code takes segments of the trajectory of 500 MD steps and computes the correlation function by treating each of the segments as independent trajectories.
+\begin{figure}[H]
+    \centering
+        % height adjusts the size of the photo.
+    \includegraphics[height=2.6in]{figures/1d_position_auto.pdf}
+    \includegraphics[height=2.6in]{figures/ideal.pdf}
+    \caption{(Left) Plot of position autocorrelation over 500 MD steps with a time step of 0.01 computed from a single trajectory with 50,000 total steps. (Right) Plot of position autocorrelation over 500 MD steps with a time step of 0.01 computed using equation (22).}
+\end{figure}
 \end{document}
