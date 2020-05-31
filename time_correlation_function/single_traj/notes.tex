@@ -43,7 +43,7 @@ In the canonical ensemble, $C_{xx}(t)$ for a 1D Harmonic Oscillator has a simple
 \be
   C_{xx}(t) = \frac{kT}{m \omega^2} \cos(\omega t)
 \ee
-where $k$ is Boltzmann's constant and $T$ is temperature. Computing this value numerically with a Molecular Dynamics trajectory poses an issue because the correlation function requires that the dynamics be realistic --- something that cannot be generated for a system coupled to a thermal bath. We can overcome this issue by defining the correlation function in the microcanonical ensemble.
+where $k$ is Boltzmann's constant and $T$ is temperature. Computing this value numerically with a single Molecular Dynamics trajectory poses an issue because the correlation function requires that the dynamics be realistic --- something that cannot be generated for a system coupled to a thermal bath. We can overcome this issue by defining the correlation function in the microcanonical ensemble.
 
 \subsection{Microcanonical ensemble}
 The first thing we need to do is compute the partition function for a Harmonic Oscillator in the microcanonical ensemble, i.e. we need to compute,
