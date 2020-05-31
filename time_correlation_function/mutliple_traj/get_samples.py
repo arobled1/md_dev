@@ -55,7 +55,7 @@ samples_v = v[::save_frequency]
 samples_v = np.delete(samples_v,0)
 
 filename = open("sampled_pos.txt", "a+")
-for l in range(len(samples)):
+for l in range(len(samples_x)):
     filename.write(str(samples_x[l]))
     filename.write('              ')
     filename.write(str(samples_v[l]) + "\n")
