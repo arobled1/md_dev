@@ -19,10 +19,10 @@ def get_force(posit, mass, frequency):
     return - mass * frequency**2 * posit
 
 tmin = 0            # Starting time
-dt = 0.01          # Delta t
-n_steps = 30000   # Number of time steps
-kbt = 4
-gamma = 0.001
+dt = 0.01           # Delta t
+n_steps = 30000     # Number of time steps
+kbt = 80
+gamma = 0.01
 
 times = np.array([tmin + i * dt for i in range(n_steps)])
 x = np.zeros((len(times)))      # Initialize Positions
