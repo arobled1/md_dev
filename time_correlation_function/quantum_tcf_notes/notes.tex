@@ -45,6 +45,76 @@ $\hat{H}_0$ is supposed to represent an unperturbed Hamiltonian describing our s
 
 
 \section{Appendix}
+\subsection{Symmetrized Correlation Function for a Quantum Harmonic Oscillator}
+The standard nonsymmetrized correlation function for a quantum Harmonic Oscillator with mass $m$ and frequency $\omega$ is,
+\be
+  C_{xx}(t) = \frac{\hbar}{4 m \omega \sinh(\beta \hbar \omega/2)} \left[ e^{i \omega t} e^{\beta \hbar \omega/2} + e^{-i \omega t} e^{-\beta \hbar \omega/2} \right]
+\ee
+where $\beta^{-1} = k_B T$.
+
+In this section, we are going to compute the symmetrized correlation function $G_{xx}(t)$,
+\be
+  G_{xx}(t) = \frac{1}{Q} \text{Tr} \left[ \hat{x} e^{i \hat{H} \tau^*_c / \hbar} \hat{x} e^{-i \hat{H} \tau_c / \hbar}\right]
+\ee
+where $\tau_c$ is an complex time variable, $\tau_c = t - i\beta \hbar/2$, and $\hat{H}$ is the standard Hamiltonian for a quantum Harmonic Oscillator, i.e. $\hat{H} \ket{E_n} = \hbar \omega(n+1/2) \ket{E_n}$ for an eigenstate $\ket{E_n}$.
+
+The partition function in the canonical ensemble $Q$ has been derived many times (check the $'\text{path}\_\text{integral}'$ repository).
+\be
+  Q = \frac{e^{-\beta \hbar \omega/2}}{1-e^{-\beta \hbar \omega}}
+\ee
+
+Since each exponential contains the Hamiltonian operator, it becomes clear that we should evaluate the trace in the energy basis,
+\be
+  \text{Tr} \left[ \hat{x} e^{i \hat{H} \tau^*_c / \hbar} \hat{x} e^{-i \hat{H} \tau_c / \hbar}\right] = \sum_n \bra{E_n} \hat{x} e^{i \hat{H} \tau^*_c / \hbar} \hat{x} e^{-i \hat{H} \tau_c / \hbar} \ket{E_n}
+\ee
+and insert the resolution of identity $I = \sum_m \ket{E_m}\bra{E_m}$ where it is most convenient.
+\be
+  \text{Tr} \left[ \hat{x} e^{i \hat{H} \tau^*_c / \hbar} \hat{x} e^{-i \hat{H} \tau_c / \hbar}\right] = \sum_n \sum_m \braket{E_n|\hat{x}
+  |E_m} \bra{E_m} e^{i \hat{H} \tau^*_c / \hbar} \hat{x} e^{-i \hat{H} \tau_c / \hbar} \ket{E_n}
+\ee
+Recognizing the following eigenvalue equations,
+\be
+  \begin{split}
+    e^{i \hat{H} \tau_c / \hbar} \ket{E_n} &= e^{i E_n \tau_c / \hbar} \ket{E_n} \\
+    \bra{E_m} e^{i \hat{H} \tau^*_c / \hbar} &= \bra{E_m} e^{i E_m \tau^*_c / \hbar}
+  \end{split}
+\ee
+we can simplify the trace even further (remember that the eigenvalues are simply constants and can be moved around).
+\be
+  \text{Tr} \left[ \hat{x} e^{i \hat{H} \tau^*_c / \hbar} \hat{x} e^{-i \hat{H} \tau_c / \hbar}\right] = \sum_n \sum_m e^{i E_m \tau^*_c / \hbar} e^{i E_n \tau_c / \hbar} \braket{E_n|\hat{x}|E_m} \braket{E_m|\hat{x}|E_n}
+\ee
+Since we have a Harmonic Oscillator, we can replace $\hat{x}$ with the ladder operators $\hat{a}$ and $\hat{a}^{\dagger}$,
+\be
+  \hat{x} = \frac{b}{\sqrt{2}} \left( \hat{a} + \hat{a}^{\dagger} \right)
+\ee
+where $b = \frac{\hbar}{m \omega}$.
+The ladder operators can act on eiegnstates of the Harmonic Oscillator, resulting in kronecker deltas when sandwiched between two different eigenstates.
+\be
+  \begin{split}
+    \braket{E_n|\hat{x}|E_m} &= \frac{b}{\sqrt{2}} \braket{E_n|\left( \hat{a} + \hat{a}^{\dagger} \right)|E_m} \\
+    &= \frac{b}{\sqrt{2}} \left[ \braket{E_n| \hat{a}|E_m} + \braket{E_n|\hat{a}^{\dagger}|E_m} \right]\\
+    &= \frac{b}{\sqrt{2}} \left[ \braket{E_n| \hat{a}|E_m} + \braket{E_n|\hat{a}^{\dagger}|E_m} \right]\\
+    &= \frac{b}{\sqrt{2}} \left[ \braket{E_n| \sqrt{m}|E_{m-1}} + \braket{E_n|\sqrt{m+1}|E_{m+1}} \right] \\
+    &= \frac{b}{\sqrt{2}} \left[ \sqrt{m} \braket{E_n|E_{m-1}} + \sqrt{m+1}\braket{E_n|E_{m+1}} \right] \\
+    &= \frac{b}{\sqrt{2}} \left[ \sqrt{m} \delta_{n,m-1} + \sqrt{m+1} \delta_{n,m+1} \right] \\
+  \end{split}
+\ee
+Likewise,
+\be
+  \braket{E_m|\hat{x}|E_n} = \frac{b}{\sqrt{2}} \left[ \sqrt{n} \delta_{m,n-1} + \sqrt{n+1} \delta_{m,n+1} \right] .
+\ee
+Going back to the trace,
+\be
+  \text{Tr} \left[ \hat{x} e^{i \hat{H} \tau^*_c / \hbar} \hat{x} e^{-i \hat{H} \tau_c / \hbar}\right] = \sum_n \sum_m e^{i E_m \tau^*_c / \hbar} e^{i E_n \tau_c / \hbar} \frac{b^2}{2} \left[ \sqrt{m} \delta_{n,m-1} + \sqrt{m+1} \delta_{n,m+1} \right] \left[ \sqrt{n} \delta_{m,n-1} + \sqrt{n+1} \delta_{m,n+1} \right]
+\ee
+we can continue simplifying by remembering that the kronecker delta evaluates to 1 or 0 under specific conditions. In this case, if we compute the sum over m we can see that only two terms will remain, one term where $m = n - 1$ and another term where $m = n + 1$.
+% \be
+%   \begin{split}
+%     \text{Tr} \left[ \hat{x} e^{i \hat{H} \tau^*_c / \hbar} \hat{x} e^{-i \hat{H} \tau_c / \hbar}\right] &= \frac{b^2}{2} \sum_n \sum_m e^{i E_m \tau^*_c / \hbar} e^{i E_n \tau_c / \hbar} \left[ \sqrt{m} \delta_{n,m-1} + \sqrt{m+1} \delta_{n,m+1} \right] \left[ \sqrt{n} \delta_{m,n-1} + \sqrt{n+1} \delta_{m,n+1} \right] \\
+%     &= \frac{b^2}{2} \sum_n e^{i E_n \tau_c / \hbar}
+%   \end{split}
+% \ee
+
 \subsection{Fourier Transform of the Symmetrized Correlation Function}
 In this section, we want to show how to derive the fourier transform of the symmetrized correlation function from the fourier transform of the nonsymmetrized correlation function, i.e. show that
 \be
