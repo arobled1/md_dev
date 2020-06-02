@@ -48,7 +48,10 @@ where $k$ is Boltzmann's constant and $T$ is temperature. Computing this value n
 \subsection{Microcanonical ensemble}
 The first thing we need to do is compute the partition function for a Harmonic Oscillator in the microcanonical ensemble, i.e. we need to compute,
 \be
-  \Omega = \frac{E_o}{h} \int_{-\infty}^{\infty} dp \int_{-\infty}^{\infty} dx \; \delta(H(x,p) - E) = \frac{E_o}{h} \int_{-\infty}^{\infty} dp \int_{-\infty}^{\infty} dx \; \delta\left( \frac{p^2}{2m} + \frac{1}{2} m \omega^2 x^2 - E \right)
+  \begin{split}
+    \Omega &= \frac{E_o}{h} \int_{-\infty}^{\infty} dp \int_{-\infty}^{\infty} dx \; \delta(H(x,p) - E) \\
+    &= \frac{E_o}{h} \int_{-\infty}^{\infty} dp \int_{-\infty}^{\infty} dx \; \delta\left( \frac{p^2}{2m} + \frac{1}{2} m \omega^2 x^2 - E \right)
+  \end{split}
 \ee
 which is non-trivial but doable. We begin by defining some new coordinates,
 \be \label{eq:bar_coords}
@@ -59,7 +62,10 @@ which is non-trivial but doable. We begin by defining some new coordinates,
 \ee
 and substituting them into the partition function.
 \be
-  \Omega = \frac{E_o}{h} \sqrt{2m} \sqrt{ \frac{2}{m \omega^2} } \int_{-\infty}^{\infty} d \bar{p} \int_{-\infty}^{\infty} d\bar{x} \; \delta\left( \bar{p}^2 + \bar{x}^2 - E \right) = \frac{2 E_o}{h \omega} \int_{-\infty}^{\infty} d \bar{p} \int_{-\infty}^{\infty} d\bar{x} \; \delta\left( \bar{p}^2 + \bar{x}^2 - E \right)
+  \begin{split}
+    \Omega &= \frac{E_o}{h} \sqrt{2m} \sqrt{ \frac{2}{m \omega^2} } \int_{-\infty}^{\infty} d \bar{p} \int_{-\infty}^{\infty} d\bar{x} \; \delta\left( \bar{p}^2 +  \bar{x}^2 - E \right) \\
+    &= \frac{2 E_o}{h \omega} \int_{-\infty}^{\infty} d \bar{p} \int_{-\infty}^{\infty} d\bar{x} \; \delta\left( \bar{p}^2 + \bar{x}^2 - E \right)
+  \end{split}
 \ee
 The delta function requires that we consider points where $p^2 + x^2 = E$ which resembles the equation for a circle so we can consider a conversion to polar coordinates.
 \be \label{eq:polar_coords}
