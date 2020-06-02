@@ -60,7 +60,7 @@ where $\tau_c$ is an complex time variable, $\tau_c = t - i\beta \hbar/2$, and $
 
 The partition function in the canonical ensemble $Q$ has been derived many times (check the $'\text{path}\_\text{integral}'$ repository).
 \be
-  Q = \frac{e^{-\beta \hbar \omega/2}}{1-e^{-\beta \hbar \omega}}
+  Q = \frac{e^{-\beta \hbar \omega/2}}{1-e^{-\beta \hbar \omega}} = \frac{1}{2 \sinh(\beta \hbar \omega /2)}
 \ee
 
 Since each exponential contains the Hamiltonian operator, it becomes clear that we should evaluate the trace in the energy basis,
@@ -72,27 +72,26 @@ and insert the resolution of identity $I = \sum_m \ket{E_m}\bra{E_m}$ where it i
   \text{Tr} \left[ \hat{x} e^{i \hat{H} \tau^*_c / \hbar} \hat{x} e^{-i \hat{H} \tau_c / \hbar}\right] = \sum_n \sum_m \braket{E_n|\hat{x}
   |E_m} \bra{E_m} e^{i \hat{H} \tau^*_c / \hbar} \hat{x} e^{-i \hat{H} \tau_c / \hbar} \ket{E_n}
 \ee
-Recognizing the following eigenvalue equations,
+Recognizing the following eigenvalue equations (check the $'\text{path}\_\text{integral}'$ repository for proof),
 \be
   \begin{split}
-    e^{i \hat{H} \tau_c / \hbar} \ket{E_n} &= e^{i E_n \tau_c / \hbar} \ket{E_n} \\
+    e^{-i \hat{H} \tau_c / \hbar} \ket{E_n} &= e^{-i E_n \tau_c / \hbar} \ket{E_n} \\
     \bra{E_m} e^{i \hat{H} \tau^*_c / \hbar} &= \bra{E_m} e^{i E_m \tau^*_c / \hbar}
   \end{split}
 \ee
 we can simplify the trace even further (remember that the eigenvalues are simply constants and can be moved around).
 \be
-  \text{Tr} \left[ \hat{x} e^{i \hat{H} \tau^*_c / \hbar} \hat{x} e^{-i \hat{H} \tau_c / \hbar}\right] = \sum_n \sum_m e^{i E_m \tau^*_c / \hbar} e^{i E_n \tau_c / \hbar} \braket{E_n|\hat{x}|E_m} \braket{E_m|\hat{x}|E_n}
+  \text{Tr} \left[ \hat{x} e^{i \hat{H} \tau^*_c / \hbar} \hat{x} e^{-i \hat{H} \tau_c / \hbar}\right] = \sum_n \sum_m e^{i E_m \tau^*_c / \hbar} e^{-i E_n \tau_c / \hbar} \braket{E_n|\hat{x}|E_m} \braket{E_m|\hat{x}|E_n}
 \ee
 Since we have a Harmonic Oscillator, we can replace $\hat{x}$ with the ladder operators $\hat{a}$ and $\hat{a}^{\dagger}$,
 \be
   \hat{x} = \frac{b}{\sqrt{2}} \left( \hat{a} + \hat{a}^{\dagger} \right)
 \ee
-where $b = \frac{\hbar}{m \omega}$.
+where $b = \sqrt{\frac{\hbar}{m \omega}}$.
 The ladder operators can act on eiegnstates of the Harmonic Oscillator, resulting in kronecker deltas when sandwiched between two different eigenstates.
 \be
   \begin{split}
     \braket{E_n|\hat{x}|E_m} &= \frac{b}{\sqrt{2}} \braket{E_n|\left( \hat{a} + \hat{a}^{\dagger} \right)|E_m} \\
-    &= \frac{b}{\sqrt{2}} \left[ \braket{E_n| \hat{a}|E_m} + \braket{E_n|\hat{a}^{\dagger}|E_m} \right]\\
     &= \frac{b}{\sqrt{2}} \left[ \braket{E_n| \hat{a}|E_m} + \braket{E_n|\hat{a}^{\dagger}|E_m} \right]\\
     &= \frac{b}{\sqrt{2}} \left[ \braket{E_n| \sqrt{m}|E_{m-1}} + \braket{E_n|\sqrt{m+1}|E_{m+1}} \right] \\
     &= \frac{b}{\sqrt{2}} \left[ \sqrt{m} \braket{E_n|E_{m-1}} + \sqrt{m+1}\braket{E_n|E_{m+1}} \right] \\
@@ -105,16 +104,72 @@ Likewise,
 \ee
 Going back to the trace,
 \be
-  \text{Tr} \left[ \hat{x} e^{i \hat{H} \tau^*_c / \hbar} \hat{x} e^{-i \hat{H} \tau_c / \hbar}\right] = \sum_n \sum_m e^{i E_m \tau^*_c / \hbar} e^{i E_n \tau_c / \hbar} \frac{b^2}{2} \left[ \sqrt{m} \delta_{n,m-1} + \sqrt{m+1} \delta_{n,m+1} \right] \left[ \sqrt{n} \delta_{m,n-1} + \sqrt{n+1} \delta_{m,n+1} \right]
+  \text{Tr} \left[ \hat{x} e^{i \hat{H} \tau^*_c / \hbar} \hat{x} e^{-i \hat{H} \tau_c / \hbar}\right] = \sum_n \sum_m e^{i E_m \tau^*_c / \hbar} e^{-i E_n \tau_c / \hbar} \frac{b^2}{2} \left[ \sqrt{m} \delta_{n,m-1} + \sqrt{m+1} \delta_{n,m+1} \right] \left[ \sqrt{n} \delta_{m,n-1} + \sqrt{n+1} \delta_{m,n+1} \right]
 \ee
-we can continue simplifying by remembering that the kronecker delta evaluates to 1 or 0 under specific conditions. In this case, if we compute the sum over m we can see that only two terms will remain, one term where $m = n - 1$ and another term where $m = n + 1$.
-% \be
-%   \begin{split}
-%     \text{Tr} \left[ \hat{x} e^{i \hat{H} \tau^*_c / \hbar} \hat{x} e^{-i \hat{H} \tau_c / \hbar}\right] &= \frac{b^2}{2} \sum_n \sum_m e^{i E_m \tau^*_c / \hbar} e^{i E_n \tau_c / \hbar} \left[ \sqrt{m} \delta_{n,m-1} + \sqrt{m+1} \delta_{n,m+1} \right] \left[ \sqrt{n} \delta_{m,n-1} + \sqrt{n+1} \delta_{m,n+1} \right] \\
-%     &= \frac{b^2}{2} \sum_n e^{i E_n \tau_c / \hbar}
-%   \end{split}
-% \ee
-
+we can continue simplifying by remembering that the kronecker delta evaluates to 1 or 0 under specific conditions. In this case, if we compute the sum over m we can see that only two terms will remain, one term where $n = m - 1$ (rearranging gives $m = n + 1$) and another term where $n = m+1$ (rearranging gives $m = n - 1$).
+\be
+  \begin{split}
+    \text{Tr} \left[ \hat{x} e^{i \hat{H} \tau^*_c / \hbar} \hat{x} e^{-i \hat{H} \tau_c / \hbar}\right] &= \frac{b^2}{2} \sum_n \sum_m e^{i E_m \tau^*_c / \hbar} e^{-i E_n \tau_c / \hbar} \left[ \sqrt{m} \delta_{n,m-1} + \sqrt{m+1} \delta_{n,m+1} \right] \left[ \sqrt{n} \delta_{m,n-1} + \sqrt{n+1} \delta_{m,n+1} \right] \\
+    &= \frac{b^2}{2} \sum_n e^{-i E_n \tau_c / \hbar} \left[ e^{i E_{n+1} \tau^*_c / \hbar} \left( \sqrt{n+1} + 0 \right) \left( 0 + \sqrt{n+1}\right) + e^{i E_{n-1} \tau^*_c / \hbar} \left( 0 + \sqrt{n} \right) \left(\sqrt{n} + 0 \right) \right]\\
+    &= \frac{b^2}{2} \sum_n e^{-i E_n \tau_c / \hbar} \left[ (n+1) e^{i E_{n+1} \tau^*_c / \hbar} + (n) e^{i E_{n-1} \tau^*_c / \hbar} \right]
+  \end{split}
+\ee
+Now we insert the definition of $\tau_c$ and combine exponentials with $t$ and exponentials with $\beta$
+\be
+  \begin{split}
+    \text{Tr} \left[ \hat{x} e^{i \hat{H} \tau^*_c / \hbar} \hat{x} e^{-i \hat{H} \tau_c / \hbar}\right] &= \frac{b^2}{2} \sum_n e^{-i E_n (t - i \beta \hbar/2) / \hbar} \left[ (n+1) e^{i E_{n+1} (t + i \beta \hbar/2) / \hbar} + (n) e^{i E_{n-1} (t + i \beta \hbar/2) / \hbar} \right] \\
+    &= \frac{b^2}{2} \sum_n e^{-i E_n t / \hbar} e^{- E_n \beta/2} \left[ (n+1)e^{iE_{n+1}t/\hbar}e^{-E_{n+1}\beta/2} + (n) e^{i E_{n-1}t/\hbar}e^{-E_{n-1} \beta/2}\right]\\
+    &= \frac{b^2}{2} \sum_n \left[ (n+1) e^{i (E_{n+1} - E_n)t/\hbar} e^{-(E_n + E_{n+1}) \beta/2} + (n) e^{i (E_{n-1} - E_n)t/\hbar} e^{-(E_n + E_{n-1}) \beta/2}\right]
+  \end{split}
+\ee
+Recalling the energies of a Harmonic Oscillator, we can substitute the following,
+\be
+  \begin{split}
+    E_{n+1} - E_n &= \hbar \omega(n+3/2) - \hbar \omega(n+1/2) = \hbar \omega \\
+    E_{n-1} - E_n &= \hbar \omega(n-1/2) - \hbar \omega(n+1/2) = -\hbar \omega \\
+    E_{n+1} + E_n &= \hbar \omega(n+3/2) + \hbar \omega(n+1/2) = 2\hbar \omega(n+1) \\
+    E_{n-1} + E_n &= \hbar \omega(n-1/2) + \hbar \omega(n+1/2) = 2\hbar \omega n
+  \end{split}
+\ee
+into the trace.
+\be
+  \begin{split}
+    \text{Tr} \left[ \hat{x} e^{i \hat{H} \tau^*_c / \hbar} \hat{x} e^{-i \hat{H} \tau_c / \hbar}\right] &= \frac{b^2}{2} \sum_n \left[ (n+1) e^{i (\hbar \omega)t/\hbar} e^{-(2\hbar \omega(n+1)) \beta/2} + (n) e^{i (-\hbar \omega)t/\hbar} e^{-(2\hbar \omega n) \beta/2}\right] \\
+    &= \frac{b^2}{2} \sum_n \left[ (n+1) e^{i \omega t} e^{-\beta \hbar \omega (n+1)} + (n) e^{-i \omega t} e^{- \beta \hbar \omega n}\right] \\
+    &= \frac{b^2}{2} e^{i \omega t} \sum_n (n+1) e^{-\beta \hbar \omega (n+1)} + \frac{b^2}{2} e^{-i \omega t} \sum_n (n) e^{- \beta \hbar \omega n} \\
+    &= \frac{b^2}{2} e^{i \omega t} \sum_n (n+1) \left( e^{-\beta \hbar \omega} \right)^{n+1} + \frac{b^2}{2} e^{-i \omega t} \sum_n n \left( e^{- \beta \hbar \omega} \right)^{n}
+  \end{split}
+\ee
+The sums can be evaluated by using the following identity, $\sum_{n=0}^{\infty} x^n = \frac{1}{1-x}$.
+\be
+  \begin{split}
+    \sum_{n=0}^{\infty} n x^n &= x \frac{d}{dx} \sum_{n=0}^{\infty} x^n = x \frac{d}{dx} \frac{1}{1-x} = \frac{x}{(1-x)^2} \\
+    \sum_{n=0}^{\infty} (n+1) x^{n+1} &= x \frac{d}{dx} x \sum_{n=0}^{\infty} x^n = x \frac{d}{dx} \frac{x}{1-x} = \frac{x}{1-x} + \frac{x^2}{(1-x)^2}
+  \end{split}
+\ee
+We finish off the trace by substituting $x = e^{-\beta \hbar \omega}$ and $b = \sqrt{\frac{\hbar}{m \omega}}$ and simplifying.
+\be
+  \begin{split}
+    \text{Tr} \left[ \hat{x} e^{i \hat{H} \tau^*_c / \hbar} \hat{x} e^{-i \hat{H} \tau_c / \hbar}\right] &= \frac{b^2}{2} e^{i \omega t} \left[ \frac{e^{-\beta \hbar \omega}}{1-e^{-\beta \hbar \omega}} + \frac{e^{-2 \beta \hbar \omega}}{(1-e^{-\beta \hbar \omega})^2} \right] + \frac{b^2}{2} e^{-i \omega t} \left[ \frac{e^{-\beta \hbar \omega}}{(1-e^{-\beta \hbar \omega})^2} \right] \\
+    &= \frac{b^2}{2} e^{i \omega t} \left[ \frac{e^{-\beta \hbar \omega}(1-e^{-\beta \hbar \omega})}{(1-e^{-\beta \hbar \omega})^2} + \frac{e^{-2 \beta \hbar \omega}}{(1-e^{-\beta \hbar \omega})^2} \right] + \frac{b^2}{2} e^{-i \omega t} \left[ \frac{e^{-\beta \hbar \omega}}{(1-e^{-\beta \hbar \omega})^2} \right] \\
+    &= \frac{b^2}{2} e^{i \omega t} \left[ \frac{e^{-\beta \hbar \omega} - e^{-2\beta \hbar \omega} + e^{-2\beta \hbar \omega}}{(1-e^{-\beta \hbar \omega})^2} \right] + \frac{b^2}{2} e^{-i \omega t} \left[ \frac{e^{-\beta \hbar \omega}}{(1-e^{-\beta \hbar \omega})^2} \right] \\
+    &= \frac{b^2}{2} e^{i \omega t} \left[ \frac{e^{-\beta \hbar \omega}}{(1-e^{-\beta \hbar \omega})^2} \right] + \frac{b^2}{2} e^{-i \omega t} \left[ \frac{e^{-\beta \hbar \omega}}{(1-e^{-\beta \hbar \omega})^2} \right] \\
+    &= \frac{b^2}{2} \left[ \frac{e^{-\beta \hbar \omega}}{(1-e^{-\beta \hbar \omega})^2} \right] \left[ e^{i \omega t} + e^{-i \omega t}\right] \\
+    &= \frac{b^2}{2} \left[ \frac{e^{-\beta \hbar \omega}}{(1-e^{-\beta \hbar \omega})^2} \right] 2 \cos(\omega t) \\
+    &= b^2 \left[ \frac{e^{-\beta \hbar \omega}}{(1-e^{-\beta \hbar \omega})^2} \right]\left[ \frac{e^{\beta \hbar \omega/2}}{e^{\beta \hbar \omega/2}} \right]^2 \cos(\omega t) \\
+    &= b^2 \left[ \frac{1}{(e^{\beta \hbar \omega}-e^{-\beta \hbar \omega})^2} \right] \cos(\omega t) \\
+    &= \frac{b^2 \cos(\omega t)}{4 \sinh^2(\beta \hbar \omega/2)} \\
+    &= \frac{\hbar \cos(\omega t)}{4 m \omega \sinh^2(\beta \hbar \omega/2)}
+  \end{split}
+\ee
+Finally, the symmetrized correlation function becomes,
+\be
+  \begin{split}
+    G_{xx}(t) &= \frac{1}{Q} \text{Tr} \left[ \hat{x} e^{i \hat{H} \tau^*_c / \hbar} \hat{x} e^{-i \hat{H} \tau_c / \hbar}\right]\\
+    &= 2 \sinh(\beta \hbar \omega/2) \left[ \frac{\hbar \cos(\omega t)}{4 m \omega \sinh^2(\beta \hbar \omega/2)} \right] \\
+    &= \frac{\hbar}{2 m \omega } \left[ \frac{\cos(\omega t)}{\sinh(\beta \hbar \omega/2)} \right]
+  \end{split}
+\ee
 \subsection{Fourier Transform of the Symmetrized Correlation Function}
 In this section, we want to show how to derive the fourier transform of the symmetrized correlation function from the fourier transform of the nonsymmetrized correlation function, i.e. show that
 \be
