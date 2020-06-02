@@ -37,7 +37,7 @@ x = np.zeros((len(times)))      # Initialize Positions
 v = np.zeros((len(times)))      # Initialize Velocities
 f = np.zeros((len(times)))      # Initialize Forces
 m = 1                           # Set mass
-w = np.sqrt(80)                # Angular Frequency for spring
+w = np.sqrt(8)                # Angular Frequency for spring
 x[0] = .1                        # Initial position
 v[0] = .5                        # Initial velocity
 f[0] = get_force(x[0], m, w)    # Compute inital force
@@ -73,7 +73,7 @@ plt.savefig('harmonic_vel_dens.pdf')
 plt.clf()
 #============================================================================
 
-save_frequency = 50
+save_frequency = 500
 samples_x = x[::save_frequency]
 samples_x = np.delete(samples_x,0)
 samples_v = v[::save_frequency]
