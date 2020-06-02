@@ -9,11 +9,11 @@ def upd_velocity(veloc, force, deltat, mass):
 
 def get_trajectory(total_steps, deltat, init_time, init_pos, init_vel, mass, omega):
     times = np.array([init_time + i * deltat for i in range(total_steps)])
-    x = np.zeros((len(times)))      # Initialize Positions
-    v = np.zeros((len(times)))      # Initialize Velocities
-    f = np.zeros((len(times)))      # Initialize Forces
-    x[0] = init_pos                 # Initial position
-    v[0] = init_vel                 # Initial velocity
+    x = np.zeros((len(times)))                   # Initialize Positions
+    v = np.zeros((len(times)))                   # Initialize Velocities
+    f = np.zeros((len(times)))                   # Initialize Forces
+    x[0] = init_pos                              # Initial position
+    v[0] = init_vel                              # Initial velocity
     f[0] = get_force(x[0], mass, omega)          # Compute inital force
 
     for i in range(1,total_steps):
@@ -31,10 +31,10 @@ def get_trajectory(total_steps, deltat, init_time, init_pos, init_vel, mass, ome
 # This block is for setting up paramters
 tmin = 0                # Starting time
 dt = 0.01               # Time step
-n_steps = 20000         # Number of time steps
-m = 2                   # Set mass
-w = 3                   # Angular Frequency for spring
-kbt = 80
+n_steps = 5000          # Number of time steps
+m = 1                   # Set mass
+w = np.sqrt(8)          # Angular Frequency for spring
+kbt = 10
 
 xs = [float(i.split()[0]) for i in open('sampled_pos.txt').readlines()]
 vs = [float(i.split()[1]) for i in open('sampled_pos.txt').readlines()]
@@ -44,7 +44,7 @@ for n in range(len(xs)):
     trajectories.append(get_trajectory(n_steps, dt, tmin, xs[n], vs[n], m, w))
 
 #============================================================================
-# This block is for computing velocity autocorrelation
+# This block is for computing position autocorrelation
 K = len(xs)
 M = len(trajectories[0])
 auto_times = [tmin + i * dt for i in range(M)]
@@ -58,7 +58,7 @@ for n in range(M):
 
 #============================================================================
 # This block is for computing the ideal correlation function
-constant = kbt / (m*w**2)
+constant = kbt / (m*(w**2))
 ideal = [constant * np.cos(w * j) for j in auto_times]
 #============================================================================
 
