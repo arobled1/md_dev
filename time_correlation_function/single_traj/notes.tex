@@ -67,7 +67,7 @@ and substituting them into the partition function.
     &= \frac{2 E_o}{h \omega} \int_{-\infty}^{\infty} d \bar{p} \int_{-\infty}^{\infty} d\bar{x} \; \delta\left( \bar{p}^2 + \bar{x}^2 - E \right)
   \end{split}
 \ee
-The delta function requires that we consider points where $p^2 + x^2 = E$ which resembles the equation for a circle so we can consider a conversion to polar coordinates.
+The delta function requires that we consider points where $\bar{p}^2 + \bar{x}^2 = E$ which resembles the equation for a circle so we can consider a conversion to polar coordinates.
 \be \label{eq:polar_coords}
   \begin{split}
     \bar{p} &= \sqrt{r \omega} \cos(\theta) \\
@@ -110,7 +110,7 @@ to get an integral of a dirac delta function over all space which is equal to 1.
 \ee
 
 Now we can begin deriving a form for the correlation function.
-We start with the definition of $C_{xx}(t)$ in the microcanonical ensemble (we take $t=0$ to be our initial time) as a phase space average,
+We start with defining $C_{xx}(t)$ in the microcanonical ensemble (we take $t=0$ to be our initial time) as a phase space average,
 \be
   C_{xx}(t) = \braket{x(0) x(t)} = \frac{E_o}{h \Omega} \int_{-\infty}^{\infty} dp \int_{-\infty}^{\infty} dx \; x(0) \; x(t) \delta(H(x,p) - E)
 \ee
