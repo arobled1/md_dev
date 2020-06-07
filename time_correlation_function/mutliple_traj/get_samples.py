@@ -30,7 +30,7 @@ def get_harmonic_density(veloci, inv_temp, mass, omega):
 # This block is for setting up paramters.
 tmin = 0                # Starting time
 dt = 0.01               # Delta t
-n_steps = 250000        # Number of time steps
+n_steps = 500000        # Number of time steps
 kbt = 10                # Temperature
 gamma = 10              # Friction
 
