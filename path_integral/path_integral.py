@@ -109,8 +109,8 @@ m_k[0] = 0
 m_prime_k[0] = m
 # Mass for the rest of the beads
 for i in range(1, pbeads):
-    m_k[i] = (i+1) * m / k
-    m_prime_k[i] = (i+1) * m / k
+    m_k[i] = (i+1) * m / i
+    m_prime_k[i] = (i+1) * m / i
 
 u = np.zeros(pbeads)
 # Compute initial stage coords
