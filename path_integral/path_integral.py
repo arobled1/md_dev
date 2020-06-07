@@ -36,7 +36,7 @@ def rand_kick(old_v, friction, boltz, mass, deltat):
 
 # Compute force from the harmonic potential U = 1/2mw^2x^2
 def get_harmonic_force(xi, mass, frequency):
-    return - mass * frequency**2 * xi
+    return - mass * (frequency**2) * xi
 
 # Transform primitive coordinates to staged coordinates
 def stage_coords(xi, num_beads):
@@ -108,9 +108,9 @@ m_prime_k = np.zeros(pbeads)
 m_k[0] = 0
 m_prime_k[0] = m
 # Mass for the rest of the beads
-for k in range(1, pbeads):
-    m_k[k] = (k+1) * m / k
-    m_prime_k[k] = (k+1) * m / k
+for i in range(1, pbeads):
+    m_k[i] = (i+1) * m / k
+    m_prime_k[i] = (i+1) * m / k
 
 u = np.zeros(pbeads)
 # Compute initial stage coords
@@ -184,13 +184,15 @@ for l in range(len(virial)):
     filename.write(str(steps[l]) + "\n")
 filename.close()
 
-# Plot the instantaneous energy estimators along with averages
+# Plotting the virial estimator
 plt.xlim(min(steps)-100, max(steps))
-plt.ylim(0,4)
-plt.plot(steps, virial, '-', color='black', alpha=0.4)
-plt.plot(steps, cume, '-', color='blue')
+plt.ylim(-0.005,0.07)
+plt.axhline(y=0.015, linewidth=2, color='r', label=r'$\epsilon_{vir} = 0.015$')
+plt.plot(steps, virial, '-', color='black', label=r'$\epsilon_{vir}$', alpha=0.4)
+plt.plot(steps, cume, '-', label='cumulative average', color='blue')
+plt.legend(loc='upper left')
 plt.xlabel('# of Steps')
-plt.ylabel('Energy')
+plt.ylabel(r'$\epsilon_{vir} \quad / \quad \hbar \omega$')
 plt.savefig('virial.pdf')
 plt.clf()
 #=============================================================================
