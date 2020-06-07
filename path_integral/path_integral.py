@@ -28,7 +28,6 @@ def upd_position(posit, veloc, deltat):
 # Use langevin thermostat to add randomness to your velocities
 def rand_kick(old_v, friction, boltz, mass, deltat):
     gaussian = np.random.normal(0,1)
-    # gaussian = 1
     sqt1 = np.sqrt(1 - np.exp(-2*friction*deltat) )
     sqt2 = np.sqrt(boltz) * np.sqrt(mass)
     random = gaussian * sqt1 * sqt2
@@ -76,23 +75,30 @@ def inverse_force_transformation(force_x):
         new_ext_u[k] = force_x[k] + ((k-1)/k)*(new_ext_u[k-1])
     return new_ext_u
 
-n_steps = 15                           # Number of time steps
+#=============================================================================
+# This block is for MD prep. Setting up parameters and initial values.
+
+n_steps = 3000000                     # Number of time steps
+pbeads = 400                          # Number of beads
+kbt = 0.00189873                      # Temperature (KbT)
+w = 0.03                              # Set Frequency
+m = 1                                 # Set Mass
 tmin = 0                              # Starting time
 dt = 0.01                             # Delta t
 times = np.array([tmin + i * dt for i in range(n_steps)])
-gamma = 1                           # Friction
-kbt = 0.189873                        # Temperature (KbT)
-w = 3                                 # Set Frequency
-m = 0.01                              # Set Mass
-pbeads = 10                           # Number of beads
-primitives_x = np.zeros(pbeads)       # Initialize bead positions
-# for rando in range(pbeads):
-    # x[rando,0] = np.random.normal(0,np.sqrt(kbt/(m*w**2)) )
-x[0] = 1                            # Iinitial positions
-v = np.zeros(pbeads)                  # Initialize bead velocities
-# for rando in range(pbeads):
-    # v[rando,0] = np.random.normal(0, np.sqrt(kbt/m))
-v[0] = 1                            # Initial velocities
+gamma = np.sqrt(pbeads)*kbt           # Friction
+
+# Initialize bead positions
+primitives_x = np.zeros(pbeads)
+# Sample initial positions
+for rando in range(pbeads):
+    primitives_x[rando] = np.random.normal(0,np.sqrt(kbt/(m*w**2)) )
+
+# Initialize bead velocities
+v = np.zeros(pbeads)
+# Sample initial velocities
+for rando in range(pbeads):
+    v[rando] = np.random.normal(0, np.sqrt(kbt/m))
 
 # Masses for the harmonic coupling
 m_k = np.zeros(pbeads)
@@ -106,7 +112,6 @@ for k in range(1, pbeads):
     m_k[k] = (k+1) * m / k
     m_prime_k[k] = (k+1) * m / k
 
-# Initialize staged coords
 u = np.zeros(pbeads)
 # Compute initial stage coords
 u[:] = stage_coords(primitives_x[:], pbeads)
@@ -124,7 +129,8 @@ for p in range(pbeads):
 f_u[:] = f_u[:] + (1/pbeads)*inverse_force_transformation(f_x[:])
 
 virial = []
-#====================== MD code starts here ==================================
+#=============================================================================
+# MD code starts here !!
 for i in range(1,n_steps):
     # Update velocity
     for p in range(pbeads):
@@ -157,30 +163,34 @@ for i in range(1,n_steps):
         sumv += (m*w**2)*primitives_x[o]**2
     # Scale the estimator by the inverse of the number of beads
     virial.append(sumv / pbeads)
-#====================== MD code ends here ==================================
+# MD code ends here
+#=============================================================================
+# This block is for analysis.
 
-# # Compute cumulative averages of the virial estimator
-# cume = np.zeros(len(virial))
-# cume[0] = virial[0]
-# for i in range(1,len(virial)):
-#     cume[i] = (i)/(i+1)*cume[i-1] + virial[i]/(i+1)
-# steps = np.arange(n_steps)
-#
-# filename = open("energies.txt", "a+")
-# for l in range(len(virial)):
-#     filename.write(str(virial[l]))
-#     filename.write('              ')
-#     filename.write(str(cume[l]))
-#     filename.write('              ')
-#     filename.write(str(steps[l]) + "\n")
-# filename.close()
-#
-# # Plot the instantaneous energy estimators along with averages
-# plt.xlim(min(steps)-100, max(steps))
-# plt.ylim(0,4)
-# plt.plot(steps, virial, '-', color='black', alpha=0.4)
-# plt.plot(steps, cume, '-', color='blue')
-# plt.xlabel('# of Steps')
-# plt.ylabel('Energy')
-# plt.savefig('virial.pdf')
-# plt.clf()
+# Compute cumulative averages of the virial estimator
+cume = np.zeros(len(virial))
+cume[0] = virial[0]
+for i in range(1,len(virial)):
+    cume[i] = (i)/(i+1)*cume[i-1] + virial[i]/(i+1)
+steps = np.arange(n_steps)
+
+# Writing values to file
+filename = open("energies.txt", "a+")
+for l in range(len(virial)):
+    filename.write(str(virial[l]))
+    filename.write('              ')
+    filename.write(str(cume[l]))
+    filename.write('              ')
+    filename.write(str(steps[l]) + "\n")
+filename.close()
+
+# Plot the instantaneous energy estimators along with averages
+plt.xlim(min(steps)-100, max(steps))
+plt.ylim(0,4)
+plt.plot(steps, virial, '-', color='black', alpha=0.4)
+plt.plot(steps, cume, '-', color='blue')
+plt.xlabel('# of Steps')
+plt.ylabel('Energy')
+plt.savefig('virial.pdf')
+plt.clf()
+#=============================================================================
