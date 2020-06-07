@@ -284,16 +284,22 @@ For this reason, histograms of the positions and momenta for the oscillator shou
 \end{figure}
 
 \subsection{Path Integral Molecular Dynamics}
-Finally, the PIMD code was written to replicate the results done by Tuckerman et al.\cite{tuckerman}
+
+Finally, the PIMD code was written to replicate the results done by Tuckerman et al.\cite{berne}
 The system defined by Tuckerman et al consisted of a one dimensional quantum harmonic oscillator with $\beta \hbar \omega = 15.8$, $m \omega / \hbar = 0.03$, and $P = 400$.
 These parameters are used so that the thermodynamic energy is dominated by the ground state energy.
 Therefore, we expect a proper PIMD calculation to yield energies equal to $\hbar \omega / 2$ (Figure 6).
 
 \begin{figure}[H]
   \centering
-  \includegraphics[scale=0.7]{Figures/pimd/smallkt.pdf}
-    \caption{Plot of the instantaneous virial estimator along with cumulative averages along a PIMD trajectory. Since the simulation was performed in using atomic units, we defined variables $\hbar = m = K_B = 1$ so that $\omega = 0.03$ and $T = 0.03/15.8$. Simulations were considered successful if the cumulative average of the virial estimator converged at $E_vir = \hbar \omega / 2 = 0.015$. This simulation converged at a value of 0.0156 after 2,500,000 million MD steps with $\Delta t = 0.01$. Initial conditions for this simulation were $u_k(0) = 0$ and $v_k(0) = 1$.}
+  \includegraphics[scale=1.1]{Figures/pimd/virial.pdf}
+    \caption{Plot of the instantaneous virial estimator along with cumulative averages along a PIMD trajectory. Since the simulation was performed in using atomic units, we defined variables $\hbar = m = 1$ so that $\omega = 0.03$ and $K_BT = 0.03/15.8$. Simulations were considered successful if the cumulative average of the virial estimator converged at $E_{vir} = \hbar \omega / 2 = 0.015$. This simulation converged at a virial energy value of 0.01536 after 3 million MD steps with $\Delta t = 0.01$.}
 \end{figure}
+
+The amount of time requried for convergence depends mostly on the choice of thermostat and integrator.
+In the original code by Tuckerman et al the Nos\'e-Hoover chain method was used to thermostat every bead along with RESPA integrators for integrating the equations of motion.
+Using a Langevin thermostat and simple velocity Verlet means that the convergence time will be much higher than if Nos\'e-Hoover chains with RESPA integrators were used.
+In the original paper, the convergence
 
 \section{Appendix}
 \subsection{Quantum Harmonic Oscillator Energies}
