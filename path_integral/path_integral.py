@@ -95,16 +95,16 @@ v = np.zeros(pbeads)                  # Initialize bead velocities
 v[0] = 1                            # Initial velocities
 
 # Masses for the harmonic coupling
-new_m_force = np.zeros(pbeads)
+m_k = np.zeros(pbeads)
 # Masses for the velocities
-new_m_vel = np.zeros(pbeads)
+m_prime_k = np.zeros(pbeads)
 # Mass for the first bead
-new_m_force[0] = 0
-new_m_vel[0] = m
+m_k[0] = 0
+m_prime_k[0] = m
 # Mass for the rest of the beads
 for k in range(1, pbeads):
-    new_m_force[k] = (k+1) * m / k
-    new_m_vel[k] = (k+1) * m / k
+    m_k[k] = (k+1) * m / k
+    m_prime_k[k] = (k+1) * m / k
 
 # Initialize staged coords
 u = np.zeros(pbeads)
@@ -114,7 +114,7 @@ u[:] = stage_coords(primitives_x[:], pbeads)
 f_u = np.zeros(pbeads)
 # Compute initial harmonic forces
 for p in range(pbeads):
-    f_u[p] = get_harmonic_force(u[p], new_m_force[p], np.sqrt(pbeads)*kbt)
+    f_u[p] = get_harmonic_force(u[p], m_k[p], np.sqrt(pbeads)*kbt)
 # Inititialize external forces in x
 f_x = np.zeros(pbeads)
 # Compute initial external forces in x
@@ -128,19 +128,19 @@ virial = []
 for i in range(1,n_steps):
     # Update velocity
     for p in range(pbeads):
-        v[p] = upd_velocity(v[p], f_u[p], dt, new_m_vel[p])
+        v[p] = upd_velocity(v[p], f_u[p], dt, m_prime_k[p])
     # Update position
     for p in range(pbeads):
         u[p] = upd_position(u[p], v[p], dt)
     # Add random velocity
     for p in range(pbeads):
-        v[p] = rand_kick(v[p], gamma, kbt, new_m_vel[p], dt)
+        v[p] = rand_kick(v[p], gamma, kbt, m_prime_k[p], dt)
     # Update position with random velocity
     for p in range(pbeads):
         u[p] = upd_position(u[p], v[p], dt)
     # Update harmonic force with random position
     for p in range(pbeads):
-        f_u[p] = get_harmonic_force(u[p], new_m_force[p], np.sqrt(pbeads)*kbt)
+        f_u[p] = get_harmonic_force(u[p], m_k[p], np.sqrt(pbeads)*kbt)
     # Update positions in x
     x[:] = inverse_stage_coords(u[:], pbeads)
     # Compute external force in updated x's
@@ -150,7 +150,7 @@ for i in range(1,n_steps):
     f_u[:] = f_u[:] + (1/pbeads)*inverse_force_transformation(f_x[:])
     # Update velocity based on random force
     for p in range(pbeads):
-        v[p] = upd_velocity(v[p], f_u[p], dt, new_m_vel[p])
+        v[p] = upd_velocity(v[p], f_u[p], dt, m_prime_k[p])
     # Computing the virial energy estimator
     sumv = 0
     for o in range(pbeads):
