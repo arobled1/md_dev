@@ -148,10 +148,10 @@ for i in range(1,n_steps):
     for p in range(pbeads):
         f_u[p] = get_harmonic_force(u[p], m_k[p], np.sqrt(pbeads)*kbt)
     # Update positions in x
-    x[:] = inverse_stage_coords(u[:], pbeads)
-    # Compute external force in updated x's
+    primitives_x[:] = inverse_stage_coords(u[:], pbeads)
+    # Compute external force with updated primitives
     for p in range(pbeads):
-        f_x[p] = get_harmonic_force(x[p], m, w)
+        f_x[p] = get_harmonic_force(primitives_x[p], m, w)
     # Update forces in stage coordinates
     f_u[:] = f_u[:] + (1/pbeads)*inverse_force_transformation(f_x[:])
     # Update velocity based on random force
@@ -167,12 +167,12 @@ for i in range(1,n_steps):
 #=============================================================================
 # This block is for analysis.
 
-# Compute cumulative averages of the virial estimator
+# Computing cumulative average of the virial estimator
 cume = np.zeros(len(virial))
 cume[0] = virial[0]
 for i in range(1,len(virial)):
     cume[i] = (i)/(i+1)*cume[i-1] + virial[i]/(i+1)
-steps = np.arange(n_steps)
+steps = np.arange(1,n_steps)
 
 # Writing values to file
 filename = open("energies.txt", "a+")
