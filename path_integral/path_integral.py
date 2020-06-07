@@ -28,6 +28,7 @@ def upd_position(posit, veloc, deltat):
 # Use langevin thermostat to add randomness to your velocities
 def rand_kick(old_v, friction, boltz, mass, deltat):
     gaussian = np.random.normal(0,1)
+    # gaussian = 1
     sqt1 = np.sqrt(1 - np.exp(-2*friction*deltat) )
     sqt2 = np.sqrt(boltz) * np.sqrt(mass)
     random = gaussian * sqt1 * sqt2
@@ -51,7 +52,7 @@ def stage_coords(xi, num_beads):
     return up_u
 
 # Transform staged coordinates to primitive coordinates
-def inverse_stage_coords(ui, xi, num_beads):
+def inverse_stage_coords(ui, num_beads):
     up_x = np.zeros(num_beads)
     # For the first bead
     up_x[0] = ui[0]
@@ -75,114 +76,111 @@ def inverse_force_transformation(force_x):
         new_ext_u[k] = force_x[k] + ((k-1)/k)*(new_ext_u[k-1])
     return new_ext_u
 
-n_steps = 20                          # Number of time steps
+n_steps = 15                           # Number of time steps
 tmin = 0                              # Starting time
 dt = 0.01                             # Delta t
 times = np.array([tmin + i * dt for i in range(n_steps)])
-gamma = 0                             # Friction
-kbt = 1                               # Temperature (KbT)
-w = 2                                 # Set Frequency
-m = 2                                 # Set Mass
-pbeads = 3                            # Number of beads
-x = np.zeros((pbeads, len(times)))    # Initialize bead positions
-x[:,0] = 1                            # Iinitial positions
-v = np.zeros((pbeads, len(times)))    # Initialize bead velocities
-v[:,0] = 0.5                          # Initial velocities
+gamma = 1                           # Friction
+kbt = 0.189873                        # Temperature (KbT)
+w = 3                                 # Set Frequency
+m = 0.01                              # Set Mass
+pbeads = 10                           # Number of beads
+primitives_x = np.zeros(pbeads)       # Initialize bead positions
+# for rando in range(pbeads):
+    # x[rando,0] = np.random.normal(0,np.sqrt(kbt/(m*w**2)) )
+x[0] = 1                            # Iinitial positions
+v = np.zeros(pbeads)                  # Initialize bead velocities
+# for rando in range(pbeads):
+    # v[rando,0] = np.random.normal(0, np.sqrt(kbt/m))
+v[0] = 1                            # Initial velocities
 
 # Masses for the harmonic coupling
 new_m_force = np.zeros(pbeads)
 # Masses for the velocities
 new_m_vel = np.zeros(pbeads)
-    # Mass for the first bead
+# Mass for the first bead
 new_m_force[0] = 0
 new_m_vel[0] = m
-    # Mass for the rest of the beads
+# Mass for the rest of the beads
 for k in range(1, pbeads):
     new_m_force[k] = (k+1) * m / k
     new_m_vel[k] = (k+1) * m / k
 
 # Initialize staged coords
-u = np.zeros((pbeads, len(times)))
+u = np.zeros(pbeads)
 # Compute initial stage coords
-u[:,0] = stage_coords(x[:,0], pbeads)
+u[:] = stage_coords(primitives_x[:], pbeads)
 # Initialize harmonic forces
-f_u = np.zeros((pbeads, len(times)))
+f_u = np.zeros(pbeads)
 # Compute initial harmonic forces
 for p in range(pbeads):
-    f_u[p,0] = get_harmonic_force(u[p, 0], new_m_force[p], np.sqrt(pbeads)*kbt)
+    f_u[p] = get_harmonic_force(u[p], new_m_force[p], np.sqrt(pbeads)*kbt)
 # Inititialize external forces in x
-f_x = np.zeros((pbeads, len(times)))
+f_x = np.zeros(pbeads)
 # Compute initial external forces in x
 for p in range(pbeads):
-    f_x[p,0] = get_harmonic_force(x[p,0], m, w)
+    f_x[p] = get_harmonic_force(primitives_x[p], m, w)
 # Compute initial forces in staged coords (eqn 12.6.12)
-f_u[:,0] = f_u[:,0] + (1/pbeads)*inverse_force_transformation(f_x[:,0])
+f_u[:] = f_u[:] + (1/pbeads)*inverse_force_transformation(f_x[:])
 
-# !!!!!!!!!!!!!!!!!!!!! MD code starts here !!!!!!!!!!!!!!!!!!!!!!!!!!!
-count = 0    # MD Step counter
-steps = []
+virial = []
+#====================== MD code starts here ==================================
 for i in range(1,n_steps):
-    steps.append(count)
-    count +=1
     # Update velocity
     for p in range(pbeads):
-        v[p,i] = upd_velocity(v[p, i-1], f_u[p, i-1], dt, new_m_vel[p])
+        v[p] = upd_velocity(v[p], f_u[p], dt, new_m_vel[p])
     # Update position
     for p in range(pbeads):
-        u[p,i] = upd_position(u[p, i-1], v[p, i], dt)
+        u[p] = upd_position(u[p], v[p], dt)
     # Add random velocity
     for p in range(pbeads):
-        v[p,i] = rand_kick(v[p, i], gamma, kbt, new_m_vel[p], dt)
+        v[p] = rand_kick(v[p], gamma, kbt, new_m_vel[p], dt)
     # Update position with random velocity
     for p in range(pbeads):
-        u[p,i] = upd_position(u[p, i], v[p, i], dt)
+        u[p] = upd_position(u[p], v[p], dt)
     # Update harmonic force with random position
     for p in range(pbeads):
-        f_u[p,i] = get_harmonic_force(u[p, i], new_m_force[p], np.sqrt(pbeads)*kbt)
+        f_u[p] = get_harmonic_force(u[p], new_m_force[p], np.sqrt(pbeads)*kbt)
     # Update positions in x
-    x[:,i] = inverse_stage_coords(u[:,i], x[:,i], pbeads)
+    x[:] = inverse_stage_coords(u[:], pbeads)
     # Compute external force in updated x's
     for p in range(pbeads):
-        f_x[p,i] = get_harmonic_force(x[p,i], m, w)
+        f_x[p] = get_harmonic_force(x[p], m, w)
     # Update forces in stage coordinates
-    f_u[:,i] = f_u[:,i] + (1/pbeads)*inverse_force_transformation(f_x[:,i])
+    f_u[:] = f_u[:] + (1/pbeads)*inverse_force_transformation(f_x[:])
     # Update velocity based on random force
     for p in range(pbeads):
-        v[p,i] = upd_velocity(v[p, i], f_u[p, i], dt, new_m_vel[p])
-
-# Compute the virial energy estimator
-virial = []
-for q in range(n_steps):
+        v[p] = upd_velocity(v[p], f_u[p], dt, new_m_vel[p])
+    # Computing the virial energy estimator
     sumv = 0
     for o in range(pbeads):
-        sumv += 0.5*(m*w**2)*x[o,q]*x[o,q] + 0.5*x[o,q]*(-f_x[o,q])
-    virial.append(sumv)
-# Convert from list to numpy array to scale elements quicker
-virial = np.asarray(virial)
-# Scale the estimator by the inverse of the number of beads
-virial = (1/pbeads)*virial
+        sumv += (m*w**2)*primitives_x[o]**2
+    # Scale the estimator by the inverse of the number of beads
+    virial.append(sumv / pbeads)
+#====================== MD code ends here ==================================
 
-# Compute cumulative averages of the virial estimator
-cume = np.zeros(len(virial))
-cume[0] = virial[0]
-for i in range(1,len(virial)):
-    cume[i] = (i)/(i+1)*cume[i-1] + virial[i]/(i+1)
-
-filename = open("energies.txt", "a+")
-for l in range(len(virial)):
-    filename.write(str(virial[l]))
-    filename.write('              ')
-    filename.write(str(cume[l]))
-    filename.write('              ')
-    filename.write(str(steps[l]) + "\n")
-filename.close()
-
-# Plot the instantaneous energy estimators along with averages
-plt.xlim(min(steps)-100, max(steps))
-plt.ylim(min(virial)-2 ,max(virial)+2)
-plt.plot(steps, virial, '-', color='black', alpha=0.4)
-plt.plot(steps, cume, '-', color='blue')
-plt.xlabel('# of Steps')
-plt.ylabel('Energy')
-plt.savefig('sunday_virial.pdf')
-plt.clf()
+# # Compute cumulative averages of the virial estimator
+# cume = np.zeros(len(virial))
+# cume[0] = virial[0]
+# for i in range(1,len(virial)):
+#     cume[i] = (i)/(i+1)*cume[i-1] + virial[i]/(i+1)
+# steps = np.arange(n_steps)
+#
+# filename = open("energies.txt", "a+")
+# for l in range(len(virial)):
+#     filename.write(str(virial[l]))
+#     filename.write('              ')
+#     filename.write(str(cume[l]))
+#     filename.write('              ')
+#     filename.write(str(steps[l]) + "\n")
+# filename.close()
+#
+# # Plot the instantaneous energy estimators along with averages
+# plt.xlim(min(steps)-100, max(steps))
+# plt.ylim(0,4)
+# plt.plot(steps, virial, '-', color='black', alpha=0.4)
+# plt.plot(steps, cume, '-', color='blue')
+# plt.xlabel('# of Steps')
+# plt.ylabel('Energy')
+# plt.savefig('virial.pdf')
+# plt.clf()
