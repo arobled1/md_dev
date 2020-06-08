@@ -29,14 +29,14 @@
 %==============================================================================%
 %                             Title Information                                %
 %==============================================================================%
-\title{PIMD Report}
+\title{PIMD Notes}
 \date{\today}
 \author{Alan Robledo}
 %==============================================================================%
 \begin{document}
 
 \maketitle
-Report is still in development.
+Notes are still in development.
 
 \section{Introduction}
 \subsection{Quantum Harmonic Oscillator}
@@ -183,7 +183,7 @@ A typical PIMD simulation then makes use of the equations of motion defined in s
     \dot{p}_k &= - m_k \omega_P^2 u_k - \frac{1}{P} \frac{\partial U}{\partial u_k} \\
   \end{split}
 \ee
-where the forces on the staging coordinates $- \frac{\partial U}{\partial u_k}$ are defined recursively as,
+where the forces on the staging coordinates are defined recursively as,
 \be
   \begin{split}
     \frac{1}{P} \frac{\partial U}{\partial u_1} &= \frac{1}{P} \sum_{l-1}^{P} \frac{\partial U}{\partial x_l} \\
@@ -196,7 +196,7 @@ When performing a PIMD calculation, thermodynamic estimators are often used to a
 The virial energy estimator is what we will focus on for testing a PIMD code.
 The virial energy,
 \be
-  E_{vir} = \frac{1}{P} \sum_{k=1}^P \Big[ \frac{1}{2}x_k \frac{\partial U}{\partial x_k} + U(x_k) \Big]
+  \epsilon_{vir} = \frac{1}{P} \sum_{k=1}^P \Big[ \frac{1}{2}x_k \frac{\partial U}{\partial x_k} + U(x_k) \Big]
 \ee
 can be computed at every step of a simulation to obtain a plot of instantaneous virial energies and cumulative averages.
 The thermal coupling will cause the instantaneous virial energies to fluctuate, but the cumulative averages should stay consistent after the system begins to equilibrate.
@@ -270,17 +270,26 @@ The langevin step
 \be
   v(t) = v(0)e^{- \gamma \Delta t} + \sqrt{\frac{m}{\beta}}\sqrt{1-e^{-2 \gamma \Delta t}} \xi^{k}
 \ee
-is added to velocity verlet so that a random kick is added to the system at each time step that depends on a random variable sampled from the normal distribution with mean $\mu = 0$ and standard deviation $\sigma^2 = 1$.
-For this reason, histograms of the positions and momenta for the oscillator should mimic a gaussian distribution (Figure 5).
+is added to velocity verlet so that a random kick is added to the system at each time step that depends on a random variable sampled from the normal distribution with mean $\mu = 0$ and standard deviation $\sigma = 1$.
+Doing so gives an algorithm for sampling the canonical density.
+Histograms of the positions and momenta for the oscillator should then mimic a gaussian distribution (Figure 5).
+To be specific, a histogram of the position should mimic a marginal distribution in x, which can be done by integrating out the velocity in the canonical density.
+\be
+  P(x) = \sqrt{ \frac{m \omega^2}{2 \pi k_B T} } e^{ - \frac{m \omega^2 x^2}{2 k_B T}}
+\ee
+And a histogram of the velocity should mimic a marginal distribution in v, which can be done by integrating out the position in the canonical density.
+\be
+  P(v) = \sqrt{ \frac{m}{2 \pi k_B T} } e^{ - \frac{m v^2}{2 k_B T}}
+\ee
 \begin{figure}[H]
     \centering
     \begin{subfigure}[b]{0.49\textwidth}
-        \includegraphics[width=\textwidth]{Figures/langevin/xhist.pdf}
+        \includegraphics[width=\textwidth]{../../langevin_thermo/figures/harmonic_pos_dens.pdf}
     \end{subfigure}
     \begin{subfigure}[b]{0.49\textwidth}
-        \includegraphics[width=\textwidth]{Figures/langevin/phist.pdf}
+        \includegraphics[width=\textwidth]{../../langevin_thermo/figures/harmonic_vel_dens.pdf}
     \end{subfigure}
-    \caption{Histograms of position (a) and momenta (b) for the one dimensional harmonic oscillator ($m = 1$). Initial conditions for the simulation was: $x(0) = 0, v(0) = 0.1$. The friction $\gamma = K_B T$ in this simulation. The choice for this value of the friction came from the optimum value of the friction coefficient being $\gamma = \omega_P$, as stated in the paper by Liu.\cite{Liu} In this case, P = 1.}
+    \caption{Histograms of position (left) and momenta (right) for the one dimensional harmonic oscillator ($m = 1$, $\omega = \sqrt{8}$). The friction $\gamma$ was set to 10 in this simulation. The histograms are compared to the marginal distributions in position and velocity (equations (23) and (24)). }
 \end{figure}
 
 \subsection{Path Integral Molecular Dynamics}
