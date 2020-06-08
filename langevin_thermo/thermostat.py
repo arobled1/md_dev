@@ -31,6 +31,8 @@ def get_harmonic_density_v(veloci, boltz_temp, mass, omega):
     exp_constant = mass / (2*boltz_temp)
     return normalization * np.exp(-exp_constant * veloci**2 )
 
+#============================================================================
+# This block is for setting up parameters and initial values.
 tmin = 0            # Starting time
 dt = 0.01          # Delta t
 n_steps = 2500000   # Number of time steps
@@ -47,6 +49,8 @@ x[0] = 0                        # Initial position
 v[0] = 0.1                      # Initial velocity
 f[0] = get_force(x[0], m, w)    # Compute inital force
 
+#============================================================================
+# This block is for MD
 for i in range(1,n_steps):
     # Update velocity
     v[i] = upd_velocity(v[i-1], f[i-1], dt, m)
@@ -78,6 +82,9 @@ plt.ylabel('P(v)')
 plt.savefig('harmonic_vel_dens.pdf')
 plt.clf()
 
+#============================================================================
+# This block is for computing a histogram of the positions similar to the
+#   velocities.
 dist_hist, dist_bin_edges = np.histogram(x[-len(x)//2:],bins=20,density=True)
 ideal_prediction_x = get_harmonic_density_x(bin_centers(dist_bin_edges), kbt, m, w)
 p = plt.plot(bin_centers(dist_bin_edges), dist_hist,marker='o',label='P(x)',linestyle='')
