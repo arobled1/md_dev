@@ -652,6 +652,52 @@ Finally, substituting the momentum integrals into equation (\ref{eq:part_func_wi
   \end{split}
 \ee
 
+\subsection{Harmonic Oscillator Position Probability}
+This section serves to derive the probability of finding a particular position of the harmonic oscillator in the canonical ensemble, equation (23).
+We start with the canonical density,
+\be
+  f(x,v) = \frac{e^{- \beta H}}{\int dx \int dv e^{- \beta H}}
+\ee
+and integrate out the velocity in the numerator so that we are left with a density in x.
+This simply means that we can cancel out an integral in the denominator.
+\be
+  \begin{split}
+    f(x) &= \frac{\int dv e^{- \beta H}}{\int dx \int dv e^{- \beta H}} \\
+    &= \frac{\int dv e^{- \beta [\frac{1}{2}mv^2]} e^{- \beta [\frac{1}{2}m \omega^2 x^2]} }{\int dx \int dv e^{- \beta [\frac{1}{2}mv^2]} e^{- \beta [\frac{1}{2}m \omega^2 x^2]}} \\
+    &= \frac{e^{- \beta [\frac{1}{2}m \omega^2 x^2]} }{\int dx e^{- \beta [\frac{1}{2}m \omega^2 x^2]}}\\
+  \end{split}
+\ee
+Remembering that the integral goes over all space, we just have a simple gaussian integral.
+\be
+  \int_{-\infty}^{\infty} dx e^{- \beta [\frac{1}{2}m \omega^2 x^2]} = \sqrt{\frac{2 \pi}{\beta m \omega^2}} = \sqrt{\frac{2 \pi k_B T}{ m \omega^2}}
+\ee
+So the density becomes,
+\be
+  f(x) = \sqrt{ \frac{m \omega^2}{2 \pi k_B T} } e^{ - \frac{m \omega^2 x^2}{2 k_B T}} .
+\ee
+\subsection{Harmonic Oscillator Velocity Probability}
+This section serves to derive the probability of finding a particular velocity of the harmonic oscillator in the canonical ensemble, equation (24).
+We start with the canonical density,
+\be
+  f(x,v) = \frac{e^{- \beta H}}{\int dx \int dv e^{- \beta H}}
+\ee
+and integrate out the position in the numerator so that we are left with a density in v.
+This simply means that we can cancel out an integral in the denominator.
+\be
+  \begin{split}
+    f(v) &= \frac{\int dx e^{- \beta H}}{\int dx \int dv e^{- \beta H}} \\
+    &= \frac{\int dx e^{- \beta [\frac{1}{2}m \omega^2 x^2]} e^{- \beta [\frac{1}{2}mv^2]} }{\int dx e^{- \beta [\frac{1}{2}m \omega^2 x^2]} \int dv e^{- \beta [\frac{1}{2}mv^2]}} \\
+    &= \frac{ e^{- \beta [\frac{1}{2}mv^2]} }{\int dv e^{- \beta [\frac{1}{2}mv^2]}}\\
+  \end{split}
+\ee
+Remembering that the integral goes over all space, we just have a simple gaussian integral.
+\be
+  \int_{-\infty}^{\infty} dv e^{- \beta [\frac{1}{2}mv^2]} = \sqrt{\frac{2 \pi}{\beta m}} = \sqrt{\frac{2 \pi k_B T}{ m }}
+\ee
+So the density becomes,
+\be
+  f(v) = \sqrt{ \frac{m}{2 \pi k_B T} } e^{ - \frac{m v^2}{2 k_B T}} .
+\ee
 \bibliography{mybib}
 \bibliographystyle{unsrt}
 
