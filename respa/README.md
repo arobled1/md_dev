@@ -1,0 +1,1 @@
+MD code that uses the RESPA algorithm as an integrator for the equations of motion. As always, we will first write the code for a single classical harmonic oscillator. Details are included in the code as comments.
