@@ -1,0 +1,1 @@
+MD code that uses the nose hoover chain thermostat to sample the canonical distribution. As always, we will first write the code for a single classical harmonic oscillator. Details are included in the code as comments.
