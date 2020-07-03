@@ -31,9 +31,9 @@ def get_harmonic_density_v(veloci, boltz_temp, mass, omega):
     exp_constant = mass / (2*boltz_temp)
     return normalization * np.exp(-exp_constant * veloci**2 )
 
-tmin = 0        # Starting time
-dt = 0.01       # Time step
-n_steps = 2500000   # Number of time steps
+tmin = 0                 # Starting time
+dt = 0.01                # Time step
+n_steps = 2500000        # Number of time steps
 
 times = np.array([tmin + i * dt for i in range(n_steps)])
 m = 1                    # Set mass
@@ -41,7 +41,7 @@ x = 0                    # Initial position
 v = 1                    # Initial velocity
 w = 1                    # Angular Frequency for spring
 big_q = 1                # Nose hoover parameter
-kbt = 1                   # Temperature parameter
+kbt = 1                  # Temperature parameter
 
 chain_q = np.zeros(4)    # intialize chain positions
 chain_q[0] = 0
@@ -59,6 +59,8 @@ f = get_force(x, m, w)   # Compute inital force
 
 positions = [x]
 velocities = [v]
+# =============================================================================
+# MD Code starts here !!! Integrator is velocity verlet.
 for i in range(1,n_steps):
     # Update oscillator position
     x = upd_position(x, v, f, dt, m)
@@ -83,7 +85,7 @@ for i in range(1,n_steps):
     positions.append(x)
     # Keep velocity value
     velocities.append(v)
-
+# MD code ends here !
 #============================================================================
 # This block is for computing a histogram of the velocities to check that the
 #   maxwell boltzmann distribution is produced. The bin centers are plotted
