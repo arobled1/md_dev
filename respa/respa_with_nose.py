@@ -1,3 +1,14 @@
+# =============================================================================
+# The following code implements XO-RESPA (extended system outside-reference
+#   system propogator) for a harmonic oscillator. In other words, the canonical
+#   distribution is sampled using a multiple time-stepping method in molecular
+#   dynamics with nose hoover chain thermostats. This algorithm is useful when
+#   the evolution of the extended variables (thermostats) is slow compared to
+#   the evolution of your variables subject to a reference (fast) force. However,
+#   in the case of path integral molecular dynamics, it is more efficient to
+#   have the extended variables evolve on the fast time scale like the vibrations
+#   of the chain polymer. An algorithm that implements this idea is XI-RESPA
+#   extended system inside-reference system propogator).
 import numpy as np
 import matplotlib.pyplot as plt
 
