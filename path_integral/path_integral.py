@@ -4,9 +4,10 @@
 # beads on a ring with harmonic nearest neighbors that are subject to an
 # external potential that is also harmonic.
 # Each bead is coupled to a langevin thermostat.
+# Code requires Python 3.
 #===============================================================================
 # Author: Alan Robledo
-# Date: 11/15/19
+# Date: 08/17/20
 #===============================================================================
 # Notes:
 #  The virial energy estimator should be close to the value of energy obtained
@@ -16,28 +17,35 @@
 #===============================================================================
 import numpy as np
 import matplotlib.pyplot as plt
+import numba
+from numba import jit
 
+@jit(nopython=True)
 # Update velocity at a half step dt/2
 def upd_velocity(veloc, force, deltat, mass):
     return veloc + (force * deltat)/(2 * mass)
 
+@jit(nopython=True)
 # Update position at a half step dt/2
 def upd_position(posit, veloc, deltat):
     return posit + 0.5 * veloc * deltat
 
+@jit(nopython=True)
 # Use langevin thermostat to add randomness to your velocities
 def rand_kick(old_v, friction, boltz, mass, deltat):
     gaussian = np.random.normal(0,1)
     sqt1 = np.sqrt(1 - np.exp(-2*friction*deltat) )
-    sqt2 = np.sqrt(boltz) * np.sqrt(mass)
+    sqt2 = np.sqrt(boltz) / np.sqrt(mass)
     random = gaussian * sqt1 * sqt2
     new_velocity = old_v * np.exp(- friction * deltat) + random
     return new_velocity
 
+@jit(nopython=True)
 # Compute force from the harmonic potential U = 1/2mw^2x^2
 def get_harmonic_force(xi, mass, frequency):
     return - mass * (frequency**2) * xi
 
+@jit(nopython=True)
 # Transform primitive coordinates to staged coordinates
 def stage_coords(xi, num_beads):
     up_u = np.zeros(num_beads)
@@ -50,6 +58,7 @@ def stage_coords(xi, num_beads):
     up_u[num_beads-1] = xi[num_beads-1] - ( ( (num_beads-2)*xi[0] ) + xi[0] )/(num_beads - 1)
     return up_u
 
+@jit(nopython=True)
 # Transform staged coordinates to primitive coordinates
 def inverse_stage_coords(ui, num_beads):
     up_x = np.zeros(num_beads)
@@ -62,6 +71,7 @@ def inverse_stage_coords(ui, num_beads):
         up_x[k] = ui[k] + (k/(k+1))*up_x[k+1] + (1/(k+1))*ui[0]
     return up_x
 
+@jit(nopython=True)
 # Compute external potential in staged coordinates using external potential in primitive coordinates
 def inverse_force_transformation(force_x):
     new_ext_u = np.zeros(len(force_x))
@@ -78,11 +88,11 @@ def inverse_force_transformation(force_x):
 #=============================================================================
 # This block is for MD prep. Setting up parameters and initial values.
 
-n_steps = 3000000                     # Number of time steps
+n_steps = 60000                       # Number of time steps
 pbeads = 400                          # Number of beads
-kbt = 0.00189873                      # Temperature (KbT)
-w = 0.03                              # Set Frequency
-m = 1                                 # Set Mass
+kbt = 3/15.8                          # Temperature (KbT)
+w = 3                                 # Set Frequency
+m = 0.01                                 # Set Mass
 tmin = 0                              # Starting time
 dt = 0.01                             # Delta t
 times = np.array([tmin + i * dt for i in range(n_steps)])
@@ -186,8 +196,8 @@ filename.close()
 
 # Plotting the virial estimator
 plt.xlim(min(steps)-100, max(steps))
-plt.ylim(-0.005,0.07)
-plt.axhline(y=0.015, linewidth=2, color='r', label=r'$\epsilon_{vir} = 0.015$')
+plt.ylim(0,7)
+plt.axhline(y=1.5, linewidth=2, color='r', label=r'$\epsilon_{vir} = 1.5$')
 plt.plot(steps, virial, '-', color='black', label=r'$\epsilon_{vir}$', alpha=0.4)
 plt.plot(steps, cume, '-', label='cumulative average', color='blue')
 plt.legend(loc='upper left')
