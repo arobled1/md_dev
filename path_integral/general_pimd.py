@@ -14,7 +14,7 @@ def upd_position(posit, veloc, deltat):
 def rand_kick(old_v, friction, boltz, mass, deltat):
     gaussian = np.random.normal(0,1)
     sqt1 = np.sqrt(1 - np.exp(-2*friction*deltat) )
-    sqt2 = np.sqrt(boltz) * np.sqrt(mass)
+    sqt2 = np.sqrt(boltz) / np.sqrt(mass)
     random = gaussian * sqt1 * sqt2
     new_velocity = old_v * np.exp(- friction * deltat) + random
     return new_velocity
@@ -62,14 +62,14 @@ def inverse_force_transformation(force_x, num_beads, num_seg_beads, num_segments
 # This block is for MD prep. Setting up parameters and initial values.
 #===================================================
 # This tiny block is for new parameters
-j = 2                                # Number of beads in chain segment
-capital_n = 5
+j = 100                                # Number of beads in chain segment
+capital_n = 4
 #===================================================
-n_steps = 11                     # Number of time steps
-pbeads = 10                          # Number of beads
-kbt = 0.00189873                      # Temperature (KbT)
-w = 0.03                              # Set Frequency
-m = 1                                 # Set Mass
+n_steps = 100000                      # Number of time steps
+pbeads = 400                          # Number of beads
+kbt = 3/15.8                          # Temperature (KbT)
+w = 3                                 # Set Frequency
+m = 0.01                              # Set Mass
 tmin = 0                              # Starting time
 dt = 0.01                             # Delta t
 times = np.array([tmin + i * dt for i in range(n_steps)])
@@ -172,7 +172,6 @@ for i in range(1,n_steps):
         sumv += (m*w**2)*primitives_x[o]**2
     # Scale the estimator by the inverse of the number of beads
     virial.append(sumv / pbeads)
-
 # MD code ends here
 #=============================================================================
 # # This block is for analysis.
@@ -196,8 +195,8 @@ filename.close()
 
 # Plotting the virial estimator
 plt.xlim(min(steps)-100, max(steps))
-plt.ylim(-0.005,0.07)
-plt.axhline(y=0.015, linewidth=2, color='r', label=r'$\epsilon_{vir} = 0.015$')
+plt.ylim(0,7)
+plt.axhline(y=1.5, linewidth=2, color='r', label=r'$\epsilon_{vir} = 0.015$')
 plt.plot(steps, virial, '-', color='black', label=r'$\epsilon_{vir}$', alpha=0.4)
 plt.plot(steps, cume, '-', label='cumulative average', color='blue')
 plt.legend(loc='upper left')
