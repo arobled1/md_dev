@@ -88,7 +88,6 @@ w = 1                                 # Set Frequency
 m = 1                                 # Set Mass
 tmin = 0                              # Starting time
 dt = 0.01                             # Delta t
-times = np.array([tmin + i * dt for i in range(n_steps)])
 gamma = np.sqrt(pbeads)*kbt           # Friction
 
 # Initialize bead positions
