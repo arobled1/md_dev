@@ -1,0 +1,1 @@
+Repository for code (and results) that computes the open path end-to-end distance distribution estimator for a harmonic potential using open chain path integral molecular dynamics using staging coordinates. 
