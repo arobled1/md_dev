@@ -1,1 +1,1 @@
-Repository for code (and results) that computes the open path end-to-end distance distribution estimator for a harmonic potential using open chain path integral molecular dynamics using staging coordinates. 
+Repository for python (3.8.2) code (and results) that computes the open path end-to-end distance distribution estimator for a harmonic potential using open chain path integral molecular dynamics with staging coordinates. 
