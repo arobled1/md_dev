@@ -6,7 +6,7 @@ integer :: pbeads                   ! Number of beads
 integer :: num_samples              ! Number of initial configurations
 integer :: n_steps                  ! Number of time steps
 double precision :: dt              ! Delta t
-double precision :: beta_p          ! Temperature (KbT)
+double precision :: beta_p          ! Temperature (Beta)
 double precision :: m               ! Set Mass
 !==============================================================================!
 contains

@@ -2,5 +2,5 @@
 20000         ! Number of initial configurations
 40000         ! Number of RPMD time steps
 0.0005d0      ! Delta t
-8.0d0         ! Temperature (KbT)
+8.0d0         ! Temperature (Beta)
 1.0d0         ! Set Mass of particle
