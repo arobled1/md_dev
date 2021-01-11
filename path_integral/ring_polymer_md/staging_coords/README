@@ -1,1 +1,1 @@
-Fortran code for computing the kubo-transformed position autocorrelation function for a one dimensional quartic oscillator for beta = 8 in staging coordinates.
+Fortran codes ('stage_rpmd.f90' runs in serial and 'parallel_rpmd.f90' runs in parallel using OpenMP) for computing the kubo-transformed position autocorrelation function for a one dimensional quartic oscillator for beta = 8 in staging coordinates. 
