@@ -34,15 +34,15 @@ subroutine get_spring_force(xi, mass, frequency, harm_force, num_beads)
 end subroutine get_spring_force
 
 ! Compute the external force and add it to the spring force
-subroutine get_mild_anharm_force(xi, harmonic_force, num_beads)
+subroutine get_quartic_force(xi, force, num_beads)
     integer :: p, num_beads
-    double precision :: mild_force
-    double precision :: xi(num_beads), harmonic_force(num_beads)
+    double precision :: ext_force
+    double precision :: xi(num_beads), force(num_beads)
     do p = 1, num_beads
-        mild_force = - xi(p) - 0.3d0*xi(p)**2 - 0.04d0*xi(p)**3
-        harmonic_force(p) = harmonic_force(p) + mild_force
+        ext_force = - xi(p)**3
+        force(p) = force(p) + ext_force
     enddo
-end subroutine get_mild_anharm_force
+end subroutine get_quartic_force
 
 ! Sample velocities from boltzmann distribution using box-muller transformation
 subroutine sample_velocities(samps, rpmd_temp, mass, num_beads)
@@ -126,7 +126,7 @@ do i = 1, num_samples
     ! Compute initial forces from harmonic springs
     call get_spring_force(primitives_x(:,i), m, 1.0d0/beta_p, f_x(:,i), pbeads)
     ! Compute initial external forces
-    call get_mild_anharm_force(primitives_x(:,i), f_x(:,i), pbeads)
+    call get_quartic_force(primitives_x(:,i), f_x(:,i), pbeads)
 enddo
 !==============================================================================!
 ! Running RPMD
@@ -140,7 +140,7 @@ do rpmd_index = 2, n_steps+1
         ! Update harmonic forces in x
         call get_spring_force(primitives_x(:,traj_var), m, 1.0d0/beta_p, f_x(:,traj_var), pbeads)
         ! Update ext forces in x
-        call get_mild_anharm_force(primitives_x(:,traj_var), f_x(:,traj_var), pbeads)
+        call get_quartic_force(primitives_x(:,traj_var), f_x(:,traj_var), pbeads)
         ! Update velocity at step
         call upd_velocity(primitives_v(:,traj_var), f_x(:,traj_var), dt, m, pbeads)
         ! Compute X(n deltat)
