@@ -1,1 +1,1 @@
-Fortran code for computing the kubo-transformed position autocorrelation function for a one dimensional mildly anharmonic oscillator for beta = 8 in cartesian coordinates.
+Fortran code for computing the kubo-transformed position autocorrelation function for a one dimensional quartic oscillator with beta = 8 in cartesian coordinates.
