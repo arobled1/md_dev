@@ -1,0 +1,3 @@
+Codes for running Ring-Polymer Molecular Dynamics in both primitive and staging
+variables. A comparison test is done to show that the dynamics in both variables
+are the same since the transformation between the two coordinates is canonical.
