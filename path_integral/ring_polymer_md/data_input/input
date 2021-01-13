@@ -1,4 +1,4 @@
-32            ! Number of beads
+32            ! Number of total beads
 20000         ! Number of initial configurations
 40000         ! Number of RPMD time steps
 0.0005d0      ! Delta t
