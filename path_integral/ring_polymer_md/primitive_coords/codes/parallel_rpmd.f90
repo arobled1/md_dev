@@ -58,6 +58,7 @@ subroutine sample_velocities(samps, rpmd_temp, mass, num_beads)
 end subroutine
 end module rpmd_mod
 program ring_polymer_dynamics
+use omp_lib
 use rpmd_mod
 implicit none
 !==============================================================================!
@@ -69,10 +70,11 @@ integer :: n_steps                  ! Number of time steps
 double precision :: dt              ! Delta t
 double precision :: beta_p          ! Temperature (Beta)
 double precision :: m               ! Set Mass
-double precision :: temp, partial_corre_sum, initial_corre_value
+double precision :: temp, partial_corre_sum
 double precision, allocatable :: primitives_x(:,:), f_x(:,:)
 double precision, allocatable :: primitives_v(:,:), initial_centroid_pos(:)
 double precision, allocatable :: correlation_times(:), correlation_values(:)
+double precision, allocatable :: save_centroids(:)
 !==============================================================================!
 ! Reading in parameters
 open(29, file="input", action="readwrite")
@@ -96,14 +98,16 @@ close(28)
 ! Allocating the centroid positions to be used for computing Kxx
 allocate(initial_centroid_pos(num_samples))
 initial_centroid_pos = 0.0d0
+! Allocating array for saving X(n deltat)
+allocate(save_centroids(num_samples))
+save_centroids = 0.0d0
+! Allocating kubo transform values
+allocate(correlation_values(n_steps+1))
+correlation_values = 0.0d0
 ! Compute centroid positions from initial configurations (X(t = 0))
 do i = 1, num_samples
     initial_centroid_pos(i) = sum(primitives_x(:,i)) / pbeads
 enddo
-
-! Allocating kubo transform values
-allocate(correlation_values(n_steps+1))
-correlation_values = 0.0d0
 ! Computing Kxx(t = 0)
 do i = 1, num_samples
     correlation_values(1) = correlation_values(1) + (initial_centroid_pos(i)**2 ) / num_samples
@@ -112,26 +116,36 @@ enddo
 ! Allocating bead velocities
 allocate(primitives_v(pbeads,num_samples))
 primitives_v = 0.0d0
-! Getting initial velocities from maxwell-boltzmann distribution
-call random_seed(rando_seed)
-do i = 1, num_samples
-    call sample_velocities(primitives_v(:,i), beta_p, m, pbeads)
-enddo
-
 ! Allocating external forces in x
 allocate(f_x(pbeads,num_samples))
 f_x = 0.0d0
+
+call random_seed(rando_seed)
+! =============================================================================
+! Start of parallel region
+!$omp parallel private(i, j, rpmd_index, traj_var)
+
+! Getting initial velocities from maxwell-boltzmann distribution
+!$omp do
+do i = 1, num_samples
+    call sample_velocities(primitives_v(:,i), beta_p, m, pbeads)
+enddo
+!$omp end do
+
 ! Compute initial forces
+!$omp do
 do i = 1, num_samples
     ! Compute initial forces from harmonic springs
     call get_spring_force(primitives_x(:,i), m, 1.0d0/beta_p, f_x(:,i), pbeads)
     ! Compute initial external forces
     call get_quartic_force(primitives_x(:,i), f_x(:,i), pbeads)
 enddo
+!$omp end do
 !==============================================================================!
 ! Running RPMD
 do rpmd_index = 2, n_steps+1
     partial_corre_sum = 0.0d0
+    !$omp do
     do traj_var = 1, num_samples
         ! Update position
         call upd_position(primitives_x(:,traj_var), primitives_v(:,traj_var), m, f_x(:,traj_var), dt, pbeads)
@@ -144,17 +158,24 @@ do rpmd_index = 2, n_steps+1
         ! Update velocity at step
         call upd_velocity(primitives_v(:,traj_var), f_x(:,traj_var), dt, m, pbeads)
         ! Compute X(n deltat)
-        partial_corre_sum = partial_corre_sum + initial_centroid_pos(traj_var) * ( sum(primitives_x(:,traj_var)) / pbeads)
+        save_centroids(traj_var) = sum(primitives_x(:,traj_var)) / pbeads
     enddo
-    ! Compute Kxx(n deltat)
-    correlation_values(rpmd_index) = correlation_values(rpmd_index) + partial_corre_sum / num_samples
+    !$omp end do
+    ! Have any one of the threads compute compute the sum below. This is done
+    ! to prevent a race condition when computing each value of Kxx.
+    !$omp single
+    do i = 1, num_samples
+        correlation_values(rpmd_index) = correlation_values(rpmd_index) + initial_centroid_pos(i)*save_centroids(i) / num_samples
+    enddo
+    !$omp end single
 enddo
+!$omp end parallel
 !==============================================================================!
 ! Writing correlation times and values to file
 open(32,file='prim_correlation_parallel.txt', action="readwrite")
 allocate(correlation_times(n_steps+1))
 do i =  1, n_steps+1
-    correlation_times(i) = (i - 1) * dt
+    correlation_times(i) = (i - 1.0d0) * dt
 enddo
 
 do i = 1, n_steps+1

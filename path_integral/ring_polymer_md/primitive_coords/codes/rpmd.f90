@@ -128,6 +128,7 @@ do i = 1, num_samples
     ! Compute initial external forces
     call get_quartic_force(primitives_x(:,i), f_x(:,i), pbeads)
 enddo
+write(*,*) f_x(:,33)
 !==============================================================================!
 ! Running RPMD
 do rpmd_index = 2, n_steps+1
