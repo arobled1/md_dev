@@ -1,0 +1,9 @@
+Input data that can be used for all RPMD codes in my primitive and staging RPMD
+directories. Position samples were obtained in cartesian coordinates from a
+PIMD calculation (see 'closed_chain_pimd' directory for algorithm) done in
+staging coordinates and then back transformed every N steps.
+
+Note: the temperature in the RPMD simulations is rescaled from T to P*T as the
+RPMD Hamiltonian used is from the paper by Perez et al listed below.
+
+Pérez A, Tuckerman ME, Müser MH. A comparative study of the centroid and ring-polymer molecular dynamics methods for approximating quantum time correlation functions from path integrals. J Chem Phys. 2009 May 14;130(18):184105. doi: 10.1063/1.3126950.
