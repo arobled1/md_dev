@@ -1,0 +1,2 @@
+The code in this directory solves the eigenvalue problem for the Hamiltonian of a quartic oscillator in the harmonic oscillator basis and then computes
+the kubo transformed position autocorrelation function in the energy basis. 
