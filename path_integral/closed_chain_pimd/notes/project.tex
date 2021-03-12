@@ -81,7 +81,7 @@ Remember that our Hamiltonian is, in general,
   \hat{H} = \hat{K} + \hat{U} .
 \ee
 We already know from classical statistical mechanics that the canonical partition function can be written as equation (\ref{eq:harm_part_func}).
-In Quantum Statistical Mechanics, the parition function is written more formally as (see Appendix 3),
+In Quantum Statistical Mechanics, the partition function is written more formally as (see Appendix 3),
 \be \label{eq:quan_part_func}
   Q(N, V, T) = \text{Tr}\Big[ e^{- \beta \hat{H}} \Big]
 \ee
@@ -174,7 +174,7 @@ and $m'_k$ are defined as,
     m'_k &= m_k = \frac{k}{k-1} m \quad \quad k = 2, \dots, P .
   \end{split}
 \ee
-Since the potential $U(x_k(u)$ is defined as the potential from the original quantum system, a PIMD calculation requires performing an inverse staging coordinate transformation in order to compute the potential in the primitive coordinates.
+Since the potential $U(x_k(u))$ is defined as the potential from the original quantum system, a PIMD calculation requires performing an inverse staging coordinate transformation in order to compute the potential in the primitive coordinates.
 
 A typical PIMD simulation then makes use of the equations of motion defined in staging coordinates,
 \be
@@ -284,10 +284,10 @@ And a histogram of the velocity should mimic a marginal distribution in v, which
 \begin{figure}[H]
     \centering
     \begin{subfigure}[b]{0.49\textwidth}
-        \includegraphics[width=\textwidth]{../../langevin_thermo/figures/harmonic_pos_dens.pdf}
+        \includegraphics[width=\textwidth]{../../../langevin_thermo/figures/harmonic_pos_dens.pdf}
     \end{subfigure}
     \begin{subfigure}[b]{0.49\textwidth}
-        \includegraphics[width=\textwidth]{../../langevin_thermo/figures/harmonic_vel_dens.pdf}
+        \includegraphics[width=\textwidth]{../../../langevin_thermo/figures/harmonic_vel_dens.pdf}
     \end{subfigure}
     \caption{Histograms of position (left) and momenta (right) for the one dimensional harmonic oscillator ($m = 1$, $\omega = \sqrt{8}$). The friction $\gamma$ was set to 10 in this simulation. The histograms are compared to the marginal distributions in position and velocity (equations (23) and (24)). }
 \end{figure}
