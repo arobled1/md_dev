@@ -17,14 +17,14 @@ f = get_force(x, m, w)  # Compute inital force
 positions = [x]
 velocities = [v]
 for i in range(1,n_steps):
-    # Update position
-    x = x + v * dt + (f/(2 * m) * dt**2)
     # Compute velocity at half step
-    v_half = v + (f/(2 * m)) * dt
+    v += (f/(2 * m)) * dt
+    # Update position
+    x += v*dt
     # Update force
     f = get_force(x, m, w)
     # Update velocity
-    v = v_half + (f/(2 * m)) * dt
+    v += + (f/(2 * m)) * dt
     # Keep position value
     positions.append(x)
     # Keep velocity value
