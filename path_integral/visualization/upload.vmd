@@ -1,0 +1,130 @@
+#===================================================================================
+# Tcl/tk script that automates uploading xyz files from an MD simulation, adds
+#   representations to make each frame look pretty, and then renders each frame into snapshots
+#   to use for building a movie (requires external software). Currently used for uploading a 
+#   path integral simulation of a hydrogen clathrate hydrate unit cell, with 6 beads used 
+#   for each atom in the simulation. The oxygen atoms that are a part of the water molecules 
+#   that define the 2 cages of interest are in yellow. The hydrogen atoms that are a part of 
+#   the same water molecules are in white. The 6 H2 molecules of interest (inside the yellow 
+#   cage) are in blue. The centroids for the H2 molecule at the center are in green. And 
+#   everything else is transparent. Also, 3 separate transparent cages are highlighted with 
+#   different colors (violet, sky blue, and magenta) to show the interconnectedness of all 
+#   the cages. 
+#   - Alan Robledo (edited 5/20/21)
+#===================================================================================
+
+# Number of MD steps you want visualized
+set numberframes 1500
+
+# Upload xyz files for center H2 centroids
+set updmol3 [mol new {centroids_1.xyz} type xyz waitfor all]
+for {set j 2} {$j < $numberframes + 1} {incr j 1} {
+  mol addfile centroids_$j.xyz type xyz waitfor all
+}
+
+# Adding representations for center H2 centroids
+mol delrep 0 top
+mol addrep top
+mol modselect 0 top "all"
+mol modstyle 0 top CPK 1.0 0.3 12 12
+mol modcolor 0 top ColorID 7
+
+# Upload xyz files for cages of interest
+set updmol [mol new {waters_1.xyz} type xyz waitfor all]
+for {set j 2} {$j < $numberframes + 1} {incr j 1} {
+  mol addfile waters_$j.xyz type xyz waitfor all
+}
+
+# Adding representations for cages of interest 
+mol delrep 0 top
+mol addrep top
+mol modselect 0 top "element O"
+mol modstyle 0 top CPK 1.0 0.3 12 12
+mol modcolor 0 top ColorID 4
+mol addrep top
+mol modselect 1 top "element H"
+mol modstyle 1 top CPK 0.3 0.3 12 12
+mol modcolor 1 top ColorID 8
+mol addrep top
+mol modstyle 2 top HBonds 4.0 20 2
+
+# Upload xyz files for H2 molecules inside cages of interest
+set updmol2 [mol new {hyds_1.xyz} type xyz waitfor all]
+for {set j 2} {$j < $numberframes + 1} {incr j 1} {
+  mol addfile hyds_$j.xyz type xyz waitfor all
+}
+
+# Adding representations for H2 molecules inside cages of interest
+mol delrep 0 top
+mol addrep top
+mol modselect 0 top "all"
+mol modstyle 0 top CPK 0.6 0.3 12 12
+mol modcolor 0 top ColorID 0
+
+# Upload xyz files all other cages/H2O molecules
+set updmol3 [mol new {other_stuff_1.xyz} type xyz waitfor all]
+for {set j 2} {$j < $numberframes + 1} {incr j 1} {
+  mol addfile other_stuff_$j.xyz type xyz waitfor all
+}
+
+# Adding representations for all other cages/H2O molecules (with transparency)
+mol delrep 0 top
+mol addrep top
+mol modselect 0 top "all"
+mol modstyle 0 top CPK 0.3 0.3 12 12
+mol modmaterial 0 top Transparent
+mol addrep top
+mol modstyle 1 top HBonds 0.0 20 2
+mol addrep top
+mol modselect 2 top "index 469 66 126 490 686 1513 520 1754 1375 1730 367"
+mol modstyle 2 top CPK 1.1 0.3 12 12
+mol modcolor 2 top ColorID 27
+mol modmaterial 2 top Transparent
+mol addrep top
+mol modselect 3 top "index 1333 514 707 1005 1447 1793 1450 69 439 508 1522 1682 1718"
+mol modstyle 3 top CPK 1.1 0.3 12 12
+mol modcolor 3 top ColorID 25
+mol modmaterial 3 top Transparent
+mol addrep top
+mol modselect 4 top "index 1029 385 352 788 803 1387 177 1829 1528 773"
+mol modstyle 4 top CPK 1.1 0.3 12 12
+mol modcolor 4 top ColorID 21
+mol modmaterial 4 top Transparent
+
+# Extra lines used for positioning the entire system, editing background/foreground lighting, and 
+#   removing the xyz axis.
+axes location off
+display depthcue off
+light 2 on
+light 3 on
+translate by 0 0 -1.7
+rotate x by 21
+rotate y by 50
+rotate z by -16
+translate by 0.2 0 -0.4
+rotate x by -4
+rotate y by 1
+rotate z by -5
+translate by -0.2 0 2.4
+rotate x by -8
+translate by 0 0 0.11
+
+# Rendering loop
+# get the number of frames in the movie
+set num [molinfo top get numframes]
+# loop through the frames
+for {set i 0} {$i < $num} {incr i 1} {
+  # go to the given frame
+  animate goto $i
+  # resize the display for better quality images
+  display resize 2000 2000 
+  # for the display to update after resizing
+  display update
+  # take the picture
+# If using snapshot, use two lines below
+  set filename snap.[format "%05d" $i].rgb
+  render snapshot $filename
+# If using tachyon, uncomment below
+ # set picture [format tachyon%05d.dat $i]
+ # render Tachyon $picture "/path/vmd/tachyon_LINUXAMD64" -aasamples 12 %s -format TARGA -res 1300 900 -o %s.tga
+}
